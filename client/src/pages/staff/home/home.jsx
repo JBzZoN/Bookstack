@@ -5,6 +5,8 @@ function StaffHome() {
   return (
     <div>
       <div>Staff Home</div>
+      <div>Josh Biju</div>
+      <div></div>
       <Outlet/>
     </div>
   )
