@@ -6,6 +6,7 @@ function StaffHome() {
     <div>
       <div>Staff Home</div>
       <div>Naman added</div>
+      <div>Something new has been added</div>
       <Outlet/>
     </div>
   )
