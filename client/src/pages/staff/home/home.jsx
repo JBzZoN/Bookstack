@@ -5,7 +5,9 @@ function StaffHome() {
   return (
     <div>
       <div>Josh Biju</div>
-      <div>Staff Home</div>
+      <div>Staff naman</div>
+      <div>Naman added</div>
+      <div>asking for request</div>
       <Outlet/>
     </div>
   )
