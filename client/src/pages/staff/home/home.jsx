@@ -6,6 +6,7 @@ function StaffHome() {
     <div>
       <div>Staff</div>
       <div>Naman added</div>
+      <div>asking for request</div>
       <Outlet/>
     </div>
   )
