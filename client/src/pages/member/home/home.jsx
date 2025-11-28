@@ -4,7 +4,7 @@ import { Outlet } from 'react-router-dom';
 function MemberHome() {
   return (
     <div>
-      <div>Member</div>
+      <div>Member-Mayur</div>
       <Outlet/>
     </div>
   )
