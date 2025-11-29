@@ -1,4 +1,4 @@
-{
+export const Book_data = {
   "count": 77182,
   "next": "https://gutendex.com/books/?page=2",
   "previous": null,
