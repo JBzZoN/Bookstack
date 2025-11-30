@@ -1,0 +1,40 @@
+/* Navbar */
+.navbar {
+  height: 80px;
+  transition: background-color 0.3s ease, box-shadow 0.3s ease;
+  background-color: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  z-index: 1030;
+}
+.navbar .nav-link {
+  font-weight: 700;
+  color: #2f344b;
+  transition: color 0.25s;
+}
+#id1,
+.navbar .nav-link.active{
+  color: indianred;
+}
+
+.btn-upgrade {
+  background: linear-gradient(135deg, #ff0080, #0a0d9f);
+  color: #fff !important;
+  border-radius: 2rem;
+  padding: 8px 22px;
+  font-weight: 700;
+  box-shadow: 0 6px 22px rgba(236, 72, 153, 0.1);
+}
+
+@media (max-width: 999px) {
+  .navbar .navbar-collapse {
+      background-color: rgba(255, 255, 255, 0.9);
+      padding: 15px 0;
+  }
+}
+
+@media (min-width: 1000px) {
+  .navbar .navbar-collapse {
+      background-color: transparent;
+  }
+}
