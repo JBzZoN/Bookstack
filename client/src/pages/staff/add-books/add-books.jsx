@@ -36,8 +36,9 @@ function AddBooks() {
                 </div>
               } 
               <input type="file" className='position-absolute top-50 start-50 translate-middle input-file' onChange={(e) => {
-                setFile(e.target.files[0].name)
                 setData(e.target.files.length)
+                if(e.target.files[0] != null)
+                  setFile(e.target.files[0].name)
               }}/>
             </div>
           </td>
