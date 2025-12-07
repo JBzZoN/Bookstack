@@ -1,12 +1,14 @@
 import React from 'react'
 import { members } from './../../../dummy-data/member-data';
 import { useNavigate } from 'react-router-dom';
+import Title from '../../../components/staff/title/title';
 
 function ViewMembers() {
 
   const navigate = useNavigate();
   return (
-    <div className='container mt-5 mb-5'>
+    <div className='container mt-3 mb-5'>
+      <Title string={"Members"}/>
       <table className='table table-striped table-danger'>
         <thead>
           <tr>

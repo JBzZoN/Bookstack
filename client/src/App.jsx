@@ -11,8 +11,10 @@ import RentRenewReturn from './pages/staff/rent-renew-return/rent-renew-return';
 import SendNewsletter from './pages/staff/send-newsletter/send-newsletter';
 import ViewMembers from './pages/staff/view-members/view-members';
 import MemberProfile from './pages/staff/member-profile/member-profile';
+import BookProfile from './pages/staff/book-profile/book-profile';
 
 function App() {
+
   return<Routes>
     <Route path="/" element={<NonMemberHome/>}>
     
@@ -27,6 +29,7 @@ function App() {
     <Route path="/staff" element={<StaffHome/>}>
       <Route path="books" element={<AllBooks/>}/>
       <Route path="books/add" element={<AddBooks/>}/>
+      <Route path="books/profile" element={<BookProfile/>}/>
       <Route path="transaction" element={<RentRenewReturn/>}/>
       <Route path="newsletter" element={<SendNewsletter/>}/>
       <Route path="members" element={<ViewMembers/>}/>

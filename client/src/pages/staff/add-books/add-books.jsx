@@ -4,6 +4,7 @@ import addImage from "../../../assets/staff/add-button.png"
 import addImageTicked from "../../../assets/staff/add-button-ticked.png"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
+import Title from './../../../components/staff/title/title';
 
 function AddBooks() {
 
@@ -17,7 +18,8 @@ function AddBooks() {
   }
 
   return (
-    <div className='container mt-5'>
+    <div className='container mt-3'>
+      <Title string={"Add a new book"}/>
       <table>
       <tbody>
         <tr>

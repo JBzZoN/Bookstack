@@ -1,6 +1,7 @@
 import React, { useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Title from '../../../components/staff/title/title';
 
 function RentRenewReturn() {
 
@@ -49,8 +50,8 @@ function RentRenewReturn() {
 
   return (
 
-    <div className='container mt-4'>
-      
+    <div className='container mt-3'>
+      <Title string={"Rent, renew or return"}/>
       <div class="form-floating mb-3">
       <input type="text" class="form-control" id="floatingInput" placeholder="name@example.com"/>
       <label for="floatingInput">Search for member</label>
