@@ -13,19 +13,31 @@ import ViewAllBooks from './pages/Member/ViewAllBooks/ViewAllBooks';
 
 /* Admin pages */
 import AdminHome from './pages/admin/home/home';
-import Staff from './pages/admin/staff/Staff';
 import AddStaff from './pages/admin/AddNewStaff/AddStaff';
 import EditStaff from './pages/admin/EditStaff/EditStaff';
 import Books from './pages/admin/Books/Books';
 import Members from './pages/admin/Members/Members';
 
+/* Staff pages */
+import Staff from './pages/admin/staff/Staff';
+import StaffHome from './pages/staff/home/home';
+import AllBooks from './pages/staff/all-books/all-books';
+import AddBooks from './pages/staff/add-books/add-books';
+import RentRenewReturn from './pages/staff/rent-renew-return/rent-renew-return';
+import SendNewsletter from './pages/staff/send-newsletter/send-newsletter';
+import ViewMembers from './pages/staff/view-members/view-members';
+import MemberProfile from './pages/staff/member-profile/member-profile';
+import BookProfile from './pages/staff/book-profile/book-profile';
+
 function App() {
-  return (
-    <Routes>
 
-      <Route path="/" element={<NonMemberHome />} />
+  return<Routes>
 
-      {/* MEMBER ROUTES */}
+    {/* NON MEMBER ROUTES */}
+    <Route path="/" element={<NonMemberHome/>}>
+    </Route>
+    
+    {/* MEMBER ROUTES */}
       <Route path="member" element={<Home />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<MemberHome />} />
@@ -34,6 +46,7 @@ function App() {
         <Route path="book/:id" element={<BookDetails />} />
         <Route path="view" element={<ViewAllBooks />} />
       </Route>
+
 
       {/* ADMIN ROUTES */}
       <Route path="admin" element={<AdminHome />}>
@@ -44,8 +57,17 @@ function App() {
         <Route path="members" element={<Members />} />
       </Route>
 
-    </Routes>
-  );
+    {/* STAFF ROUTES */}
+    <Route path="/staff" element={<StaffHome/>}>
+      <Route path="books" element={<AllBooks/>}/>
+      <Route path="books/add" element={<AddBooks/>}/>
+      <Route path="books/profile" element={<BookProfile/>}/>
+      <Route path="transaction" element={<RentRenewReturn/>}/>
+      <Route path="newsletter" element={<SendNewsletter/>}/>
+      <Route path="members" element={<ViewMembers/>}/>
+      <Route path="members/profile" element={<MemberProfile/>}/>
+    </Route>
+  </Routes>
 }
 
 export default App;

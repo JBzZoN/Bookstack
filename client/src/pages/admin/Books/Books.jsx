@@ -1,9 +1,9 @@
 import React from "react";
-import { Book_data } from "../../../dummy-data/book-data";
 import "./Books.css";
+import { bookData } from "../../../dummy-data/book-data";
 
 export default function Books() {
-  const books = Book_data.results;
+  const books = bookData.results;
 
   return (
     <div className="books-container">
