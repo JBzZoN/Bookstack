@@ -1,10 +1,9 @@
 import React from "react";
-import "./Navbar.css";
-
+import "../../../components/admin/Navbar/navbar.css";
 
 export default function Navbar() {
 return (
-<nav className="navbar">
+<nav className="non-member-navbar">
 <div className="logo">BookStack</div>
 <div className="nav-links">
 <a href="/admin/staff">Staff</a>

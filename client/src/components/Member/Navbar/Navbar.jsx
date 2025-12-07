@@ -1,10 +1,10 @@
-import '../Navbar/Navbar.css'
+import '../../../components/Member/Navbar/Navbar.css'
 import { NavLink,Link } from 'react-router-dom';
 import logo from '../../../assets/logo.png'
 
 function Navbar () {
     return (
-        <nav className="navbar navbar-expand-lg fixed-top">
+        <nav className="member-navbar navbar navbar-expand-lg fixed-top">
             <div className="container">
 
                 <div className="d-flex align-items-center gap-2 text-decoration-none" to="/">
