@@ -1,0 +1,15 @@
+/* Footer */
+footer {
+  background-color: #fff;
+  border-top: 1px solid #e2e8f0;
+  text-align: center;
+  padding: 1rem 0;
+  font-size: 0.85rem;
+  color: hsl(220, 9%, 46%);
+  padding-top: 25px;
+}
+
+.ds {
+  height: 3px;
+  background: linear-gradient(90deg, #ec4899, #6366f1, #2dd4bf);
+}
