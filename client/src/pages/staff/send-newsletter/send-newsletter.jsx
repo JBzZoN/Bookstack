@@ -10,7 +10,7 @@ function SendNewsletter() {
   }
 
   return (
-    <div className='container whole-container'>
+    <div className='container whole-container mb-5'>
         <div className="card profile text-center w-100">
             <h6 className='card-header display-6 text-send'>
               Send newsletter

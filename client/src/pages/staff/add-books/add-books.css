@@ -4,7 +4,15 @@
     height: 100%;
 }
 
+.img-txt {
+    position: relative;
+    transform: translateY(-45px);
+    text-align: center;
+    z-index: 10;
+}
+
 .add-image {
+    transform: translateY(-15px);
     width: 200px;
     height: 200px;
 }

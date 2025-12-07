@@ -10,7 +10,7 @@ function MemberProfile() {
   const member = location.state.member;
 
   return (
-    <div className='container profile-container'>
+    <div className='container profile-container mb-5'>
         <div class="card profile position-relative">
             <div className="position-absolute top-0 start-50 translate-middle whitener"></div>
             <img src={profileImage} className='position-absolute top-0 start-50 translate-middle profile-image' alt="" />

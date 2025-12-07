@@ -7,13 +7,13 @@ function ViewMembers() {
   const navigate = useNavigate();
   return (
     <div className='container mt-5 mb-5'>
-      <table className='table table-striped table-warning border  border-dark'>
+      <table className='table table-striped table-danger'>
         <thead>
           <tr>
             <th>Name</th>
-            <th>Email</th>
+            <th className='d-none d-md-table-cell'>Email</th>
             <th>Phone</th>
-            <th>Address</th>
+            <th className='d-none d-md-table-cell'>Address</th>
             <th>DOB</th>
             <th>View More</th>
           </tr>
@@ -21,9 +21,9 @@ function ViewMembers() {
         <tbody>
           {members.map((e) => <tr key={e.username}>
             <td>{e.name}</td>
-            <td>{e.email}</td>
+            <td className='d-none d-md-table-cell'>{e.email}</td>
             <td>{e.phone}</td>
-            <td>{e.address}</td>
+            <td className='d-none d-md-table-cell'>{e.address}</td>
             <td>{e.date_of_birth}</td>
             <td><button className='btn btn-success' onClick={
               () => {

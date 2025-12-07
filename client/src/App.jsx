@@ -14,8 +14,13 @@ import MemberProfile from './pages/staff/member-profile/member-profile';
 
 function App() {
   return<Routes>
-    <Route path="/" element={<NonMemberHome/>}></Route>
-    <Route path="/member" element={<MemberHome/>}></Route>
+    <Route path="/" element={<NonMemberHome/>}>
+    
+    </Route>
+    
+    <Route path="/member" element={<MemberHome/>}>
+    
+    </Route>
     <Route path="/admin" element={<AdminHome/>}>
       <Route path='dummy' element={<Dummy/>}/>
     </Route>
