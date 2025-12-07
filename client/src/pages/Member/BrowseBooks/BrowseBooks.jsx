@@ -18,7 +18,7 @@ function BrowseBooks () {
                                 title={book.title}
                                 author={book.author}
                                 image={book.image}
-                                link={'/member/book'}
+                                link={`/member/book/${book.id}`}
                             />
                         ))
                     }

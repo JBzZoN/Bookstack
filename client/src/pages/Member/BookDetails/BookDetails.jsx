@@ -1,7 +1,33 @@
 import BookCard from '../../../components/Member/BookCard/BookCard'
 import '../BookDetails/BookDetails.css'
+import { allBooksData } from '../../../dummy-data/all-books-data'
+import { useParams } from 'react-router-dom';
 
 function BookDetails () {
+    const { id } = useParams();
+
+    const book = allBooksData.find(b => b.id === Number(id));
+
+    console.log("Book_data =", allBooksData);
+console.log("ID =", id);
+    
+    if (!book) {
+        return (
+        <div className="container py-5">
+            <h2>Book not found</h2>
+        </div>
+        );
+    }
+
+    const image = book.image || "No image available";
+    const title = book.title || "No title available";
+    const author = book.author || "Unknown";
+    const summary = book.description || "No summary available.";
+    const genre = book.genre || "No genre available.";
+    const publisher = book.publisher || "No publisher available.";
+    const isbn = book.isbn || "Not available.";
+    const copyAvailable = book.stock || "Out of Stock - No Copy Available";
+    
     return (
         <div>
             <div className="container py-5" style={{ marginTop: "50px" }}>
@@ -10,13 +36,13 @@ function BookDetails () {
                     <div className="row g-5">
 
                     <div className="col-lg-5 text-center">
-                        <img src="https://www.bigw.com.au/medias/sys_master/images/images/h13/h96/114373905219614.jpg" className="img-fluid book-cover" alt="Book Cover" />
+                        <img src={image} className="img-fluid book-cover" alt="Book Cover" />
                     </div>
 
                     <div className="col-lg-7">
 
-                        <h1 className="font-montserrat display-5">The Midnight Library</h1>
-                        <h4 className="fw-normal text-secondary">by Matt Haig</h4>
+                        <h1 className="font-montserrat display-5">{title}</h1>
+                        <h4 className="fw-normal text-secondary">by {author}</h4>
 
                         <div className="d-flex align-items-center gap-3 my-4">
                             <div className="text-warning fs-5">
@@ -30,25 +56,20 @@ function BookDetails () {
                             <span className="badge fs-6" style={{ backgroundColor: "rgba(var(--brand-teal-rgb), 0.1)", color: "var(--brand-teal)" }}>Available</span>
                         </div>
 
-                        <p className="lead">
-                        Between life and death there is a library, and within that library,
-                        the shelves go on forever. Every book provides a chance to try another
-                        life you could have lived. To see how things would be if you had made
-                        other choices... Would you have done anything different?
-                        </p>
+                        <p className="lead">{summary}</p>
 
                         <hr className="my-4" />
 
                         <div className="row">
 
                         <div className="col-md-6">
-                            <p><strong>Genre:</strong> Fiction, Fantasy</p>
-                            <p><strong>Publisher:</strong> Viking</p>
+                            <p><strong>Genre:</strong> {genre}</p>
+                            <p><strong>Publisher:</strong> {publisher}</p>
                         </div>
 
                         <div className="col-md-6">
-                            <p><strong>ISBN:</strong> 978-0525559474</p>
-                            <p><strong>Copies Available:</strong> 3 of 5</p>
+                            <p><strong>ISBN:</strong> {isbn}</p>
+                            <p><strong>Copies Available:</strong> {copyAvailable}</p>
                         </div>
 
                         </div>
@@ -107,27 +128,27 @@ function BookDetails () {
 
                     <div className="horizontal-scroll mt-3">
                         <BookCard
-                            key={1}
-                            title={"Klara and the Sun"}
-                            author={"Kazuo Ishiguro"}
-                            image={"https://covers.openlibrary.org/b/id/10561563-L.jpg"}
-                            link={'/member/book'}
+                            key={2542}
+                            title={"A Doll's House"}
+                            author={"Henrik Ibsen"}
+                            image={"https://www.gutenberg.org/cache/epub/2542/pg2542.cover.medium.jpg"}
+                            link={'/member/book/2542'}
                         />
 
                         <BookCard
-                            key={2}
-                            title={"Piranesi"}
-                            author={"Susanna Clarke"}
-                            image={"https://covers.openlibrary.org/b/id/10413954-L.jpg"}
-                            link={'/member/book'}
+                            key={98}
+                            title={"A Tale of Two Cities"}
+                            author={"Charles Dickens"}
+                            image={"https://www.gutenberg.org/cache/epub/98/pg98.cover.medium.jpg"}
+                            link={'/member/book/98'}
                         />
 
                         <BookCard
-                            key={3}
-                            title={"The Invisible Life of Addie LaRue"}
-                            author={"V.E. Schwab<"}
-                            image={"https://covers.openlibrary.org/b/id/10909237-L.jpg"}
-                            link={'/member/book'}
+                            key={844}
+                            title={"The Importance of Being Earnest"}
+                            author={"Oscar Wilde"}
+                            image={"https://www.gutenberg.org/cache/epub/844/pg844.cover.medium.jpg"}
+                            link={'/member/book/844'}
                         />
 
                     </div>

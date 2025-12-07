@@ -10,15 +10,17 @@ import BrowseBooks from './pages/Member/BrowseBooks/BrowseBooks';
 import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
 import ViewAllBooks from './pages/Member/ViewAllBooks/ViewAllBooks';
+import { Navigate } from 'react-router-dom';
 
 function App() {
   return <Routes>
     <Route path="/" element={<NonMemberHome/>}/>
     <Route path="member" element={<Home/>}>
+      <Route index element={<Navigate to="home" replace />} />
       <Route path="home" element={<MemberHome/>}/>
       <Route path="browse" element={<BrowseBooks/>}/>
       <Route path="account" element={<MyAccount/>}/>
-      <Route path="book" element={<BookDetails/>}/>
+      <Route path="book/:id" element={<BookDetails/>}/>
       <Route path="view" element={<ViewAllBooks/>}/>
     </Route>
     <Route path="admin" element={<AdminHome/>}>

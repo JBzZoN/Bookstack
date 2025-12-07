@@ -59,7 +59,7 @@ function MemberHome() {
                   title={book.title}
                   author={book.author}
                   image={book.image}
-                  link={`/member/book`}
+                  link={`/member/book/${book.id}`}
                 />
               ))
             }
@@ -81,7 +81,7 @@ function MemberHome() {
                   title={book.title}
                   author={book.author}
                   image={book.image}
-                  link={`/member/book`}
+                  link={`/member/book/${book.id}`}
                 />
               ))
             }
@@ -118,7 +118,7 @@ function MemberHome() {
                   title={book.title}
                   author={book.author}
                   image={book.image}
-                  link={`/member/book`}
+                  link={`/member/book/${book.id}`}
                 />
               ))
             }

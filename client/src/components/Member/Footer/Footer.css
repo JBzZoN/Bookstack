@@ -5,6 +5,11 @@ footer {
   text-align: center;
   padding: 1rem 0;
   font-size: 0.85rem;
-  color: #6b7280;
-  margin-top: 3rem;
+  color: hsl(220, 9%, 46%);
+  padding-top: 25px;
+}
+
+.ds {
+  height: 3px;
+  background: linear-gradient(90deg, #ec4899, #6366f1, #2dd4bf);
 }
