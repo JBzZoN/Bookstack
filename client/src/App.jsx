@@ -1,11 +1,11 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 /* Non-member pages */
-import NonMemberHome from './pages/nonmember/NonMemberHome';
+import NonMemberHome from './pages/non-member/home/home';
 
 /* Member pages */
 import Home from './pages/Member/Home/Home';
-import MemberHome from './pages/Member/Home/MemberHome';
+import MemberHome from './pages/Member/MemberHome/MemberHome';
 import BrowseBooks from './pages/Member/BrowseBooks/BrowseBooks';
 import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
@@ -13,12 +13,11 @@ import ViewAllBooks from './pages/Member/ViewAllBooks/ViewAllBooks';
 
 /* Admin pages */
 import AdminHome from './pages/admin/home/home';
-import Dummy from './pages/admin/dummy/dummy';
 import Staff from './pages/admin/staff/Staff';
 import AddStaff from './pages/admin/AddNewStaff/AddStaff';
 import EditStaff from './pages/admin/EditStaff/EditStaff';
 import Books from './pages/admin/Books/Books';
-import Members from './pages/admin/Members/members';
+import Members from './pages/admin/Members/Members';
 
 function App() {
   return (
@@ -38,7 +37,6 @@ function App() {
 
       {/* ADMIN ROUTES */}
       <Route path="admin" element={<AdminHome />}>
-        <Route path="dummy" element={<Dummy />} />
         <Route path="staff" element={<Staff />} />
         <Route path="addstaff" element={<AddStaff />} />
         <Route path="editstaff" element={<EditStaff />} />
