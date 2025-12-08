@@ -1,8 +1,12 @@
 import '../../../components/Member/Navbar/Navbar.css'
-import { NavLink,Link } from 'react-router-dom';
+import { NavLink,Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png'
 
 function Navbar () {
+    const navigate=useNavigate();
+    const handleLogin = () => {
+    navigate("/aboutus")
+  };
     return (
         <nav className="member-navbar navbar navbar-expand-lg fixed-top">
             <div className="container">
@@ -29,7 +33,7 @@ function Navbar () {
                         <NavLink to="/member/home" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
                         <NavLink to="/member/browse" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Browse Books</NavLink>
                         <NavLink to="/member/account" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>My Account</NavLink>
-                        <button to="/membership" className="btn btn-upgrade mt-2 mt-lg-0">Upgrade</button>
+                        <button onClick={handleLogin} to="/membership" className="btn btn-upgrade mt-2 mt-lg-0">Logout</button>
                     </div>
 
                 </div>

@@ -41,7 +41,7 @@ console.log("ID =", id);
 
                     <div className="col-lg-7">
 
-                        <h1 className="font-montserrat display-5">{title}</h1>
+                        <h1 className="h1-c font-montserrat display-5">{title}</h1>
                         <h4 className="fw-normal text-secondary">by {author}</h4>
 
                         <div className="d-flex align-items-center gap-3 my-4">

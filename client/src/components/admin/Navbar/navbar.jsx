@@ -10,7 +10,7 @@ return (
 <a href="/admin/books">Books</a>
 <a href="/admin/members">Members</a>
 </div>
-<a href="/admin" className="logout">Logout</a>
+<a href="/aboutus" className="logout">Logout</a>
 </nav>
 );
 }

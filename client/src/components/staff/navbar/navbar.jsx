@@ -32,7 +32,7 @@ function StaffNavbar() {
                     </li>
                 </ul>
                 <form className="d-flex" role="search"> 
-                    <Link to="/" className='nav-link text-light' style={{margin:"0 10px 0 0"}}>Log out</Link>
+                    <Link to="/aboutus" className='nav-link text-light' style={{margin:"0 10px 0 0"}}>Log out</Link>
                 </form>
                 </div>
             </div>

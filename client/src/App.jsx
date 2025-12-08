@@ -1,6 +1,6 @@
-import { Routes, Route, Navigate } from "react-router-dom";
-
-/* Non-member pages */
+import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
+import './App.css'
+import Login from './pages/non-member/Login/Login';
 import NonMemberHome from './pages/non-member/home/home';
 
 /* Member pages */
@@ -18,6 +18,7 @@ import EditStaff from './pages/admin/EditStaff/EditStaff';
 import Books from './pages/admin/Books/Books';
 import Members from './pages/admin/Members/Members';
 
+
 /* Staff pages */
 import Staff from './pages/admin/staff/Staff';
 import StaffHome from './pages/staff/home/home';
@@ -29,12 +30,24 @@ import ViewMembers from './pages/staff/view-members/view-members';
 import MemberProfile from './pages/staff/member-profile/member-profile';
 import BookProfile from './pages/staff/book-profile/book-profile';
 
+/* Non member pages */
+import BooksData from './pages/non-member/Books/Books';
+import Membership from './pages/non-member/Membership/Membership';
+import AboutUs from './pages/non-member/AboutUs/AboutUs';
+import Register from './pages/non-member/Register/Register';
+
 function App() {
-
-  return<Routes>
-
+  return <Routes>
+    
     {/* NON MEMBER ROUTES */}
     <Route path="/" element={<NonMemberHome/>}>
+        <Route index element={<Navigate to="aboutus" replace />} />
+        <Route path='Login' element={<Login/>}></Route>
+        <Route path="books" element={<BooksData/>}></Route>
+        <Route path="membership" element={<Membership/>}></Route>
+        <Route path="aboutus" element={<AboutUs/>}></Route>
+        <Route path="register" element={<Register/>}></Route>
+
     </Route>
     
     {/* MEMBER ROUTES */}
