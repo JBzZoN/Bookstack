@@ -2,7 +2,7 @@ import React from 'react'
 import { bookData } from "../../../dummy-data/book-data"
 import { Link } from 'react-router-dom';
 
-function Books() {
+function BooksData() {
   return (
     <div className='container mt-5 mb-5'>  {/* ✅ added top margin */}
       <div className='row gx-3 gy-4'>
@@ -66,4 +66,4 @@ function Books() {
   )
 }
 
-export default Books
+export default BooksData

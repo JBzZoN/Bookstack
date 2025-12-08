@@ -1,0 +1,75 @@
+.carousel-item img {
+  height: 400px;         
+  object-fit: cover;    
+}
+
+.carousel-indicators {
+  display: flex !important;
+  justify-content: center;
+  gap: 10px;
+}
+
+/* Navbar */
+.logo-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
+}
+
+/* Home-h1-headings below carousal */
+.home-h1 {
+  font-size: 25px;
+  font-weight: 750;
+  color: black;
+}
+
+/* Home-h2-headings below carousal */
+.home-h2 {
+  font-size: 25px;
+  color: goldenrod;
+  font-weight: 750;
+}
+
+/* Home-h1-headings below carousal */
+.home-h3 {
+  font-size: 20px;
+  color: rgb(50, 50, 224);
+  margin-left: 100px;
+}
+
+/* Scroll Wrapper */
+.horizontal-scroll {
+  display: flex;
+  gap: 1.45rem;
+  overflow-x: auto;
+  padding: 0.7rem 0.7rem;
+  scrollbar-width: none; 
+}
+
+/* Quote section */
+.quote-section {
+  padding: 4rem 2rem;
+  background: linear-gradient(135deg, #2dd4bf, #25a18e);
+  color: white;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  text-align: center;
+  border-radius: 1rem;
+  box-shadow: 0 6px 20px #6366f122;
+  font-style: italic;
+  user-select: none;
+  font-size: 1.25rem;
+}
+.quote-section h2 {
+  font-weight: 800;
+  margin-bottom: 1rem;
+}
+
+

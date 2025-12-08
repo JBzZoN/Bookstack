@@ -12,7 +12,7 @@ function AdminHome() {
   }
   return (
 
-    <div>
+    <div style={{backgroundColor:"black"}}>
       <nav className="navbar bg-dark border-bottom border-body navbar-expand-lg" data-bs-theme="dark">
           <div className="container-fluid">
     {/* <a className="navbar-brand" href="#">Bookstack</a> */}
@@ -42,6 +42,7 @@ function AdminHome() {
                 className='nav-link'
                 aria-current='page'
                 to='/membership'
+                style={{color:"white"}}
               >
                 Membership
           </Link>
@@ -51,6 +52,7 @@ function AdminHome() {
                 className='nav-link'
                 aria-current='page'
                 to='/books'
+                style={{color:"white"}}
               >
                 Books
           </Link>

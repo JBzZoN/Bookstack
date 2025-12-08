@@ -6,14 +6,14 @@ function Login() {
   const [email, setEmail] = useState("");
   const navigate = useNavigate();
   const handleLogin = () => {
-    if (email === "user@email.com") {
-      navigate("/user");
+    if (email === "member@email.com") {
+      navigate("/member/home");
     } 
     else if (email === "admin@email.com") {
-      navigate("/admin");
+      navigate("/admin/books");
     } 
     else if (email === "staff@email.com") {
-      navigate("/staff");
+      navigate("/staff/books");
     } 
     else {
       alert("Invalid email");

@@ -1,7 +1,4 @@
-body{
-/* Created with https://www.css-gradient.com */
-background: #161616;
-}
+
 h1{
   color:#fff;
 }
@@ -19,6 +16,7 @@ h1{
  border-radius:20px;
  min-height:450px;
    box-shadow: 0 0 12px 0 rgba(0,0,0,0.2);
+
 
  @media (max-width: 768px) {
   min-height:350px;
