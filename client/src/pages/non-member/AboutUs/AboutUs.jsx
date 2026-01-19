@@ -5,7 +5,7 @@ function AboutUs() {
   return (
     <div>
 
-      {/* ===== HERO SECTION ===== */}
+      
       <div className="bg-dark text-white text-center py-5">
         <div className="container">
           <h1 className="display-4 fw-bold">Welcome to Our Library</h1>
@@ -18,7 +18,7 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* ===== ABOUT SECTION ===== */}
+      
       <div className="container py-5">
         <div className="row align-items-center">
           
@@ -48,7 +48,7 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* ===== FEATURES ===== */}
+     
       <div className="bg-light py-5">
         <div className="container">
           <h2 className="text-center mb-4">Our Features</h2>
@@ -79,7 +79,7 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* ===== BOOK PREVIEW ===== */}
+     
       <div className="container py-5">
         
        <h2
@@ -114,7 +114,7 @@ function AboutUs() {
         </div>
       </div>
 
-      {/* ===== FOOTER ===== */}
+      
       <footer className="bg-dark text-white py-4">
         <div className="container">
           <div className="row">
