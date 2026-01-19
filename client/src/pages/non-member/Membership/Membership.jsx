@@ -21,7 +21,7 @@ function Membership() {
            <small><i class="far fa-clock"></i>most affodable plan for a regular customer</small>
           </div>
          <h4 class="card-title mt-0 text-center pb-3">
-            <a class="text-dark text-decoration-none" href="https://creativemanner.com">₹499</a>
+             <h4 class="text-dark text-decoration-none">₹499</h4>
         </h4>
 
 
@@ -45,7 +45,7 @@ function Membership() {
            <small><i class="far fa-clock"></i>most affodable plan for a monthly customer</small>
           </div>
          <h4 class="card-title mt-0 text-center pb-3">
-            <a class="text-dark text-decoration-none" href="https://creativemanner.com">₹999</a>
+             <h4 class="text-dark text-decoration-none">₹999</h4>
         </h4>
 
 
@@ -69,7 +69,7 @@ function Membership() {
            <small><i class="far fa-clock"></i>most affodable plan for a YEARLY customer</small>
           </div>
          <h4 class="card-title mt-0 text-center pb-3">
-            <a class="text-dark text-decoration-none" href="https://creativemanner.com">₹1599</a>
+            <h4 class="text-dark text-decoration-none">₹1599</h4>
         </h4>
 
 
