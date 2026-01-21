@@ -11,7 +11,7 @@ import lombok.Data;
 public class Dummy {
     @Id
     @Column(name = "user_id", length = 10, nullable = false)
-    private String userId;
+    private Integer userId;
 
     @Column(name = "name", length = 30)
     private String name;
