@@ -248,18 +248,6 @@ INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
 (5, 40000, '2019/04/10'),
 (9, 42000, '2021/09/01');
 
-INSERT INTO book_table (isbn, title, author, description, publisher, edition, book_category, user_id, action, action_date, book_id, number_of_copies, number_of_copies_remaining) VALUES
-(10001, 'Python Basics', 'Mark Lutz', 'Intro to Python', 'OReilly', 2021, 'T', 04, 'Added', '2025-01-10', 01, 10, 8),
-(10002, 'Learning SQL', 'Alan Beaulieu', 'SQL fundamentals', 'OReilly', 2020, 'T', 05, 'Added', '2025-02-05', 02, 8, 6),
-(10003, 'Data Science Handbook', 'Jake VanderPlas', 'Guide for Data Science', 'OReilly', 2019, 'T', 09, 'Added', '2025-03-12', 03, 7, 5),
-(10004, 'C++ Primer', 'Stanley Lippman', 'C++ intro', 'Pearson', 2022, 'T', 04, 'Added', '2025-04-01', 04, 12, 9),
-(10005, 'Clean Code', 'Robert C Martin', 'Code quality guide', 'Prentice Hall', 2021, 'T', 05, 'Added', '2025-04-20', 05, 15, 13),
-(10006, 'DB Systems', 'Raghu Ramakrishnan', 'Database concepts', 'McGraw Hill', 2020, 'T', 09, 'Added', '2025-05-01', 06, 9, 7),
-(10007, 'AI Basics', 'Stuart Russell', 'Intro to AI', 'Pearson', 2022, 'T', 04, 'Added', '2025-05-22', 07, 6, 4),
-(10008, 'Java Complete Ref', 'Herbert Schildt', 'Java reference', 'McGraw Hill', 2021, 'T', 05, 'Added', '2025-06-15', 08, 20, 18),
-(10009, 'Operating Systems', 'Galvin', 'OS concepts', 'Wiley', 2020, 'T', 09, 'Added', '2025-07-01', 09, 14, 10),
-(10010, 'Networks', 'Kurose Ross', 'Computer networks', 'Pearson', 2022, 'T', 04, 'Added', '2025-08-01', 10, 11, 9);
-
 INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
 (01, 04, 01, '2025-01-12'),
 (02, 05, 02, '2025-02-07'),
@@ -296,3 +284,257 @@ INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
 (03, 08, 1),
 (07, 09, 1),
 (08, 10, 1);
+
+-- 1. Add image column to book_table
+ALTER TABLE Bookstack.book_table
+ADD COLUMN book_image VARCHAR(255) NULL AFTER description;
+
+-- 2. Create genre table
+CREATE TABLE IF NOT EXISTS Bookstack.genre_table (
+  genre_id INT AUTO_INCREMENT,
+  genre_name VARCHAR(50) NOT NULL,
+  PRIMARY KEY (genre_id),
+  UNIQUE (genre_name)
+) ENGINE = InnoDB;
+
+-- 3. Create book_genre mapping table (many-to-many)
+CREATE TABLE IF NOT EXISTS Bookstack.book_genre (
+  book_id INT NOT NULL,
+  genre_id INT NOT NULL,
+  PRIMARY KEY (book_id, genre_id),
+  CONSTRAINT fk_book_genre_book
+    FOREIGN KEY (book_id)
+    REFERENCES Bookstack.book_table (book_id)
+    ON DELETE CASCADE,
+  CONSTRAINT fk_book_genre_genre
+    FOREIGN KEY (genre_id)
+    REFERENCES Bookstack.genre_table (genre_id)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+-- 4. Remove old non-normalized category column
+ALTER TABLE Bookstack.book_table
+DROP COLUMN book_category;
+
+ALTER TABLE Bookstack.book_table
+DROP COLUMN edition;
+
+-- Table to store user ratings for books (one rating per user per book)
+CREATE TABLE IF NOT EXISTS Bookstack.book_rating (
+  rating_id INT NOT NULL AUTO_INCREMENT,
+  book_id INT NOT NULL,
+  user_id INT NOT NULL,
+  rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
+  rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (rating_id),
+  UNIQUE KEY uq_book_user_rating (book_id, user_id),
+
+  CONSTRAINT fk_rating_book
+    FOREIGN KEY (book_id)
+    REFERENCES Bookstack.book_table (book_id)
+    ON DELETE CASCADE,
+
+  CONSTRAINT fk_rating_user
+    FOREIGN KEY (user_id)
+    REFERENCES Bookstack.user_table (user_id)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+
+-- Table to store comments made by users on books
+CREATE TABLE IF NOT EXISTS Bookstack.book_comment (
+  comment_id INT NOT NULL AUTO_INCREMENT,
+  book_id INT NOT NULL,
+  user_id INT NOT NULL,
+  comment TEXT NOT NULL,
+  comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+
+  PRIMARY KEY (comment_id),
+
+  CONSTRAINT fk_comment_book
+    FOREIGN KEY (book_id)
+    REFERENCES Bookstack.book_table (book_id)
+    ON DELETE CASCADE,
+
+  CONSTRAINT fk_comment_user
+    FOREIGN KEY (user_id)
+    REFERENCES Bookstack.user_table (user_id)
+    ON DELETE CASCADE
+) ENGINE = InnoDB;
+
+INSERT INTO user_table (name,email,phone,address,dob,username,password,role_type)
+VALUES
+('Manoj Kumar','manoj@example.com','9811111111','Bengaluru','1996-05-12','manoj','pass','Member'),
+('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member'),
+('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member'),
+('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian');
+
+INSERT INTO staff_table (user_id,salary,date_hired)
+VALUES
+(14,39000,'2022-02-15');
+
+INSERT INTO Member_table (user_id,membership_type,member_start,member_end)
+VALUES
+(11,'Standard','2025-01-01','2025-12-31'),
+(12,'Premium','2025-02-01','2026-01-31'),
+(13,'Basic','2024-06-01','2025-05-31');
+
+INSERT INTO genre_table (genre_name)
+VALUES
+('Fiction'),
+('Non-Fiction'),
+('Fantasy'),
+('Science Fiction'),
+('Self-Help'),
+('Biography & Memoir'),
+('Business & Economics'),
+('Philosophy'),
+('History'),
+('Programming & Technology'),
+('Science'),
+('Psychology');
+
+INSERT INTO Record_table (member_id,staff_id,date)
+VALUES
+(11,4,'2025-08-25'),
+(12,5,'2025-08-28'),
+(13,14,'2025-09-02');
+
+ALTER TABLE book_table
+MODIFY isbn VARCHAR(13);
+
+ALTER TABLE book_table
+MODIFY title VARCHAR(255);
+
+INSERT INTO book_table
+(isbn, title, author, description, book_image, publisher, user_id, action, action_date, number_of_copies, number_of_copies_remaining)
+VALUES
+('9780061120084','To Kill a Mockingbird','Harper Lee','Classic novel on justice and morality.',
+ 'https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg','HarperCollins',4,'Added','2025-08-10',10,8),
+
+('9780743273565','The Great Gatsby','F. Scott Fitzgerald','American classic novel.',
+ 'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg','Scribner',5,'Added','2025-08-15',8,6),
+
+('9780544003415','The Hobbit','J.R.R. Tolkien','Fantasy adventure.',
+ 'https://covers.openlibrary.org/b/isbn/9780544003415-L.jpg','HarperCollins',9,'Added','2025-08-20',12,9),
+
+('9781455586691','Atomic Habits','James Clear','Building good habits.',
+ 'https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg','Avery',14,'Added','2025-08-22',14,11),
+
+('9780307387899','Sapiens','Yuval Noah Harari','History of humankind.',
+ 'https://covers.openlibrary.org/b/isbn/9780307387899-L.jpg','Harper',4,'Added','2025-08-25',11,9),
+
+('9780140449136','Meditations','Marcus Aurelius','Stoic philosophy.',
+ 'https://covers.openlibrary.org/b/isbn/9780140449136-L.jpg','Penguin',5,'Added','2025-08-28',7,5),
+
+('9780812981605','Rich Dad Poor Dad','Robert Kiyosaki','Personal finance lessons.',
+ 'https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg','Plata',9,'Added','2025-09-01',9,7),
+
+('9780307474278','The Lean Startup','Eric Ries','Startup methodology.',
+ 'https://covers.openlibrary.org/b/isbn/9780307474278-L.jpg','Crown',14,'Added','2025-09-05',8,6),
+
+('9780062315007','The Alchemist','Paulo Coelho','Spiritual journey.',
+ 'https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg','HarperOne',4,'Added','2025-09-08',10,8),
+
+('9780140449266','The Republic','Plato','Political philosophy.',
+ 'https://covers.openlibrary.org/b/isbn/9780140449266-L.jpg','Penguin',5,'Added','2025-09-10',6,4),
+
+('9780132350884','Clean Code','Robert C. Martin','Software craftsmanship.',
+ 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg','Prentice Hall',9,'Added','2025-09-12',15,12),
+
+('9780134685991','Effective Java','Joshua Bloch','Java best practices.',
+ 'https://covers.openlibrary.org/b/isbn/9780134685991-L.jpg','Addison-Wesley',14,'Added','2025-09-15',10,7),
+
+('9780596517748','JavaScript: The Good Parts','Douglas Crockford','JavaScript insights.',
+ 'https://covers.openlibrary.org/b/isbn/9780596517748-L.jpg','OReilly',4,'Added','2025-09-18',9,6),
+
+('9780262033848','AI: A Modern Approach','Stuart Russell','AI fundamentals.',
+ 'https://covers.openlibrary.org/b/isbn/9780262033848-L.jpg','Pearson',5,'Added','2025-09-20',8,5),
+
+('9780131103627','The C Programming Language','Kernighan & Ritchie','C language classic.',
+ 'https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg','Prentice Hall',9,'Added','2025-09-22',12,9);
+
+-- =========================
+-- BOOK ↔ GENRE MAPPING
+-- =========================
+INSERT INTO book_genre (book_id, genre_id)
+VALUES
+-- Classics / Fiction
+(1,1),(1,7),          -- To Kill a Mockingbird
+(2,1),(2,7),          -- The Great Gatsby
+
+-- Fantasy
+(3,3),(3,1),          -- The Hobbit
+
+-- Self-help / Psychology
+(4,5),(4,12),         -- Atomic Habits
+
+-- Non-fiction / History
+(5,2),(5,9),          -- Sapiens
+
+-- Philosophy
+(6,8),                -- Meditations
+(10,8),               -- The Republic
+(9,1),(9,8),          -- The Alchemist
+
+-- Business / Self-help
+(7,5),(7,11),         -- Rich Dad Poor Dad
+(8,11),(8,5),         -- The Lean Startup
+
+-- Programming / Technology
+(11,10),              -- Clean Code
+(12,10),              -- Effective Java
+(13,10),              -- JavaScript: The Good Parts
+(15,10),              -- The C Programming Language
+
+-- AI / Science
+(14,4),(14,11);       -- AI: A Modern Approach
+
+
+-- =========================
+-- RECORD DETAILS
+-- =========================
+INSERT INTO record_Detail_table (record_id, status, book_id, total_copies, due_Date)
+VALUES
+(11,'Issued',1,1,'2025-09-05'),      -- To Kill a Mockingbird
+(12,'Returned',2,1,'2025-09-01'),    -- The Great Gatsby
+(13,'Issued',4,1,'2025-09-12');      -- Atomic Habits
+
+
+-- =========================
+-- MEMBER ↔ BOOK
+-- =========================
+INSERT INTO member_book_table (user_id, book_id, copy_count)
+VALUES
+(11,1,1),    -- Manoj Kumar → To Kill a Mockingbird
+(13,4,1);    -- Suresh Rao → Atomic Habits
+
+
+-- =========================
+-- BOOK RATINGS
+-- =========================
+INSERT INTO book_rating (book_id, user_id, rating)
+VALUES
+(1,1,5),    -- To Kill a Mockingbird
+(1,2,4),
+
+(4,3,5),    -- Atomic Habits
+(4,7,4),
+
+(11,8,5),   -- Clean Code
+(11,11,4),
+
+(14,12,5),  -- AI: A Modern Approach
+(14,13,4);
+
+
+-- =========================
+-- BOOK COMMENTS
+-- =========================
+INSERT INTO book_comment (book_id, user_id, comment)
+VALUES
+(1,1,'A powerful and timeless novel.'),
+(4,3,'Very practical and motivating.'),
+(11,8,'Must-read for clean coding.'),
+(14,13,'Excellent introduction to AI.');

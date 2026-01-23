@@ -45,11 +45,4 @@ public class User {
 	@Column(name = "role_type", length = 45)
 	private String roleType;
 
-	/* ------------------ Relationships ------------------ */
-
-	@OneToOne(mappedBy = "user", fetch = FetchType.LAZY)
-	private Staff staff;
-
-	/* ------------------ Constructors ------------------ */
-
 }

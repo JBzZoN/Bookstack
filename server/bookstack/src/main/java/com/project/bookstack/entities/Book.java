@@ -3,11 +3,14 @@ package com.project.bookstack.entities;
 
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 
 
 @Entity
 @Table(name = "book_table", schema = "Bookstack")
+@Data
 public class Book {
 
 
@@ -17,7 +20,10 @@ public class Book {
 	    private Integer bookId;
 
 	    @Column(name = "isbn")
-	    private Integer isbn;
+	    private String isbn;
+	    
+	    @Column(name = "book_image")
+	    private String image;
 
 	    @Column(name = "title", length = 25)
 	    private String title;
@@ -30,12 +36,6 @@ public class Book {
 
 	    @Column(name = "publisher", length = 45)
 	    private String publisher;
-
-	    @Column(name = "edition")
-	    private Integer edition;   // YEAR mapped as Integer
-
-	    @Column(name = "book_category")
-	    private Character bookCategory;
 
 	    @Column(name = "action", length = 15)
 	    private String action;

@@ -1,11 +1,24 @@
-import React from 'react'
-import { members } from './../../../dummy-data/member-data';
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom';
 import Title from '../../../components/staff/title/title';
+import axios from 'axios';
 
 function ViewMembers() {
 
   const navigate = useNavigate();
+
+  const [members, setMembers] = useState([])
+
+  async function getAllMembers() {
+      const response = await axios.get("http://localhost:8080/staff/members");
+      const data = response.data
+      setMembers(data)
+  }
+  console.log(members)
+  useEffect(() => {
+      getAllMembers()
+  }, [])
+
   return (
     <div className='container mt-3 mb-5'>
       <Title string={"Members"}/>
@@ -21,12 +34,12 @@ function ViewMembers() {
           </tr>
         </thead>
         <tbody>
-          {members.map((e) => <tr key={e.username}>
-            <td>{e.name}</td>
-            <td className='d-none d-md-table-cell'>{e.email}</td>
-            <td>{e.phone}</td>
-            <td className='d-none d-md-table-cell'>{e.address}</td>
-            <td>{e.date_of_birth}</td>
+          {members.map((e) => <tr key={e.user.userId}>
+            <td>{e.user.name}</td>
+            <td className='d-none d-md-table-cell'>{e.user.email}</td>
+            <td>{e.user.phone}</td>
+            <td className='d-none d-md-table-cell'>{e.user.address}</td>
+            <td>{e.user.dob}</td>
             <td><button className='btn btn-success' onClick={
               () => {
                 navigate('/staff/members/profile', {state:{member:e}})

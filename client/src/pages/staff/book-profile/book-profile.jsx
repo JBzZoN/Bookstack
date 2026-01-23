@@ -8,14 +8,13 @@ function BookProfile() {
   
   const location = useLocation();
   const book = location.state.book;
-  console.log(book)
   return (
     <div>
     <div className='container book-container mb-5'>
         <div className="card book position-relative">
             <div className="position-absolute top-0 start-50 translate-middle whitener"></div>
-            <img src={book.formats['image/jpeg']} className='position-absolute top-0 start-50 translate-middle book-image' alt="" />
-            <div class="card-body mt-5">
+            <img src={book.image} className='position-absolute top-0 start-50 translate-middle book-image' alt="" />
+            <div className="card-body mt-5">
                 <table className='table table-striped mt-4'>
                     <tbody>
                         <tr>
@@ -24,17 +23,17 @@ function BookProfile() {
                         </tr>
                         <tr>
                             <td>Author</td>
-                            <td>{book.authors[0].name}</td>
+                            <td>{book.author}</td>
                         </tr>
                         
                         <tr>
                             <td>Summary</td>
-                            <td>{book.summaries[0]}</td>
+                            <td>{book.description}</td>
                         </tr>
                         
                     </tbody>
                 </table>
-                <Link to="/staff/books" class="btn btn-primary go-back">Go Back</Link>
+                <Link to="/staff/books" className="btn btn-primary go-back">Go Back</Link>
             </div>
             </div>
     </div>

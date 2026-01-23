@@ -29,10 +29,9 @@ public interface AdminRepository extends JpaRepository<Book,Long>{
 			       b.title,
 			       b.author,
 			       b.description,
-			       b.publisher,
-			       b.edition
+			       b.publisher
 			   )
 			   from Book b
 			""")
-			List<AdminDetailDto> getAllBooks();
+	List<AdminDetailDto> getAllBooks();
 }

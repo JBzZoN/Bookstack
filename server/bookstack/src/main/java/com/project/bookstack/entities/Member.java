@@ -1,9 +1,12 @@
 package com.project.bookstack.entities;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "Member_table", schema = "Bookstack")
+@Data
 public class Member {
 
     /* ------------------ Shared Primary Key ------------------ */
@@ -13,7 +16,7 @@ public class Member {
     private Integer userId;
 
     @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "user_id",
         referencedColumnName = "user_id",
@@ -23,7 +26,7 @@ public class Member {
 
     /* ------------------ Membership Type ------------------ */
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "membership_type",
         referencedColumnName = "membership_type",

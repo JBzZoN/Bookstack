@@ -31,7 +31,7 @@ public class MembershipData {
     private Integer reservationLimit;
 
     @Column(name = "access_to_new")
-    private Boolean accessToNew;
+    private Byte accessToNew;
 
     @Column(name = "monthly_cost")
     private Integer monthlyCost;

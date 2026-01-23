@@ -19,44 +19,44 @@ function MemberProfile() {
                     <tbody>
                         <tr>
                             <td>Name</td>
-                            <td>{member.name}</td>
+                            <td>{member.user.name}</td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td>{member.email}</td>
+                            <td>{member.user.email}</td>
                         </tr>
                         
                         <tr>
                             <td>Phone no</td>
-                            <td>{member.phone}</td>
+                            <td>{member.user.phone}</td>
                         </tr>
                         
                         <tr>
                             <td>Address</td>
-                            <td>{member.address}</td>
+                            <td>{member.user.address}</td>
                         </tr>
                         
                         <tr>
                             <td>Date of birth</td>
-                            <td>{member.date_of_birth}</td>
+                            <td>{member.user.dob}</td>
                         </tr>
                         <tr>
                             <td>Membership type</td>
-                            <td>{member.membership_type}</td>
+                            <td>{member.membershipData.membershipType}</td>
                         </tr>
                         <tr>
                             <td>Username</td>
-                            <td>{member.username}</td>
+                            <td>{member.user.username}</td>
                         </tr>
                         
                         <tr>
                             <td>Membership start</td>
-                            <td>{member.membership_start}</td>
+                            <td>{member.memberStart}</td>
                         </tr>
                         
                         <tr>
                             <td>Membership end</td>
-                            <td>{member.membership_end}</td>
+                            <td>{member.memberEnd}</td>
                         </tr>
                     </tbody>
                 </table>

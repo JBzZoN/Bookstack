@@ -7,13 +7,11 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-
 public class AdminDetailDto {
 
-    private Integer isbn;
+    private String isbn;
     private String title;
     private String author;
     private String description;
     private String publisher;
-    private Integer edition;
 }
