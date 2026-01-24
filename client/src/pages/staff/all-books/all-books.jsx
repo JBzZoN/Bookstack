@@ -21,7 +21,6 @@ function AllBooks() {
         "Self-Help": "text-bg-warning"
     };
 
-
     const onRemove = () => {
         toast.info("Removal request sent")
     }
@@ -56,7 +55,9 @@ function AllBooks() {
                     <div className="card-body">
                         <h5 className="card-title small-text" style={{height:"40px"}}>{e.title}</h5>
                         <p className="card-text small-text">
-                            {e.genreList?.map((a, index) => (
+                            
+                            {
+                            e.genreList?.slice(0, 2).map((a, index) => (
                             <span
                             key={index}
                             className={`badge rounded-pill me-1 ${genreColorMap[a] || "text-bg-secondary"}`}
@@ -64,6 +65,14 @@ function AllBooks() {
                             {a}
                             </span>
                         ))}
+                        {
+                            (e.genreList.length > 2) && <span
+                            className={`badge rounded-pill me-1 text-bg-danger`}
+                            >
+                                ...
+                            </span>
+                        
+                        }
                         </p>
                     </div>
                     <div className='card-footer d-flex justify-content-between' id='card-footer'>

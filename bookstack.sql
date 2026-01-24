@@ -208,83 +208,6 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`member_book_table` (
 ENGINE = InnoDB;
 
 
-SET SQL_MODE=@OLD_SQL_MODE;
-SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
-SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
-
--- -----------------------------------------------------
--- MYSQL DUMMY DATA
--- -----------------------------------------------------
--- MySQL Workbench Forward Engineering
-
-INSERT INTO membership_data_table 
-(membership_type, borrow_limit, borrow_period, `renewal_limit`, `reservation_limit`, `access_to_new`, monthly_cost, yearly_cost)
-VALUES
-('Basic', 3, 7, 1, 0, 0, 50, 500),
-('Premium', 7, 14, 5, 3, 1, 300, 3000),
-('Standard', 5, 10, 2, 2, 0, 150, 1500);
-
-INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
-('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
-('Bob Mathew', 'bob.mathew@example.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
-('Clara Thomas', 'clara.thomas@example.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
-('David Roy', 'david.roy@example.com', '9898765432', '78 Palm St, Trivandrum', '1989-11-22', 'davidr', 'roy123', 'Librarian', 4),
-('Eva George', 'eva.george@example.com', '9786543210', '90 Rose Lane, Kochi', '1992-09-30', 'evag', 'eva321', 'Librarian', 5),
-('Frank Wilson', 'frank.wilson@example.com', '9754321980', '101 Maple St, Thrissur', '1985-06-10', 'frankw', 'frank555', 'Admin', 6),
-('Grace Paul', 'grace.paul@example.com', '9845632109', '12 Lotus St, Alappuzha', '1997-01-17', 'gracep', 'grace111', 'Member', 7),
-('Henry Joseph', 'henry.joseph@example.com', '9832109876', '14 Ocean View, Calicut', '1994-12-25', 'henryj', 'henry222', 'Member', 8),
-('Isabel Dsouza', 'isabel.dsouza@example.com', '9723456123', '22 River St, Kottayam', '1990-08-19', 'isabeld', 'isa333', 'Librarian', 9),
-('John Samuel', 'john.samuel@example.com', '9798765412', '40 Park Lane, Trivandrum', '1988-03-14', 'johns', 'john444', 'Admin', 10);
-
-INSERT INTO member_table (user_id, membership_type, member_start, member_end) VALUES
-(1, 'Premium', '2025-05-01', '2026-04-30'),
-(2, 'Standard', '2024-01-01', '2024-12-31'),
-(3, 'Basic', '2023-02-01', '2024-01-31'),
-(7, 'Premium', '2022-03-01', '2023-02-28'),
-(8, 'Premium', '2022-02-01', '2023-02-21');
-
-INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
-(4, 35000, '2020/06/15'),
-(5, 40000, '2019/04/10'),
-(9, 42000, '2021/09/01');
-
-INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
-(01, 04, 01, '2025-01-12'),
-(02, 05, 02, '2025-02-07'),
-(03, 09, 03, '2025-03-15'),
-(07, 04, 04, '2025-04-03'),
-(08, 05, 05, '2025-05-05'),
-(01, 09, 06, '2025-05-20'),
-(02, 04, 07, '2025-06-10'),
-(03, 05, 08, '2025-07-12'),
-(07, 09, 09, '2025-08-22'),
-(08, 04, 10, '2025-09-10');
-
-INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date) VALUES
-(01, 01, 'Issued', 01, 1, '2025-01-20'),
-(02, 02, 'Issued', 02, 1, '2025-02-15'),
-(03, 03, 'Returned', 03, 1, '2025-03-22'),
-(04, 04, 'Issued', 04, 1, '2025-04-15'),
-(05, 05, 'Issued', 05, 2, '2025-05-20'),
-(06, 06, 'Returned', 06, 1, '2025-05-28'),
-(07, 07, 'Issued', 07, 1, '2025-06-18'),
-(08, 08, 'Issued', 08, 1, '2025-07-20'),
-(09, 09, 'Returned', 09, 1, '2025-08-30'),
-(10, 10, 'Issued', 10, 1, '2025-09-18');
-
-
-INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
-(01, 01, 1),
-(02, 02, 1),
-(03, 03, 1),
-(07, 04, 1),
-(08, 05, 2),
-(01, 06, 1),
-(02, 07, 1),
-(03, 08, 1),
-(07, 09, 1),
-(08, 10, 1);
-
 -- 1. Add image column to book_table
 ALTER TABLE Bookstack.book_table
 ADD COLUMN book_image VARCHAR(255) NULL AFTER description;
@@ -363,49 +286,58 @@ CREATE TABLE IF NOT EXISTS Bookstack.book_comment (
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
-INSERT INTO user_table (name,email,phone,address,dob,username,password,role_type)
-VALUES
-('Manoj Kumar','manoj@example.com','9811111111','Bengaluru','1996-05-12','manoj','pass','Member'),
-('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member'),
-('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member'),
-('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian');
-
-INSERT INTO staff_table (user_id,salary,date_hired)
-VALUES
-(14,39000,'2022-02-15');
-
-INSERT INTO Member_table (user_id,membership_type,member_start,member_end)
-VALUES
-(11,'Standard','2025-01-01','2025-12-31'),
-(12,'Premium','2025-02-01','2026-01-31'),
-(13,'Basic','2024-06-01','2025-05-31');
-
-INSERT INTO genre_table (genre_name)
-VALUES
-('Fiction'),
-('Non-Fiction'),
-('Fantasy'),
-('Science Fiction'),
-('Self-Help'),
-('Biography & Memoir'),
-('Business & Economics'),
-('Philosophy'),
-('History'),
-('Programming & Technology'),
-('Science'),
-('Psychology');
-
-INSERT INTO Record_table (member_id,staff_id,date)
-VALUES
-(11,4,'2025-08-25'),
-(12,5,'2025-08-28'),
-(13,14,'2025-09-02');
-
 ALTER TABLE book_table
 MODIFY isbn VARCHAR(13);
 
 ALTER TABLE book_table
 MODIFY title VARCHAR(255);
+
+
+SET SQL_MODE=@OLD_SQL_MODE;
+SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;
+SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
+
+-- -----------------------------------------------------
+-- MYSQL DUMMY DATA
+-- -----------------------------------------------------
+-- MySQL Workbench Forward Engineering
+
+INSERT INTO membership_data_table 
+(membership_type, borrow_limit, borrow_period, `renewal_limit`, `reservation_limit`, `access_to_new`, monthly_cost, yearly_cost)
+VALUES
+('Basic', 3, 7, 1, 0, 0, 50, 500),
+('Premium', 7, 14, 5, 3, 1, 300, 3000),
+('Standard', 5, 10, 2, 2, 0, 150, 1500);
+
+INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
+('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
+('Bob Mathew', 'bob.mathew@example.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
+('Clara Thomas', 'clara.thomas@example.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
+('David Roy', 'david.roy@example.com', '9898765432', '78 Palm St, Trivandrum', '1989-11-22', 'davidr', 'roy123', 'Librarian', 4),
+('Eva George', 'eva.george@example.com', '9786543210', '90 Rose Lane, Kochi', '1992-09-30', 'evag', 'eva321', 'Librarian', 5),
+('Frank Wilson', 'frank.wilson@example.com', '9754321980', '101 Maple St, Thrissur', '1985-06-10', 'frankw', 'frank555', 'Admin', 6),
+('Grace Paul', 'grace.paul@example.com', '9845632109', '12 Lotus St, Alappuzha', '1997-01-17', 'gracep', 'grace111', 'Member', 7),
+('Henry Joseph', 'henry.joseph@example.com', '9832109876', '14 Ocean View, Calicut', '1994-12-25', 'henryj', 'henry222', 'Member', 8),
+('Isabel Dsouza', 'isabel.dsouza@example.com', '9723456123', '22 River St, Kottayam', '1990-08-19', 'isabeld', 'isa333', 'Librarian', 9),
+('John Samuel', 'john.samuel@example.com', '9798765412', '40 Park Lane, Trivandrum', '1988-03-14', 'johns', 'john444', 'Admin', 10),
+('Manoj Kumar','manoj@example.com','9811111111','Bengaluru','1996-05-12','manoj','pass','Member', 11),
+('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member', 12),
+('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member', 13),
+('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian', 14);
+
+INSERT INTO member_table (user_id, membership_type, member_start, member_end) VALUES
+(1, 'Premium', '2025-05-01', '2026-04-30'),
+(2, 'Standard', '2024-01-01', '2024-12-31'),
+(3, 'Basic', '2023-02-01', '2024-01-31'),
+(7, 'Premium', '2022-03-01', '2023-02-28'),
+(8, 'Premium', '2022-02-01', '2023-02-21');
+
+INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
+(4, 35000, '2020/06/15'),
+(5, 40000, '2019/04/10'),
+(9, 42000, '2021/09/01'),
+(14,39000,'2022-02-15');
+
 
 INSERT INTO book_table
 (isbn, title, author, description, book_image, publisher, user_id, action, action_date, number_of_copies, number_of_copies_remaining)
@@ -455,6 +387,35 @@ VALUES
 ('9780131103627','The C Programming Language','Kernighan & Ritchie','C language classic.',
  'https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg','Prentice Hall',9,'Added','2025-09-22',12,9);
 
+
+-- =========================
+-- BOOK RATINGS
+-- =========================
+INSERT INTO book_rating (book_id, user_id, rating)
+VALUES
+(1,1,5),    -- To Kill a Mockingbird
+(1,2,4),
+
+(4,3,5),    -- Atomic Habits
+(4,7,4),
+
+(11,8,5),   -- Clean Code
+(11,11,4),
+
+(14,12,5),  -- AI: A Modern Approach
+(14,13,4);
+
+
+-- =========================
+-- BOOK COMMENTS
+-- =========================
+INSERT INTO book_comment (book_id, user_id, comment)
+VALUES
+(1,1,'A powerful and timeless novel.'),
+(4,3,'Very practical and motivating.'),
+(11,8,'Must-read for clean coding.'),
+(14,13,'Excellent introduction to AI.');
+
 -- =========================
 -- BOOK ↔ GENRE MAPPING
 -- =========================
@@ -491,16 +452,52 @@ VALUES
 -- AI / Science
 (14,4),(14,11);       -- AI: A Modern Approach
 
+INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
+(01, 04, 01, '2025-01-12'),
+(02, 05, 02, '2025-02-07'),
+(03, 09, 03, '2025-03-15'),
+(07, 04, 04, '2025-04-03'),
+(08, 05, 05, '2025-05-05'),
+(01, 09, 06, '2025-05-20'),
+(02, 04, 07, '2025-06-10'),
+(03, 05, 08, '2025-07-12'),
+(07, 09, 09, '2025-08-22'),
+(08, 04, 10, '2025-09-10'),
+(11,4,11,'2025-08-25'),
+(12,5,12,'2025-08-28'),
+(13,14,13,'2025-09-02');
 
--- =========================
--- RECORD DETAILS
--- =========================
-INSERT INTO record_Detail_table (record_id, status, book_id, total_copies, due_Date)
+INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date) VALUES
+(01, 01, 'Issued', 01, 1, '2025-01-20'),
+(02, 02, 'Issued', 02, 1, '2025-02-15'),
+(03, 03, 'Returned', 03, 1, '2025-03-22'),
+(04, 04, 'Issued', 04, 1, '2025-04-15'),
+(05, 05, 'Issued', 05, 2, '2025-05-20'),
+(06, 06, 'Returned', 06, 1, '2025-05-28'),
+(07, 07, 'Issued', 07, 1, '2025-06-18'),
+(08, 08, 'Issued', 08, 1, '2025-07-20'),
+(09, 09, 'Returned', 09, 1, '2025-08-30'),
+(10, 10, 'Issued', 10, 1, '2025-09-18');
+
+
+
+INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
+(01, 01, 1),
+(02, 02, 1),
+(03, 03, 1),
+(07, 04, 1),
+(08, 05, 2),
+(01, 06, 1),
+(02, 07, 1),
+(03, 08, 1),
+(07, 09, 1),
+(08, 10, 1);
+
+INSERT INTO Member_table (user_id,membership_type,member_start,member_end)
 VALUES
-(11,'Issued',1,1,'2025-09-05'),      -- To Kill a Mockingbird
-(12,'Returned',2,1,'2025-09-01'),    -- The Great Gatsby
-(13,'Issued',4,1,'2025-09-12');      -- Atomic Habits
-
+(11,'Standard','2025-01-01','2025-12-31'),
+(12,'Premium','2025-02-01','2026-01-31'),
+(13,'Basic','2024-06-01','2025-05-31');
 
 -- =========================
 -- MEMBER ↔ BOOK
@@ -512,29 +509,26 @@ VALUES
 
 
 -- =========================
--- BOOK RATINGS
+-- RECORD DETAILS
 -- =========================
-INSERT INTO book_rating (book_id, user_id, rating)
+INSERT INTO record_Detail_table (record_id, status, book_id, total_copies, due_Date)
 VALUES
-(1,1,5),    -- To Kill a Mockingbird
-(1,2,4),
-
-(4,3,5),    -- Atomic Habits
-(4,7,4),
-
-(11,8,5),   -- Clean Code
-(11,11,4),
-
-(14,12,5),  -- AI: A Modern Approach
-(14,13,4);
+(11,'Issued',1,1,'2025-09-05'),      -- To Kill a Mockingbird
+(12,'Returned',2,1,'2025-09-01'),    -- The Great Gatsby
+(13,'Issued',4,1,'2025-09-12');      -- Atomic Habits
 
 
--- =========================
--- BOOK COMMENTS
--- =========================
-INSERT INTO book_comment (book_id, user_id, comment)
+INSERT INTO genre_table (genre_name)
 VALUES
-(1,1,'A powerful and timeless novel.'),
-(4,3,'Very practical and motivating.'),
-(11,8,'Must-read for clean coding.'),
-(14,13,'Excellent introduction to AI.');
+('Fiction'),
+('Non-Fiction'),
+('Fantasy'),
+('Science Fiction'),
+('Self-Help'),
+('Biography & Memoir'),
+('Business & Economics'),
+('Philosophy'),
+('History'),
+('Programming & Technology'),
+('Science'),
+('Psychology');
