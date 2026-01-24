@@ -19,12 +19,19 @@ import org.springframework.web.multipart.MultipartFile;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
+import com.project.bookstack.dto.RentRenewReturnRecordDTO;
+import com.project.bookstack.dto.RentRenewReturnRequestDTO;
 import com.project.bookstack.entities.Book;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.User;
+import com.project.bookstack.entities.Record;
+import com.project.bookstack.entities.RecordDetail;
+import com.project.bookstack.entities.Staff;
 import com.project.bookstack.repositories.StaffBookRepository;
 import com.project.bookstack.repositories.StaffDetailsRepository;
 import com.project.bookstack.repositories.StaffMemberRepository;
+import com.project.bookstack.repositories.StaffRecordDetailRepository;
+import com.project.bookstack.repositories.StaffRecordRepository;
 import com.project.bookstack.repositories.StaffUserRepository;
 
 import jakarta.transaction.Transactional;
@@ -42,6 +49,11 @@ public class StaffService {
 	private final StaffDetailsRepository staffDetailsRepository;
 	
 	private final StaffUserRepository staffUserRepository;
+	
+	private final StaffRecordRepository staffRecordRepository;
+	
+
+	private final StaffRecordDetailRepository staffRecordDetailRepository;
 	
 	public List<BookDto> getAllBooks() {
 		// TODO Auto-generated method stub
@@ -139,6 +151,46 @@ public class StaffService {
 		
 		
 		return  dtoList;
+	}
+
+	public void uploadRecord(RentRenewReturnRequestDTO rentRenewReturnRequestDTO) {
+		
+		Record record = new Record();
+
+        // Member reference (NO DB HIT)
+		System.out.println(rentRenewReturnRequestDTO.getMemberId());
+        Member member = staffMemberRepository.findById(rentRenewReturnRequestDTO.getMemberId()).get();
+        record.setMember(member);
+
+        // Staff reference (NO DB HIT)
+        Staff staff = staffDetailsRepository.findById(rentRenewReturnRequestDTO.getStaffId()).get();
+        record.setStaff(staff);
+
+        record.setDate(LocalDate.now());
+
+        staffRecordRepository.save(record);
+
+        /* ------------------ Create Record Details ------------------ */
+
+        for (RentRenewReturnRecordDTO r : rentRenewReturnRequestDTO.getRecords()) {
+
+            RecordDetail detail = new RecordDetail();
+            detail.setRecord(record);
+
+            // Book reference (NO DB HIT)
+            Book book = staffBookRepository.findById(r.getBookId()).get();
+            detail.setBook(book);
+
+            detail.setStatus(r.getStatus());
+            detail.setTotalCopies(r.getCopies());
+
+            if ("Rent".equalsIgnoreCase(r.getStatus())) {
+                detail.setDueDate(LocalDate.now().plusDays(14));
+            }
+
+            staffRecordDetailRepository.save(detail);
+        }
+		
 	}
 
 	

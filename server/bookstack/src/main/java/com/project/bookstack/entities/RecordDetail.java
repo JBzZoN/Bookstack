@@ -1,10 +1,15 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "record_Detail_table", schema = "Bookstack")
+@Data
+@NoArgsConstructor
 public class RecordDetail {
 
     /* ------------------ Primary Key ------------------ */

@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
+import com.project.bookstack.dto.RentRenewReturnRequestDTO;
 import com.project.bookstack.dto.Search;
 import com.project.bookstack.entities.Book;
 import com.project.bookstack.entities.Member;
@@ -49,6 +50,12 @@ public class StaffController {
 	@PostMapping("/search/book")
 	public List<BookSearchDTO> searchBooks(@RequestBody Search bookSearch) {
 		return staffService.searchBooks(bookSearch.search());
+	}
+	
+	@PostMapping("/record")
+	public void uploadRecord(@RequestBody RentRenewReturnRequestDTO rentRenewReturnRequestDTO) {
+		System.out.println(rentRenewReturnRequestDTO);
+		staffService.uploadRecord(rentRenewReturnRequestDTO);
 	}
 
 	

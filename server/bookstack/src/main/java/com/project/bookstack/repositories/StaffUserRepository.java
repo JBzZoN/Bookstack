@@ -13,7 +13,7 @@ import com.project.bookstack.entities.User;
 @Repository
 public interface StaffUserRepository extends JpaRepository<User, Integer> {
 	
-	@Query("SELECT u FROM User u WHERE u.username LIKE CONCAT('%', :q, '%') OR u.email LIKE CONCAT(:q, '%') OR u.name LIKE CONCAT('%', :q, '%')")
+	@Query("SELECT u FROM User u WHERE u.roleType='Member' and (u.username LIKE CONCAT('%', :q, '%') OR u.email LIKE CONCAT(:q, '%') OR u.name LIKE CONCAT('%', :q, '%'))")
 	List<User> searchUsers(
 	    @Param("q") String q,
 	    Pageable pageable

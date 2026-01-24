@@ -7,6 +7,10 @@ import "./rent-renew-return.css"
 
 function RentRenewReturn() {
 
+  // ⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+  const STAFF_ID = 4;
+  // ⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+
   // member search
   const [onSearch, setOnSearch] = useState(false)
   const [searchResults, setSearchResults] = useState([])
@@ -29,46 +33,109 @@ function RentRenewReturn() {
     }, 500);
   }
 
-  const [rows, setRows] = useState(1)
+  // Book searching code
+  const [rows, setRows] = useState([{
+    recordType: "Rent",
+    onBookSearch: false,
+    searchBookResults: [],
+    searchBookBarOn: false,
+    searchBookString: "",
+    searchResultBook: null,
+    numberOfCopies: 0
+  }])
 
-  // book search
-  const [onBookSearch, setOnBookSearch] = useState(false)
-  const [searchBookResults, setSearchBookResults] = useState([])
-  const [searchBookBarOn, setSearchBookBarOn] = useState(false)
-  const [searchBookString, setSearchBookString] = useState("")
+  const setRecordType = (value, index) => {
+    let temp = [...rows]
+    temp[index].recordType = value
+    setRows(temp) 
+  };
 
-  // final book
-  const [searchResultBook, setSearchResultBook] = useState(null)
+  const setOnBookSearch = (value, index) => {
+    let temp = [...rows]
+    temp[index].onBookSearch = value
+    setRows(temp) 
+  };
+
   
-  const onSearchBook = (e) => {
-    setSearchBookString(e.target.value)
-    const value = e.target.value
-    if (value.length < 2 || onBookSearch == true) return;
-    setOnBookSearch(true)
-    const timer = setTimeout(async () => {
-      if(value.length < 2) return;
-      const response = await axios.post("http://localhost:8080/staff/search/book", {"search" : value})
-      setSearchBookResults(response.data)
-      setOnBookSearch(false)
-    }, 500);
+  const setNumberOfCopies = (value, index) => {
+    let temp = [...rows]
+    temp[index].numberOfCopies = value
+    setRows(temp) 
+  };
+
+  const setSearchBookResults = (value, index) => {
+    let temp = [...rows]
+    temp[index].searchBookResults = value
+    setRows(temp)
+  };
+  const setSearchBookBarOn = (value, index) => {
+    let temp = [...rows]
+    temp[index].searchBookBarOn = value
+    setRows(temp)
+  };
+  const setSearchBookString = (value, index) => {
+    let temp = [...rows]
+    temp[index].searchBookString = value
+    setRows(temp)
+  };
+  const setSearchResultBook = (value, index) => {
+    let temp = [...rows]
+    temp[index].searchResultBook = value
+    setRows(temp)
+  };
+
+  const addRows = () => {
+    let temp = [...rows]
+    temp.push({
+      recordType: "Rent",
+      onBookSearch: false,
+      searchBookResults: [],
+      searchBookBarOn: false,
+      searchBookString: "",
+      searchResultBook: null,
+      numberOfCopies: 0
+    })
+    setRows(temp)
+  }
+
+  const removeRows = () => {
+    let temp = [...rows]
+    temp.pop()
+    setRows(temp)
   }
 
   const navigate = useNavigate()
-  const onSubmit = () => {
+  const onSubmit = async () => {
+    const output = {
+      staffId: STAFF_ID,
+      memberId: searchResultUser.userId,
+      records: []
+    }
+
+    rows.forEach(e => {
+      output.records.push({
+        status: e.recordType,
+        bookId: e.searchResultBook.bookId,
+        copies: e.numberOfCopies
+      })
+    })
+
+    const response = await axios.post("http://localhost:8080/staff/record", output)
+
     navigate('/staff/books')
     toast.success("Added a record")
   }
 
   function addForms() {
     let code = [];
-    for(let i = 0; i < rows; i++) {
+    for(let i = 0; i < rows.length; i++) {
       code.push(<tr>
         <td>
           <div className="form-floating mb-3">
-            <select id="inputState" className="form-select">
-              <option>Rent</option>
-              <option>Renew</option>
-              <option>Return</option>
+            <select id="inputState" className="form-select" onChange={e => setRecordType(e.target.value, i)}>
+              <option value="Rent">Rent</option>
+              <option value="Renew">Renew</option>
+              <option value="Return">Return</option>
             </select>
             
             <label for="floatingInput">Rent, renew or return</label>
@@ -80,24 +147,38 @@ function RentRenewReturn() {
 
           <div className="form-floating mb-3">
             <input type="email" className="form-control" id="floatingInput" placeholder="name@example.com"
-            value={searchBookString}
-            onChange={onSearchBook} autoComplete="off"
-            onFocus={() => setSearchBookBarOn(true)}
-            onBlur={() => setTimeout(() => setSearchBookBarOn(false), 500)}/>
-            <label htmlFor="floatingInput">{searchResultBook?searchResultBook.title: "Search for books based on isbn, title, author or publisher"}</label>
+            value={rows[i].searchBookString}
+            onChange={
+              (e) => {
+                setSearchBookString(e.target.value, i)
+                const value = e.target.value
+                if (value.length < 2 || rows[i].onBookSearch == true) return;
+                setOnBookSearch(true, i)
+                const timer = setTimeout(async () => {
+                  if(value.length < 2) return;
+                  const response = await axios.post("http://localhost:8080/staff/search/book", {"search" : value})
+                  setSearchBookResults(response.data, i)
+                  setOnBookSearch(false, i)
+                }, 500);
+              }
 
-            {(searchBookResults.length > 0) && (searchBookBarOn) && (searchBookString.length >= 2) && (
+            } autoComplete="off"
+            onFocus={() => setSearchBookBarOn(true, i)}
+            onBlur={() => setTimeout(() => setSearchBookBarOn(false, i), 500)}/>
+            <label htmlFor="floatingInput">{rows[i].searchResultBook?rows[i].searchResultBook.title: "Search for books based on isbn, title, author or publisher"}</label>
+
+            {(rows[i].searchBookResults.length > 0) && (rows[i].searchBookBarOn) && (rows[i].searchBookString.length >= 2) && (
             <div
               className="list-group position-absolute shadow mt-1 w-100"
               style={{ zIndex: 1000 }}
             >
-              {searchBookResults.map((book, index) => (
+              {rows[i].searchBookResults.map((book, index) => (
                 <div
                   key={book.id}
                   className="list-group-item list-group-item-action"
                   onClick={() => {
-                    setSearchResultBook(book)
-                    setSearchBookString("")
+                    setSearchResultBook(book, i)
+                    setSearchBookString("", i)
                   }}
                 >
                   <strong>{book.title}</strong><br />
@@ -114,7 +195,7 @@ function RentRenewReturn() {
         </td>
         <td>
           <div className="form-floating mb-3">
-            <input type="number" className="form-control" id="floatingInput" placeholder="name@example.com"/>
+            <input type="number" className="form-control" id="floatingInput" placeholder="name@example.com" onChange={e=>setNumberOfCopies(e.target.value, i)}/>
             <label htmlFor="floatingInput">Count</label>
           </div>
         </td>
@@ -162,8 +243,8 @@ function RentRenewReturn() {
 
     
     <div className='d-flex justify-content-between'>
-      <button className='btn btn-primary mb-4' onClick={() => {setRows(rows + 1)}}>Add more records</button>
-      <button className='btn btn-danger mb-4' onClick={() => {if(rows == 1) return;setRows(rows - 1)}}>Remove last record</button>
+      <button className='btn btn-primary mb-4' onClick={() => {addRows()}}>Add more records</button>
+      <button className='btn btn-danger mb-4' onClick={() => {if(rows.length == 1) return;removeRows()}}>Remove last record</button>
     </div>
       <table className='table table-striped table-danger'>
       <thead>
