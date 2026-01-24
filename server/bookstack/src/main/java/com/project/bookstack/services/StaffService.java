@@ -13,6 +13,9 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
+import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -52,8 +55,12 @@ public class StaffService {
 	
 	private final StaffRecordRepository staffRecordRepository;
 	
-
 	private final StaffRecordDetailRepository staffRecordDetailRepository;
+	
+	private final JavaMailSender javaMailSender;
+	
+	@Value("${bookstack.from.email}")
+	public String fromEmailAddress;
 	
 	public List<BookDto> getAllBooks() {
 		// TODO Auto-generated method stub
@@ -190,6 +197,25 @@ public class StaffService {
 
             staffRecordDetailRepository.save(detail);
         }
+		
+	}
+
+	public void sendEmail(String email) {
+		
+		List<String> emails = staffUserRepository.findByRoleType("Member").stream()
+				.map(e -> e.getEmail())
+				.toList();
+		
+		for(String emailString: emails) {
+			MimeMessagePreparator a = b -> {
+				MimeMessageHelper c = new MimeMessageHelper(b);
+				c.setFrom(fromEmailAddress);
+				c.setTo(emailString);
+				c.setSubject("News letter from Bookstack library");
+				c.setText(email);
+			};
+			javaMailSender.send(a);
+		}
 		
 	}
 

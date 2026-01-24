@@ -28,6 +28,5 @@ public interface StaffBookRepository extends JpaRepository<Book, Integer>{
 	    @Param("q") String q,
 	    Pageable pageable
 	);
-
 	
 }

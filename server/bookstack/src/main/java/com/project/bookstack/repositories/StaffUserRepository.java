@@ -18,5 +18,6 @@ public interface StaffUserRepository extends JpaRepository<User, Integer> {
 	    @Param("q") String q,
 	    Pageable pageable
 	);
-
+	
+	List<User> findByRoleType(String roleType);
 }
