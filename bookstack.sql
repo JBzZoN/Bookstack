@@ -40,18 +40,18 @@ USE `Bookstack` ;
 -- -----------------------------------------------------
 -- Table `Bookstack`.`user_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`user_table` (
-  `name` CHAR(30) NULL,
-  `email` VARCHAR(30) NULL,
-  `phone` CHAR(10) NULL,
-  `address` VARCHAR(45) NULL,
-  `dob` DATE NULL,
-  `username` CHAR(15) NULL,
-  `password` VARCHAR(100) NULL,
-  `role_type` VARCHAR(45) NULL,
-  `user_id` INT AUTO_INCREMENT,
-  PRIMARY KEY (`user_id`))
-ENGINE = InnoDB;
+-- CREATE TABLE IF NOT EXISTS `Bookstack`.`user_table` (
+--   `name` CHAR(30) NULL,
+--   `email` VARCHAR(30) NULL,
+--   `phone` CHAR(10) NULL,
+--   `address` VARCHAR(45) NULL,
+--   `dob` DATE NULL,
+--   `username` CHAR(15) NULL,
+--   `password` VARCHAR(100) NULL,
+--   `role_type` VARCHAR(45) NULL,
+--   `user_id` INT AUTO_INCREMENT,
+--   PRIMARY KEY (`user_id`))
+-- ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
@@ -74,17 +74,17 @@ ENGINE = InnoDB;
 -- Table `Bookstack`.`Member_table`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Bookstack`.`Member_table` (
-  `user_id` INT AUTO_INCREMENT,
+  `user_id` INT,
   `membership_type` CHAR(8) NULL,
   `member_start` DATE NULL,
   `member_end` DATE NULL,
   PRIMARY KEY (`user_id`),
   INDEX `membership_type_idx` (`membership_type` ASC) VISIBLE,
-  CONSTRAINT `member_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `Bookstack`.`user_table` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
+  -- CONSTRAINT `member_user`
+    -- FOREIGN KEY (`user_id`)
+    -- REFERENCES `Bookstack`.`member_table` (`user_id`)
+    -- ON DELETE NO ACTION
+    -- ON UPDATE NO ACTION,
   CONSTRAINT `membership_type`
     FOREIGN KEY (`membership_type`)
     REFERENCES `Bookstack`.`membership_data_table` (`membership_type`)
@@ -97,15 +97,17 @@ ENGINE = InnoDB;
 -- Table `Bookstack`.`staff_table`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `Bookstack`.`staff_table` (
-  `user_id` INT AUTO_INCREMENT,
+  `user_id` INT,
   `salary` FLOAT NULL,
   `date_hired` DATE NULL,
-  PRIMARY KEY (`user_id`),
-  CONSTRAINT `staff_user`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `Bookstack`.`user_table` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
+  PRIMARY KEY (`user_id`)
+  -- ,
+  -- CONSTRAINT `staff_user`
+    -- FOREIGN KEY (`user_id`)
+    -- REFERENCES `Bookstack`.`member_table` (`user_id`)
+    -- ON DELETE NO ACTION
+    -- ON UPDATE NO ACTION
+    )
 ENGINE = InnoDB;
 
 
@@ -260,7 +262,7 @@ CREATE TABLE IF NOT EXISTS Bookstack.book_rating (
 
   CONSTRAINT fk_rating_user
     FOREIGN KEY (user_id)
-    REFERENCES Bookstack.user_table (user_id)
+    REFERENCES Bookstack.member_table (user_id)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
@@ -282,7 +284,7 @@ CREATE TABLE IF NOT EXISTS Bookstack.book_comment (
 
   CONSTRAINT fk_comment_user
     FOREIGN KEY (user_id)
-    REFERENCES Bookstack.user_table (user_id)
+    REFERENCES Bookstack.member_table (user_id)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
@@ -309,21 +311,21 @@ VALUES
 ('Premium', 7, 14, 5, 3, 1, 300, 3000),
 ('Standard', 5, 10, 2, 2, 0, 150, 1500);
 
-INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
-('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
-('Bob Mathew', 'bob.mathew@example.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
-('Clara Thomas', 'clara.thomas@example.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
-('David Roy', 'david.roy@example.com', '9898765432', '78 Palm St, Trivandrum', '1989-11-22', 'davidr', 'roy123', 'Librarian', 4),
-('Eva George', 'eva.george@example.com', '9786543210', '90 Rose Lane, Kochi', '1992-09-30', 'evag', 'eva321', 'Librarian', 5),
-('Frank Wilson', 'frank.wilson@example.com', '9754321980', '101 Maple St, Thrissur', '1985-06-10', 'frankw', 'frank555', 'Admin', 6),
-('Grace Paul', 'grace.paul@example.com', '9845632109', '12 Lotus St, Alappuzha', '1997-01-17', 'gracep', 'grace111', 'Member', 7),
-('Henry Joseph', 'henry.joseph@example.com', '9832109876', '14 Ocean View, Calicut', '1994-12-25', 'henryj', 'henry222', 'Member', 8),
-('Isabel Dsouza', 'isabel.dsouza@example.com', '9723456123', '22 River St, Kottayam', '1990-08-19', 'isabeld', 'isa333', 'Librarian', 9),
-('John Samuel', 'john.samuel@example.com', '9798765412', '40 Park Lane, Trivandrum', '1988-03-14', 'johns', 'john444', 'Admin', 10),
-('Manoj Kumar','manoj@example.com','9811111111','Bengaluru','1996-05-12','manoj','pass','Member', 11),
-('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member', 12),
-('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member', 13),
-('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian', 14);
+-- INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
+-- ('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
+-- ('Bob Mathew', 'bob.mathew@example.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
+-- ('Clara Thomas', 'clara.thomas@example.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
+-- ('David Roy', 'david.roy@example.com', '9898765432', '78 Palm St, Trivandrum', '1989-11-22', 'davidr', 'roy123', 'Librarian', 4),
+-- ('Eva George', 'eva.george@example.com', '9786543210', '90 Rose Lane, Kochi', '1992-09-30', 'evag', 'eva321', 'Librarian', 5),
+-- ('Frank Wilson', 'frank.wilson@example.com', '9754321980', '101 Maple St, Thrissur', '1985-06-10', 'frankw', 'frank555', 'Admin', 6),
+-- ('Grace Paul', 'grace.paul@example.com', '9845632109', '12 Lotus St, Alappuzha', '1997-01-17', 'gracep', 'grace111', 'Member', 7),
+-- ('Henry Joseph', 'henry.joseph@example.com', '9832109876', '14 Ocean View, Calicut', '1994-12-25', 'henryj', 'henry222', 'Member', 8),
+-- ('Isabel Dsouza', 'isabel.dsouza@example.com', '9723456123', '22 River St, Kottayam', '1990-08-19', 'isabeld', 'isa333', 'Librarian', 9),
+-- ('John Samuel', 'john.samuel@example.com', '9798765412', '40 Park Lane, Trivandrum', '1988-03-14', 'johns', 'john444', 'Admin', 10),
+-- ('Manoj Kumar','manoj@example.com','9811111111','Bengaluru','1996-05-12','manoj','pass','Member', 11),
+-- ('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member', 12),
+-- ('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member', 13),
+-- ('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian', 14);
 
 INSERT INTO member_table (user_id, membership_type, member_start, member_end) VALUES
 (1, 'Premium', '2025-05-01', '2026-04-30'),
@@ -399,12 +401,20 @@ VALUES
 (4,3,5),    -- Atomic Habits
 (4,7,4),
 
-(11,8,5),   -- Clean Code
-(11,11,4),
+(11,8,5);   -- Clean Code
 
-(14,12,5),  -- AI: A Modern Approach
-(14,13,4);
 
+INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
+(01, 01, 1),
+(02, 02, 1),
+(03, 03, 1),
+(07, 04, 1),
+(08, 05, 2),
+(01, 06, 1),
+(02, 07, 1),
+(03, 08, 1),
+(07, 09, 1),
+(08, 10, 1);
 
 -- =========================
 -- BOOK COMMENTS
@@ -414,7 +424,24 @@ VALUES
 (1,1,'A powerful and timeless novel.'),
 (4,3,'Very practical and motivating.'),
 (11,8,'Must-read for clean coding.'),
-(14,13,'Excellent introduction to AI.');
+(14,7,'Excellent introduction to AI.');
+
+
+
+INSERT INTO genre_table (genre_name)
+VALUES
+('Fiction'),
+('Non-Fiction'),
+('Fantasy'),
+('Science Fiction'),
+('Self-Help'),
+('Biography & Memoir'),
+('Business & Economics'),
+('Philosophy'),
+('History'),
+('Programming & Technology'),
+('Science'),
+('Psychology');
 
 -- =========================
 -- BOOK ↔ GENRE MAPPING
@@ -459,13 +486,7 @@ INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
 (07, 04, 04, '2025-04-03'),
 (08, 05, 05, '2025-05-05'),
 (01, 09, 06, '2025-05-20'),
-(02, 04, 07, '2025-06-10'),
-(03, 05, 08, '2025-07-12'),
-(07, 09, 09, '2025-08-22'),
-(08, 04, 10, '2025-09-10'),
-(11,4,11,'2025-08-25'),
-(12,5,12,'2025-08-28'),
-(13,14,13,'2025-09-02');
+(02, 04, 07, '2025-06-10');
 
 INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date) VALUES
 (01, 01, 'Issued', 01, 1, '2025-01-20'),
@@ -474,24 +495,7 @@ INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, t
 (04, 04, 'Issued', 04, 1, '2025-04-15'),
 (05, 05, 'Issued', 05, 2, '2025-05-20'),
 (06, 06, 'Returned', 06, 1, '2025-05-28'),
-(07, 07, 'Issued', 07, 1, '2025-06-18'),
-(08, 08, 'Issued', 08, 1, '2025-07-20'),
-(09, 09, 'Returned', 09, 1, '2025-08-30'),
-(10, 10, 'Issued', 10, 1, '2025-09-18');
-
-
-
-INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
-(01, 01, 1),
-(02, 02, 1),
-(03, 03, 1),
-(07, 04, 1),
-(08, 05, 2),
-(01, 06, 1),
-(02, 07, 1),
-(03, 08, 1),
-(07, 09, 1),
-(08, 10, 1);
+(07, 07, 'Issued', 07, 1, '2025-06-18');
 
 INSERT INTO Member_table (user_id,membership_type,member_start,member_end)
 VALUES
@@ -507,38 +511,12 @@ VALUES
 (11,1,1),    -- Manoj Kumar → To Kill a Mockingbird
 (13,4,1);    -- Suresh Rao → Atomic Habits
 
+-- ANOTHER DATABASE
 
--- =========================
--- RECORD DETAILS
--- =========================
-INSERT INTO record_Detail_table (record_id, status, book_id, total_copies, due_Date)
-VALUES
-(11,'Issued',1,1,'2025-09-05'),      -- To Kill a Mockingbird
-(12,'Returned',2,1,'2025-09-01'),    -- The Great Gatsby
-(13,'Issued',4,1,'2025-09-12');      -- Atomic Habits
+CREATE DATABASE IF NOT EXISTS authorization;
+USE authorization;
 
-
-INSERT INTO genre_table (genre_name)
-VALUES
-('Fiction'),
-('Non-Fiction'),
-('Fantasy'),
-('Science Fiction'),
-('Self-Help'),
-('Biography & Memoir'),
-('Business & Economics'),
-('Philosophy'),
-('History'),
-('Programming & Technology'),
-('Science'),
-('Psychology');
-
-// ANOTHER DATABASE
-
-CREATE DATABASE IF NOT EXISTS auth_db;
-USE auth_db;
-
-CREATE TABLE IF NOT EXISTS `auth_db`.`user_table` (
+CREATE TABLE IF NOT EXISTS `authorization`.`user_table` (
   `name` CHAR(30) NULL,
   `email` VARCHAR(30) NULL,
   `phone` CHAR(10) NULL,

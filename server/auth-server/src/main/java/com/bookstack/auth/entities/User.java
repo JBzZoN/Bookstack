@@ -14,7 +14,7 @@ import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
 @Entity
-@Table(name = "user_table", schema = "Bookstack")
+@Table(name = "user_table")
 @Getter
 @Setter
 @NoArgsConstructor

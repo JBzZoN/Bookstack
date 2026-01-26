@@ -14,16 +14,6 @@ public class Member {
     @Id
     @Column(name = "user_id")
     private Integer userId;
-
-    @MapsId
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "user_id",
-        referencedColumnName = "user_id",
-        foreignKey = @ForeignKey(name = "member_user")
-    )
-    private User user;
-
     /* ------------------ Membership Type ------------------ */
 
     @ManyToOne(fetch = FetchType.EAGER)

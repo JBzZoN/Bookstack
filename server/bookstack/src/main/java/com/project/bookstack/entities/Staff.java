@@ -16,15 +16,6 @@ public class Staff {
     @Column(name = "user_id")
     private Integer userId;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "user_id",
-        referencedColumnName = "user_id",
-        foreignKey = @ForeignKey(name = "staff_user")
-    )
-    private User user;
-
     @Column(name = "salary")
     private Float salary;
 

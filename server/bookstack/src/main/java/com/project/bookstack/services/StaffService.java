@@ -2,6 +2,7 @@ package com.project.bookstack.services;
 
 import java.io.IOException;
 
+
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -26,7 +27,6 @@ import com.project.bookstack.dto.RentRenewReturnRecordDTO;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
 import com.project.bookstack.entities.Book;
 import com.project.bookstack.entities.Member;
-import com.project.bookstack.entities.User;
 import com.project.bookstack.entities.Record;
 import com.project.bookstack.entities.RecordDetail;
 import com.project.bookstack.entities.Staff;
@@ -35,7 +35,6 @@ import com.project.bookstack.repositories.StaffDetailsRepository;
 import com.project.bookstack.repositories.StaffMemberRepository;
 import com.project.bookstack.repositories.StaffRecordDetailRepository;
 import com.project.bookstack.repositories.StaffRecordRepository;
-import com.project.bookstack.repositories.StaffUserRepository;
 
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -50,8 +49,6 @@ public class StaffService {
 	private final StaffMemberRepository staffMemberRepository;
 
 	private final StaffDetailsRepository staffDetailsRepository;
-	
-	private final StaffUserRepository staffUserRepository;
 	
 	private final StaffRecordRepository staffRecordRepository;
 	
@@ -138,11 +135,11 @@ public class StaffService {
 		return staffBookRepository.getGenreList(id);
 	}
 
-	public List<User> searchUsers(String search) {
-		// TODO Auto-generated method stub
-		List<User> searchResults = staffUserRepository.searchUsers(search, PageRequest.of(0, 5));
-		return  searchResults;
-	}
+//	public List<User> searchUsers(String search) {
+//		// TODO Auto-generated method stub
+//		List<User> searchResults = staffUserRepository.searchUsers(search, PageRequest.of(0, 5));
+//		return  searchResults;
+//	}
 	
 	public List<BookSearchDTO> searchBooks(String search) {
 		// TODO Auto-generated method stub
@@ -200,24 +197,24 @@ public class StaffService {
 		
 	}
 
-	public void sendEmail(String email) {
-		
-		List<String> emails = staffUserRepository.findByRoleType("Member").stream()
-				.map(e -> e.getEmail())
-				.toList();
-		
-		for(String emailString: emails) {
-			MimeMessagePreparator a = b -> {
-				MimeMessageHelper c = new MimeMessageHelper(b);
-				c.setFrom(fromEmailAddress);
-				c.setTo(emailString);
-				c.setSubject("News letter from Bookstack library");
-				c.setText(email);
-			};
-			javaMailSender.send(a);
-		}
-		
-	}
+//	public void sendEmail(String email) {
+//		
+//		List<String> emails = staffUserRepository.findByRoleType("Member").stream()
+//				.map(e -> e.getEmail())
+//				.toList();
+//		
+//		for(String emailString: emails) {
+//			MimeMessagePreparator a = b -> {
+//				MimeMessageHelper c = new MimeMessageHelper(b);
+//				c.setFrom(fromEmailAddress);
+//				c.setTo(emailString);
+//				c.setSubject("News letter from Bookstack library");
+//				c.setText(email);
+//			};
+//			javaMailSender.send(a);
+//		}
+//		
+//	}
 
 	
 }
