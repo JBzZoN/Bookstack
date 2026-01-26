@@ -2,24 +2,37 @@ package com.project.bookstack.controllers;
 
 import java.util.List;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.bookstack.entities.Dummy;
-import com.project.bookstack.services.DummyService;
+import com.project.bookstack.dto.member.BookCardDTO;
+import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.services.MemberService;
 
+import lombok.RequiredArgsConstructor;
+
+@CrossOrigin(origins = "http://localhost:5173")
 @RestController
-@RequestMapping("dummy")
-public class DummyController {
+@RequestMapping("/member")
+@RequiredArgsConstructor
+public class MemberController {
 
-	@Autowired
-	DummyService dummyService;
-	
-	@GetMapping("/all")
-	public List<Dummy> dummyFetch() {
-		return dummyService.dummyServiceFetch();
-	}
-	
+    private final MemberService memberService;
+
+    @GetMapping("/books")
+    public List<BookCardDTO> getAllBooks() {
+        return memberService.getAllBooks();
+    }
+    
+    @GetMapping("/liked-books")
+    public List<BookCardDTO> getAllLikedBooks() {
+        return memberService.getAllLikedBooks();
+    }
+    
+    @GetMapping("/recommended-books")
+    public List<BookCardDTO> getRecommendedBooks() {
+        return memberService.getRecommendedBooks();
+    }
 }

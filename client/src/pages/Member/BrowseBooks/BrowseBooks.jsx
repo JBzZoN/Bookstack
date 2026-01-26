@@ -1,24 +1,40 @@
 import '../BrowseBooks/BrowseBooks.css'
-import { allBooksData } from '../../../dummy-data/all-books-data'
 import BookCard from '../../../components/Member/BookCard/BookCard'
+import { allBooksCardData } from '../../../api/member';
+import { useState, useEffect } from 'react';
 
 function BrowseBooks () {
+    const [allBooksCard, setAllBooksCard] = useState([]);
+
+    useEffect(() => {
+        allBooksCardData()
+            .then(res => {
+                setAllBooksCard(Array.isArray(res.data) ? res.data : []);
+            })
+            .catch(err => {
+                console.error("Failed to fetch books", err);
+                setAllBooksCard([]);
+            });
+    }, []);
+
     return (
-        <div>
-            <div className="container browse-title text-center mb-5">
+        <div className='mb-5 p-2'>
+            <div className="container browse-title text-center">
                 <h1 className="display-4">Explore Our Collection</h1>
                 <p className="lead">Find your next adventure between the pages.</p>
             </div>
 
-            <div className='container vertical-scroll'>
+            <div className='mt-4 container vertical-scroll'>
                     {
-                        allBooksData.map((book) => (
+                        allBooksCard.map((book) => (
                             <BookCard
-                                key={book.id}
+                                key={book.bookId}
                                 title={book.title}
                                 author={book.author}
-                                image={book.image}
-                                link={`/member/book/${book.id}`}
+                                image={book.bookImage}
+                                rating={book.averageRatings}
+                                like={book.likedByCurrentUser}
+                                link={`/member/book/${84}`}
                             />
                         ))
                     }

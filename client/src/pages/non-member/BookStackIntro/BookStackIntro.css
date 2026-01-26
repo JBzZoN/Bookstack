@@ -1,0 +1,222 @@
+/* =========================================================
+   GLOBAL THEME VARIABLES
+   ---------------------------------------------------------
+   Single source of truth for colors
+   ========================================================= */
+:root {
+  --primary-color: #6366f1;
+  --secondary-color: #ec4899;
+  --accent-color: #2dd4bf;
+  --green-color-start: #22c55e;
+  --green-color-end: #16a34a;
+}
+
+/* =========================================================
+   PAGE-SPECIFIC BACKGROUND (BookStack Intro only)
+   ========================================================= */
+body:has(.outer-body) {
+  background: linear-gradient(
+    0deg,
+    #6366f1,
+    #2dd4bf,
+    #ec4899,
+    #fcd34d
+  );
+  background-size: 100% 100%;
+  animation: gradientBG 20s ease infinite;
+  color: white;
+}
+
+/* Gradient animation */
+@keyframes gradientBG {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+.hero-section {
+  text-align: center;
+  padding: 3rem 2rem;
+}
+
+.hero-logo-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.hero-logo {
+  width: clamp(80px, 20vw, 150px);
+  height: auto;
+}
+
+.logo-text {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  text-align: center;
+}
+
+.book-part,
+.stack-part {
+  font-size: clamp(2.5rem, 8vw, 6rem);
+  line-height: 1;
+}
+
+.book-part {
+  color: #0a0d9f;
+}
+
+.stack-part {
+  color: #333;
+}
+
+/* =========================================================
+   HERO FEATURE CHIPS
+   ========================================================= */
+.hero-features {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+.hero-feature {
+  border: 2px solid white;
+  padding: 0.8rem 1rem;
+  border-radius: 50px;
+  font-weight: 700;
+  transition: transform 0.3s;
+}
+
+.hero-feature:hover {
+  transform: scale(1.05);
+}
+
+/* =========================================================
+   FEATURE SHOWCASE SECTION
+   ========================================================= */
+.feature-section {
+  padding: 1rem 2rem;
+}
+
+.feature-row {
+  display: flex;
+  gap: 3rem;
+  margin-bottom: 4rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.feature-row.reverse {
+  flex-direction: row-reverse;
+}
+
+.feature-frame {
+  flex: 1;
+  height: 300px;
+  border: 3px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.feature-text {
+  flex: 1;
+}
+
+.feature-title {
+  font-size: 2rem;
+}
+
+/* =========================================================
+   CTA SECTIONS
+   ========================================================= */
+.cta-section1 {
+  margin-top: 20px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 1rem;
+  border-radius: 0.5rem;
+  text-align: center;
+}
+
+.cta-section2 {
+  margin-top: 18px;
+  background: rgba(0, 0, 0, 0.4);
+  padding: 3rem 2rem;
+  border-radius: 1.5rem;
+  text-align: center;
+  margin-bottom: 50px;
+}
+
+/* =========================================================
+   BUTTONS (GLOBAL-CANDIDATE)
+   ========================================================= */
+.btn-subscribe {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: white;
+  padding: 0.8rem 1.5rem;
+  border-radius: 50px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.btn-guest {
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  color: white;
+  text-decoration: none;
+}
+
+/* =========================================================
+   FOOTER
+   ========================================================= */
+.footer {
+  text-align: center;
+  padding: 1rem 0;
+  padding-top: 25px;
+  font-size: 18px;
+}
+
+/* =========================================================
+   RESPONSIVE LAYER
+   ========================================================= */
+@media (max-width: 1200px) {
+  .hero-section { padding: 2.5rem 2rem; }
+  .feature-row { gap: 2.5rem; }
+}
+
+@media (max-width: 992px) {
+  .hero-section { padding: 2.2rem 1.5rem; }
+  .feature-row { gap: 2rem; }
+  .feature-frame { height: 260px; }
+  .feature-title { font-size: 1.8rem; }
+  .cta-section1,
+  .cta-section2 { margin: 0 1rem; }
+}
+
+@media (max-width: 768px) {
+  .hero-section { padding: 2rem 1.2rem; }
+  .hero-features { gap: 0.6rem; }
+  .hero-feature { font-size: 0.9rem; padding: 0.6rem 0.9rem; }
+  .feature-row,
+  .feature-row.reverse { flex-direction: column; text-align: center; }
+  .feature-frame { width: 100%; height: 220px; }
+  .feature-title { font-size: 1.6rem; }
+}
+
+@media (max-width: 576px) {
+  .hero-section { padding: 1.8rem 1rem; }
+  .feature-section { padding: 1rem; }
+  .cta-section2 { padding: 2rem 1.2rem; }
+  .btn-subscribe,
+  .btn-guest { font-size: 0.85rem; padding: 0.45rem 1rem; }
+  .footer { font-size: 0.9rem; }
+}

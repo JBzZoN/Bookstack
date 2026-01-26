@@ -5,10 +5,17 @@ import { Link } from 'react-router-dom';
 import { newArrivals } from '../../../dummy-data/new-arrivals.js';
 import { trendingBooks } from '../../../dummy-data/trending-books.js';
 import BookCard from '../../../components/Member/BookCard/BookCard.jsx';
+import banner1 from '../../../assets/images/member/banner1.png';
+import banner2 from '../../../assets/images/member/banner2.png';
+import banner3 from '../../../assets/images/member/banner3.png';
+import banner4 from '../../../assets/images/member/banner4.png';
+import banner5 from '../../../assets/images/member/banner5.png';
+import banner6 from '../../../assets/images/member/banner6.png';
+import banner7 from '../../../assets/images/member/banner7.png';
 
 function MemberHome() {
   return (
-    <div>
+    <div className='p-2'>
       <div className='container mt-5 py-5'>
         <div id="carouselExampleIndicators" className="carousel slide" data-bs-ride="carousel">
           <div className="carousel-indicators paragraph-indicators">
@@ -16,21 +23,34 @@ function MemberHome() {
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
             <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="3" aria-label="Slide 4"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="4" aria-label="Slide 5"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="5" aria-label="Slide 6"></button>
+            <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="6" aria-label="Slide 7"></button>
           </div>
 
           <div className="carousel-inner">
             <div className="carousel-item active">
-              <img src="/images/banner1.png" className="d-block w-100" alt="slide1" />
+              <img src={banner1} className="d-block w-100" alt="slide1" />
             </div>
             <div className="carousel-item">
-              <img src="/images/banner2.png" className="d-block w-100" alt="slide2" />
+              <img src={banner2} className="d-block w-100" alt="slide2" />
             </div>
             <div className="carousel-item">
-              <img src="/images/banner3.png" className="d-block w-100" alt="slide3" />
+              <img src={banner3} className="d-block w-100" alt="slide3" />
             </div>
             <div className="carousel-item">
-              <img src="/images/banner4.png" className="d-block w-100" alt="slide4" />
+              <img src={banner4} className="d-block w-100" alt="slide4" />
             </div>
+            <div className="carousel-item">
+              <img src={banner5} className="d-block w-100" alt="slide5" />
+            </div>
+            <div className="carousel-item">
+              <img src={banner6} className="d-block w-100" alt="slide6" />
+            </div>
+            <div className="carousel-item">
+              <img src={banner7} className="d-block w-100" alt="slide7" />
+            </div>
+
           </div>
 
           <button className="carousel-control-prev" type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide="prev">
@@ -48,7 +68,7 @@ function MemberHome() {
           {/* Recommended Books */}
           <div className='container d-flex justify-content-between align-items-center'>
             <h1 className='home-h1 mt-4'>Recommended Books</h1> 
-            <Link to="/member/view"><h3 className='home-h3 mt-4'>View All</h3></Link>    
+            <Link to="/member/view"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
           </div>
 
           <div className="horizontal-scroll">
@@ -70,7 +90,7 @@ function MemberHome() {
         <div>
           <div className='container d-flex justify-content-between align-items-center'>
             <h1 className='home-h1 mt-4'>Trending Books</h1> 
-            <Link to="/member/view"><h3 className='home-h3 mt-4'>View All</h3></Link>    
+            <Link to="/member/view"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
           </div>
 
           <div className="horizontal-scroll">
@@ -89,7 +109,7 @@ function MemberHome() {
         </div>
 
         {/* Quote Section */}
-        <div className="quote-section">
+        <div className="quote-section mt-4 mb-4">
           <h2 className="font-montserrat">Today's Quote</h2>
           <blockquote className="blockquote fs-4 fst-italic mt-3">
             "A reader lives a thousand lives before he dies . . . The man who never reads lives only one."
@@ -100,14 +120,14 @@ function MemberHome() {
         </div>
 
         {/* New Arrivals */}
-        <div>
+        <div className='mb-0'>
           <div className="container d-flex align-items-center justify-content-between">
             <div className="d-flex gap-2">
               <h1 className="home-h1 mt-4">New Arrivals</h1>
               <h2 className="home-h2 mt-4">(Premium)</h2>
             </div>
 
-            <Link to="/member/view"><h3 className="home-h3 mt-4">View All</h3></Link>
+            <Link to="/member/view"><h3 id='view-all' className="btn home-h3 mt-4">View All</h3></Link>
           </div>
 
           <div className="horizontal-scroll">

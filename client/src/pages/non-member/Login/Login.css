@@ -1,105 +1,84 @@
-/* Main Layout */
-.wrapper {
-  display: flex;
-  height: 100vh;
-  width: 100%;
-  background: white;
+:root {
+  --brand-indigo: #6366f1;
+  --brand-pink: #ec4899;
+  --brand-teal: #2dd4bf;
+  --brand-indigo-rgb: 99, 102, 241;
+  --brand-pink-rgb: 236, 72, 153;
 }
 
-.side-image {
-  position: absolute;
-  left: 0px;
-  width: 100vw;
-  height: 100vh;
-}
-
-.logo {
-  width: 120px;      /* you can change this */
-  height: auto;      /* keeps natural proportion */
-  object-fit: contain;
-}
-
-/* LEFT SECTION */
-.left-section {
-  flex: 1;
+/* WRAPPER */
+.auth-wrapper {
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f4f7ff 0%, #fff1f2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 1rem;
+  font-family: 'Lato', sans-serif;
 }
 
-.banner-img {
-  width: 75%;
-  border-radius: 10px;
+.font-montserrat {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
 }
 
-/* RIGHT SECTION */
-.right-section {
-  flex: 1;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding-right: 40px;
-}
-
-/* LOGIN BOX */
-.login-box {
-  width: 380px;
-  background: #ffffff;
-  padding: 35px;
-  border-radius: 14px;
-  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.12);
-  text-align: center;
-}
-
-.login-box h2 {
-  margin-bottom: 8px;
-  font-size: 26px;
-}
-
-.subtitle {
-  color: #777;
-  margin-bottom: 25px;
-}
-
-/* INPUT GROUP WITH ICON */
-.input-group {
-  display: flex;
-  align-items: center;
-  background: #f8f8f8;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  padding: 12px;
-  margin-bottom: 18px;
-}
-
-.input-group .icon {
-  font-size: 18px;
-  margin-right: 10px;
-  color: #555;
-}
-
-.input-group input {
-  flex: 1;
-  border: none;
-  background: transparent;
-  outline: none;
-  font-size: 15px;
-}
-
-/* LOGIN BUTTON */
-.login-btn {
+/* CARD */
+.login-card {
+  border-radius: 1.5rem;
+  overflow: hidden;
+  background: #fff;
+  max-width: 900px;
   width: 100%;
-  padding: 14px;
-  background: #3f48cc;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
+}
+
+/* IMAGE PANEL */
+.img-panel {
+  background-image:
+    linear-gradient(
+  180deg,
+  #4f0bc5 0%,
+  rgb(236, 94, 117) 70%
+),
+    url("https://images.unsplash.com/photo-1505642095992-ea3997129b7e?q=80&w=1887&auto=format&fit=crop");
+  background-size: cover;
+  background-position: center;
   color: white;
-  border: none;
-  border-radius: 8px;
-  font-size: 17px;
-  margin-top: 10px;
-  cursor: pointer;
-  transition: 0.2s ease;
+  padding: 3rem;
 }
 
-.login-btn:hover {
-  background: #2f3bb8;
+.brand-logo {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
 }
+
+.brand-name {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.book-part {
+  color: #0a0d9f;
+}
+
+.stack-part {
+  color: #111827;
+}
+
+/* FORM PANEL */
+.form-panel {
+  padding: 3rem;
+}
+
+.form-control-lg {
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+}
+
+
+
+
+
