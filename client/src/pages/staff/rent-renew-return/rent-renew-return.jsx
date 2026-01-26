@@ -27,7 +27,7 @@ function RentRenewReturn() {
     setOnSearch(true)
     const timer = setTimeout(async () => {
       if(value.length < 2) return;
-      const response = await axios.post("http://localhost:8080/staff/search/user", {"search" : value})
+      const response = await axios.post("http://localhost:7070/staff/search/user", {"search" : value}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
       setSearchResults(response.data)
       setOnSearch(false)
     }, 500);
@@ -120,7 +120,7 @@ function RentRenewReturn() {
       })
     })
 
-    const response = await axios.post("http://localhost:8080/staff/record", output)
+    const response = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     navigate('/staff/books')
     toast.success("Added a record")
@@ -156,7 +156,7 @@ function RentRenewReturn() {
                 setOnBookSearch(true, i)
                 const timer = setTimeout(async () => {
                   if(value.length < 2) return;
-                  const response = await axios.post("http://localhost:8080/staff/search/book", {"search" : value})
+                  const response = await axios.post("http://localhost:7070/staff/search/book", {"search" : value})
                   setSearchBookResults(response.data, i)
                   setOnBookSearch(false, i)
                 }, 500);

@@ -10,7 +10,7 @@ function ViewMembers() {
   const [members, setMembers] = useState([])
 
   async function getAllMembers() {
-      const response = await axios.get("http://localhost:8080/staff/members");
+      const response = await axios.get("http://localhost:7070/staff/members", {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}});
       const data = response.data
       setMembers(data)
   }

@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstack.auth.dto.LoginRequest;
+import com.bookstack.auth.dto.UserResponseDto;
+import com.bookstack.auth.entities.User;
 import com.bookstack.auth.security.JwtUtil;
 import com.bookstack.auth.service.AuthService;
 
@@ -34,7 +36,18 @@ public class AuthController {
 			// 2. Authenticate using AuthenticationManager
 			Authentication auth = authMgr.authenticate(authToken);
 			String jwt = jwtUtil.createToken(auth); // 3. Generate JWT token
-			return ResponseEntity.ok(jwt); // 4. Return token
+			
+			// create a response dto
+			User user = (User) auth.getPrincipal();
+			UserResponseDto result = UserResponseDto.builder()
+				.email(user.getEmail())
+				.name(user.getName())
+				.role(user.getRoleType())
+				.token(jwt)
+				.userId(user.getUserId())
+				.username(user.getUsername())
+				.build();
+			return ResponseEntity.ok(result); // 4. Return token
 			} catch (AuthenticationException e) {
 			return ResponseEntity.status(401).body("Invalid credentials");
 			}

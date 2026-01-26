@@ -21,7 +21,6 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/staff")
 @RequiredArgsConstructor
 @RestController
-@CrossOrigin
 public class StaffController {
 	
 	public final StaffService staffService;

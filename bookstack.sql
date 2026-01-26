@@ -538,7 +538,7 @@ VALUES
 CREATE DATABASE IF NOT EXISTS auth_db;
 USE auth_db;
 
-CREATE TABLE IF NOT EXISTS `Bookstack`.`user_table` (
+CREATE TABLE IF NOT EXISTS `auth_db`.`user_table` (
   `name` CHAR(30) NULL,
   `email` VARCHAR(30) NULL,
   `phone` CHAR(10) NULL,

@@ -48,7 +48,7 @@ function AddBooks() {
 
     console.table(payload);
 
-    const response = await axios.post("http://localhost:8080/staff/book", payload)
+    const response = await axios.post("http://localhost:7070/staff/book", payload, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
     console.table(response)
 
     navigate('/staff/books')

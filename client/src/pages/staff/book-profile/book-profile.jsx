@@ -28,7 +28,7 @@ const genreColorMap = {
     <div className='container book-container mb-5'>
         <div className="card book position-relative">
             <div className="position-absolute top-0 start-50 translate-middle whitener"></div>
-            <img src={book.image.startsWith("http") ? book.image : `http://localhost:8080/${book.image}`} className='position-absolute top-0 start-50 translate-middle book-image' alt="" />
+            <img src={book.image.startsWith("http") ? book.image : `http://localhost:7070/staff/image/${book.image}`} className='position-absolute top-0 start-50 translate-middle book-image' alt="" />
             <div className="card-body mt-5">
                 <table className='table table-striped mt-4'>
                     <tbody>

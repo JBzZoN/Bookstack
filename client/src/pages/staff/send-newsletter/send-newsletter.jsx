@@ -102,7 +102,7 @@ Happy Reading!
   const sendEmail = async () => {
     navigate("/staff/books")
     toast.success("Email Sent!")
-    await axios.post("http://localhost:8080/staff/email", {email: emailBody})
+    await axios.post("http://localhost:7070/staff/email", {email: emailBody}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
   }
 
   return (

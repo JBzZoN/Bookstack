@@ -29,11 +29,13 @@ function AllBooks() {
     const [bookData, setBookData] = useState([])
 
     async function getAllBooks() {
-        const response = await axios.get("http://localhost:8080/staff/books");
+        const response = await axios.get("http://localhost:7070/staff/books", {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}});
         const data = response.data
+
         for (let i = 0; i < data.length; i++) {
             const response = await axios.get(
-                "http://localhost:8080/staff/book/" + data[i].bookId
+                "http://localhost:7070/staff/book/" + data[i].bookId
+                , {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}}
             );
 
             data[i].genreList = response.data;
@@ -51,7 +53,7 @@ function AllBooks() {
             <Title string={"All books"}/>
             <div className='row'>
                 {bookData.map((e) => <div className='col d-flex justify-content-center mt-3' key={e.bookId}><div className="card" style={{width: "200px"}}>
-                    <img src={e.image.startsWith("http") ? e.image : `http://localhost:8080/${e.image}`} className="card-img-top" style={{width:"100%", height: "200px"}} alt="..."/>
+                    <img src={e.image.startsWith("http") ? e.image : `http://localhost:7070/staff/image/${e.image}`} className="card-img-top" style={{width:"100%", height: "200px"}} alt="..."/>
                     <div className="card-body">
                         <h5 className="card-title small-text" style={{height:"40px"}}>{e.title}</h5>
                         <p className="card-text small-text">

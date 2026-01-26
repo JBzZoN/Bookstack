@@ -3,6 +3,7 @@ package com.bookstack.gateway.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -27,7 +28,7 @@ public class SecurityConfiguration {
 		.cors(Customizer.withDefaults()) // Or use withDefaults()
 		// URL authorization
 		.authorizeHttpRequests(requests -> requests
-			.requestMatchers("/auth/**").permitAll()
+			.requestMatchers("/auth/**", "/staff/image/**").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
 			.requestMatchers("/staff/**").hasAuthority("Librarian")
