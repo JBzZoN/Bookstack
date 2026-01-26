@@ -34,7 +34,7 @@ function BrowseBooks () {
                                 image={book.bookImage}
                                 rating={book.averageRatings}
                                 like={book.likedByCurrentUser}
-                                link={`/member/book/${84}`}
+                                link={`/member/book/${book.bookId}`}
                             />
                         ))
                     }

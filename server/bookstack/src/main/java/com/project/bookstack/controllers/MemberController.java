@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -35,4 +36,40 @@ public class MemberController {
     public List<BookCardDTO> getRecommendedBooks() {
         return memberService.getRecommendedBooks();
     }
+    
+    @GetMapping("/trending-books")
+    public List<BookCardDTO> getTrendingBooks() {
+        return memberService.getTrendingBooks();
+    }
+    
+    @GetMapping("/new-arrived-books")
+    public List<BookCardDTO> getNewArrivedBooks() {
+        return memberService.getNewArrivedBooks();
+    }
+    
+    @GetMapping("/all-recommended-books")
+    public List<BookCardDTO> getAllRecommendedBooks() {
+        return memberService.getAllRecommendedBooks();
+    }
+    
+    @GetMapping("/all-trending-books")
+    public List<BookCardDTO> getAllTrendingBooks() {
+        return memberService.getAllTrendingBooks();
+    }
+    
+    @GetMapping("/all-new-arrived-books")
+    public List<BookCardDTO> getAllNewArrivedBooks() {
+        return memberService.getAllNewArrivedBooks();
+    }
+    
+    @GetMapping("/book/{id}")
+    public BookDTO getBookDetails(@PathVariable("id") Integer bookId) {
+        return memberService.getBookDetails(bookId);
+    }
+    
+    @GetMapping("/might-liked-books/{id}")
+    public List<BookCardDTO> getMightAlsoLikedBooks(@PathVariable("id") Integer bookId) {
+        return memberService.getMightAlsoLikedBooks(bookId);
+    }
+
 }

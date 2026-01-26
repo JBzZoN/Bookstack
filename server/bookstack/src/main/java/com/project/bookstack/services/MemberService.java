@@ -12,5 +12,19 @@ public interface MemberService {
 	List<BookCardDTO> getAllLikedBooks();
 	
 	List<BookCardDTO> getRecommendedBooks();
+	
+	List<BookCardDTO> getTrendingBooks();
+	
+	List<BookCardDTO> getNewArrivedBooks();
+	
+	List<BookCardDTO> getAllRecommendedBooks();
+	
+	List<BookCardDTO> getAllTrendingBooks();
+	
+	List<BookCardDTO> getAllNewArrivedBooks();
+
+	BookDTO getBookDetails(Integer bookId);
+
+	List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId);
     
 }

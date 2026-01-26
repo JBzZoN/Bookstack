@@ -9,7 +9,9 @@ import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
 import ViewAllBooks from './pages/Member/ViewAllBooks/ViewAllBooks';
 import LikedBooks from './pages/Member/LikedBooks/LikedBooks';
-
+import AllRecommendedBooks from './pages/Member/RecommendedBooks/RecommendedBooks';
+import AllTrendingBooks from './pages/Member/TrendingBooks/TrendingBooks';
+import AllNewArrivedBooks from './pages/Member/NewArrivedBooks/NewArrivedBooks';
 
 /* Admin pages */
 import AdminHome from './pages/admin/home/home';
@@ -54,13 +56,15 @@ function App() {
       <Route path="member" element={<Home />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<MemberHome />} />
+        <Route path="recommended-books" element={<AllRecommendedBooks />} />
+        <Route path="trending-books" element={<AllTrendingBooks />} />
+        <Route path="new-arrivals" element={<AllNewArrivedBooks />} />
         <Route path="browse" element={<BrowseBooks />} />
         <Route path="account" element={<MyAccount />} />
         <Route path="book/:id" element={<BookDetails />} />
         <Route path="view" element={<ViewAllBooks />} />
         <Route path="liked-books" element={<LikedBooks />} />
       </Route>
-
 
       {/* ADMIN ROUTES */}
       <Route path="admin" element={<AdminHome />}>

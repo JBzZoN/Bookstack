@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import './BookCard.css';
 import heartFilled from './../../../assets/heart-filled.png/';
 import heartOutline from './../../../assets/heart-outline.png';
+import star from './../../../assets/images/member/star.png';
 
 function BookCard({ title, author, image, rating, like, link }) {
   const [liked, setLiked] = useState(like);
@@ -23,9 +24,9 @@ function BookCard({ title, author, image, rating, like, link }) {
               <h6>{title}</h6>
               <div className="author">{author}</div>
 
-              <div className="rating">
-                <span className="rating-value">{rating}</span>
-                <span className="star">★</span>
+              <div className='rating'>
+                <h3 className="rating-value">{rating}</h3>
+                <img id="star" src={star} alt="rating star" />
               </div>
             </td>
 

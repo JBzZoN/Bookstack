@@ -1,6 +1,6 @@
 package com.project.bookstack.dto.member;
 
-import java.time.LocalDate;
+import java.util.List;
 
 public record BookDTO (
 	   	Integer bookId,
@@ -8,11 +8,11 @@ public record BookDTO (
 	    String title,
 	    String author,
 	    String description,
+	    List<String> genres,
 	    String publisher,
-	    Integer edition,
-	    String action,
-	    LocalDate actionDate,
 	    Integer numberOfCopies,
 	    Integer numberOfCopiesRemaining,
-	    String bookImage
+	    Double averageRatings,
+		Boolean likedByCurrentUser,
+	    String bookImage	    
 ) {}

@@ -1,7 +1,7 @@
 import React from 'react'
 import '../MemberHome/MemberHome.css'
-import { recommendedBooks } from '../../../dummy-data/recommended-books.js';
-import { Link } from 'react-router-dom';  
+import { Link, Outlet } from 'react-router-dom'; 
+import { useState,useEffect } from 'react'; 
 import { newArrivals } from '../../../dummy-data/new-arrivals.js';
 import { trendingBooks } from '../../../dummy-data/trending-books.js';
 import BookCard from '../../../components/Member/BookCard/BookCard.jsx';
@@ -12,8 +12,42 @@ import banner4 from '../../../assets/images/member/banner4.png';
 import banner5 from '../../../assets/images/member/banner5.png';
 import banner6 from '../../../assets/images/member/banner6.png';
 import banner7 from '../../../assets/images/member/banner7.png';
+import { recommendedBooksData,trendingBooksData,newArrivedBooksData } from '../../../api/member.js'
 
 function MemberHome() {
+  const [recommendedBooks, setRecommendedBooks] = useState([]);
+  const [trendingBooks, setTrendingBooks] = useState([]);
+  const [newArrivedBooks, setNewArrivedBooks] = useState([]); 
+  
+  useEffect(() => {
+    recommendedBooksData()
+      .then(res => {
+        setRecommendedBooks(Array.isArray(res.data) ? res.data : []);
+      })
+       .catch(err => {
+        console.error("Failed to fetch books", err);
+        setRecommendedBooks([]);
+      });
+
+    trendingBooksData()
+      .then(res => {
+        setTrendingBooks(Array.isArray(res.data) ? res.data : []);
+      }) 
+      .catch(err => {
+        console.error("Failed to fetch books", err);
+        setTrendingBooks([]);
+      });
+
+    newArrivedBooksData()
+      .then(res => {
+        setNewArrivedBooks(Array.isArray(res.data) ? res.data : []);
+      }) 
+      .catch(err => {
+        console.error("Failed to fetch books", err);
+        setNewArrivedBooks([]);
+      });
+  }, []);
+
   return (
     <div className='p-2'>
       <div className='container mt-5 py-5'>
@@ -63,23 +97,27 @@ function MemberHome() {
             <span className="visually-hidden">Next</span>
           </button>
         </div>
+
+        <Outlet/>
         
         <div>
           {/* Recommended Books */}
           <div className='container d-flex justify-content-between align-items-center'>
             <h1 className='home-h1 mt-4'>Recommended Books</h1> 
-            <Link to="/member/view"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
+            <Link to="/member/recommended-books"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
           </div>
 
           <div className="horizontal-scroll">
             { 
               recommendedBooks.map((book) => (
                 <BookCard
-                  key={book.id}
+                  key={book.bookId}
                   title={book.title}
                   author={book.author}
-                  image={book.image}
-                  link={`/member/book/${book.id}`}
+                  image={book.bookImage}
+                  rating={book.averageRatings}
+                  like={book.likedByCurrentUser}
+                  link={`/member/book/${84}`}
                 />
               ))
             }
@@ -90,18 +128,20 @@ function MemberHome() {
         <div>
           <div className='container d-flex justify-content-between align-items-center'>
             <h1 className='home-h1 mt-4'>Trending Books</h1> 
-            <Link to="/member/view"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
+            <Link to="/member/trending-books"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
           </div>
 
           <div className="horizontal-scroll">
             { 
               trendingBooks.map((book) => (
                 <BookCard
-                  key={book.id}
+                  key={book.bookId}
                   title={book.title}
                   author={book.author}
-                  image={book.image}
-                  link={`/member/book/${book.id}`}
+                  image={book.bookImage}
+                  rating={book.averageRatings}
+                  like={book.likedByCurrentUser}
+                  link={`/member/book/${84}`}
                 />
               ))
             }
@@ -127,18 +167,20 @@ function MemberHome() {
               <h2 className="home-h2 mt-4">(Premium)</h2>
             </div>
 
-            <Link to="/member/view"><h3 id='view-all' className="btn home-h3 mt-4">View All</h3></Link>
+            <Link to="/member/new-arrivals"><h3 id='view-all' className="btn home-h3 mt-4">View All</h3></Link>
           </div>
 
           <div className="horizontal-scroll">
             { 
-              newArrivals.map((book) => (
+              newArrivedBooks.map((book) => (
                 <BookCard
-                  key={book.id}
+                  key={book.bookId}
                   title={book.title}
                   author={book.author}
-                  image={book.image}
-                  link={`/member/book/${book.id}`}
+                  image={book.bookImage}
+                  rating={book.averageRatings}
+                  like={book.likedByCurrentUser}
+                  link={`/member/book/${84}`}
                 />
               ))
             }

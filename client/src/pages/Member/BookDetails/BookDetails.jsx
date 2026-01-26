@@ -1,18 +1,43 @@
 import BookCard from '../../../components/Member/BookCard/BookCard'
 import '../BookDetails/BookDetails.css'
-import { allBooksData } from '../../../dummy-data/all-books-data'
 import { useParams } from 'react-router-dom';
 import ReviewsSection from '../../../components/Member/ReviewSection/ReviewSection';
+import star from '../../../assets/images/member/star.png'
+import { bookDetailsData,mightLikedBooksData } from '../../../api/member';
+import { use, useEffect, useState } from 'react';
 
 function BookDetails () {
+    const [bookDetails, setBookDetails] = useState([]);
+    const [mightLikedBooks,setMightLikedBooks] = useState([]);
+
     const { id } = useParams();
 
-    const book = allBooksData.find(b => b.id === Number(id));
+    useEffect(() => {
+        if (!id) return;
 
-    console.log("Book_data =", allBooksData);
-console.log("ID =", id);
-    
-    if (!book) {
+        bookDetailsData(id)
+        .then(res => setBookDetails(res.data))
+        .catch(err => {
+            console.error("Failed to fetch book", err);
+            setBookDetails(null);
+        });
+    }, [id]);
+
+    useEffect(() => {
+        if (!id) return;
+
+        mightLikedBooksData(id)
+        .then(res => setMightLikedBooks(res.data))
+        .catch(err => {
+            console.error("Failed to fetch book", err);
+            setMightLikedBooks(null);
+        });
+    }, [id]);
+
+    console.log(bookDetails);
+
+
+    if (!bookDetails) {
         return (
         <div className="container py-5">
             <h2>Book not found</h2>
@@ -20,15 +45,21 @@ console.log("ID =", id);
         );
     }
 
-    const image = book.image || "No image available";
-    const title = book.title || "No title available";
-    const author = book.author || "Unknown";
-    const summary = book.description || "No summary available.";
-    const genre = book.genre || "No genre available.";
-    const publisher = book.publisher || "No publisher available.";
-    const isbn = book.isbn || "Not available.";
-    const copyAvailable = book.stock || "Out of Stock - No Copy Available";
-    
+    const image = bookDetails.bookImage || "No image available";
+    const title = bookDetails.title || "No title available";
+    const author = bookDetails.author || "Unknown";
+    const summary = bookDetails.description || "No summary available.";
+    const genres = bookDetails.genres?.length ? bookDetails.genres.join(", ") : "No genre available";
+
+    const publisher = bookDetails.publisher || "No publisher available.";
+    const isbn = bookDetails.isbn || "Not available.";
+    const totalCopies = bookDetails.numberOfCopies || "Out of Stock - No Copy Available";
+    const copyAvailable = bookDetails.numberOfCopiesRemaining || "Out of Stock - No Copy Available";
+    const rating = bookDetails.averageRatings || 0;
+    const likedByUser = bookDetails.likedByCurrentUser || false;
+
+    const [like,setLike] = useState(false);
+
     return (
         <div className='p-2'>
             <div className="container py-5 mt-5">
@@ -46,12 +77,12 @@ console.log("ID =", id);
                             <h4 className="fw-normal text-secondary">by {author}</h4>
 
                             <div className="d-flex align-items-center gap-3 my-4">
-                                <div className="rating">
-                                    <span className="rating-value">3.5</span>
-                                    <span className="star">★</span>
+                                <div className='rating'>
+                                    <h3 className="rating-value">{rating}</h3>
+                                    <img id="star" src={star} alt="rating star" />
                                 </div>
 
-                                <span className="badge fs-6" style={{ backgroundColor: "rgba(var(--brand-teal-rgb), 0.1)", color: "var(--brand-teal)" }}>Available</span>
+                                <span className="badge fs-6 availability"><h4 className='member-h4'>Available</h4></span>
                             </div>
 
                             <p className="lead">{summary}</p>
@@ -61,13 +92,13 @@ console.log("ID =", id);
                             <div className="row">
 
                             <div className="col-md-6">
-                                <p><strong>Genre:</strong> {genre}</p>
+                                <p><strong>Genre:</strong> {genres}</p>
                                 <p><strong>Publisher:</strong> {publisher}</p>
                             </div>
 
                             <div className="col-md-6">
                                 <p><strong>ISBN:</strong> {isbn}</p>
-                                <p><strong>Copies Available:</strong> {copyAvailable}</p>
+                                <p><strong>Copies Available:</strong> {copyAvailable} of {totalCopies}</p>
                             </div>
 
                             </div>
@@ -90,7 +121,7 @@ console.log("ID =", id);
                 </div>
 
                 <div className="my-5">
-                    <ReviewsSection bookId={book.id} />
+                    {/* <ReviewsSection bookId={book.id} /> */}
                 </div>
 
                 <div className="">
@@ -98,30 +129,19 @@ console.log("ID =", id);
                     <h2 className="font-montserrat">You Might Also Like</h2>
 
                     <div className="horizontal-scroll mt-3">
-                        <BookCard
-                            key={2542}
-                            title={"A Doll's House"}
-                            author={"Henrik Ibsen"}
-                            image={"https://www.gutenberg.org/cache/epub/2542/pg2542.cover.medium.jpg"}
-                            link={'/member/book/2542'}
-                        />
-
-                        <BookCard
-                            key={98}
-                            title={"A Tale of Two Cities"}
-                            author={"Charles Dickens"}
-                            image={"https://www.gutenberg.org/cache/epub/98/pg98.cover.medium.jpg"}
-                            link={'/member/book/98'}
-                        />
-
-                        <BookCard
-                            key={844}
-                            title={"The Importance of Being Earnest"}
-                            author={"Oscar Wilde"}
-                            image={"https://www.gutenberg.org/cache/epub/844/pg844.cover.medium.jpg"}
-                            link={'/member/book/844'}
-                        />
-
+                        {
+                            mightLikedBooks.map((book) => (
+                                <BookCard
+                                    key={book.bookId}
+                                    title={book.title}
+                                    author={book.author}
+                                    image={book.bookImage}
+                                    rating={book.averageRatings}
+                                    like={book.likedByCurrentUser}
+                                    link={`/member/book/${book.bookId}`}
+                                />
+                            ))
+                        }
                     </div>
 
                 </div>
