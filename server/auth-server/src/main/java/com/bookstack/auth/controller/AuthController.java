@@ -34,6 +34,11 @@ public class AuthController {
 		return authService.findAll();
 	}
 	
+	@GetMapping("/email")
+	public List<String> getEmails() {
+		return authService.getEmails();
+	}
+	
 	@PostMapping("/search/users")
 	public List<User> getUsers(@RequestParam String search) {
 		return authService.getSearchedUsers(search);

@@ -34,6 +34,14 @@ public class RouteConfiguration {
 	            RequestPredicates.path("/staff/**"),
 	            HandlerFunctions.http()
 	        )
+	        .route(
+		            RequestPredicates.path("/admin/**"),
+		            HandlerFunctions.http()
+		    )
+	        .route(
+		            RequestPredicates.path("/member/**"),
+		            HandlerFunctions.http()
+		    )
 	        .before(
 	            BeforeFilterFunctions.uri("http://localhost:8080")
 	        )

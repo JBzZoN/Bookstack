@@ -18,4 +18,7 @@ public interface AuthorizationClient {
 	@PostMapping("/auth/search/users")
 	List<UserDTO> getSearchedUsers(@RequestParam String search);
 	
+	@GetMapping("/auth/email")
+	List<String> getEmails();
+	
 }

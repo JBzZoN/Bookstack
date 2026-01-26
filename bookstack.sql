@@ -172,6 +172,7 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`record_Detail_table` (
   `book_id` INT,
   `total_copies` INT NULL,
   `due_Date` DATE NULL,
+  `fine_paid` BOOLEAN,
   PRIMARY KEY (`record_detail_id`),
   INDEX `book_id_idx` (`book_id` ASC) VISIBLE,
   INDEX `record_id_idx` (`record_id` ASC) VISIBLE,
@@ -426,8 +427,6 @@ VALUES
 (11,8,'Must-read for clean coding.'),
 (14,7,'Excellent introduction to AI.');
 
-
-
 INSERT INTO genre_table (genre_name)
 VALUES
 ('Fiction'),
@@ -488,14 +487,14 @@ INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
 (01, 09, 06, '2025-05-20'),
 (02, 04, 07, '2025-06-10');
 
-INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date) VALUES
-(01, 01, 'Issued', 01, 1, '2025-01-20'),
-(02, 02, 'Issued', 02, 1, '2025-02-15'),
-(03, 03, 'Returned', 03, 1, '2025-03-22'),
-(04, 04, 'Issued', 04, 1, '2025-04-15'),
-(05, 05, 'Issued', 05, 2, '2025-05-20'),
-(06, 06, 'Returned', 06, 1, '2025-05-28'),
-(07, 07, 'Issued', 07, 1, '2025-06-18');
+INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date, fine_paid) VALUES
+(01, 01, 'Issued', 01, 1, '2025-01-20', true),
+(02, 02, 'Issued', 02, 1, '2025-02-15', true),
+(03, 03, 'Returned', 03, 1, '2025-03-22', false),
+(04, 04, 'Issued', 04, 1, '2025-04-15', true),
+(05, 05, 'Issued', 05, 2, '2025-05-20', false),
+(06, 06, 'Returned', 06, 1, '2025-05-28', true),
+(07, 07, 'Issued', 07, 1, '2025-06-18', true);
 
 INSERT INTO Member_table (user_id,membership_type,member_start,member_end)
 VALUES

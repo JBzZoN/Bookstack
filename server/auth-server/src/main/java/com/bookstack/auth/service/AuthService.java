@@ -44,5 +44,13 @@ public class AuthService {
 		// TODO Auto-generated method stub
 		return userRepository.searchUsers(search, PageRequest.of(0, 5));
 	}
+	public List<String> getEmails() {
+		// TODO Auto-generated method stub
+		List<String> emails = userRepository.findAll()
+									.stream()
+									.map(e -> e.getEmail())
+									.toList();
+		return emails;
+	}
 	
 }

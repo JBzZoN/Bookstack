@@ -214,24 +214,22 @@ public class StaffService {
 		
 	}
 
-//	public void sendEmail(String email) {
-//		
-//		List<String> emails = staffUserRepository.findByRoleType("Member").stream()
-//				.map(e -> e.getEmail())
-//				.toList();
-//		
-//		for(String emailString: emails) {
-//			MimeMessagePreparator a = b -> {
-//				MimeMessageHelper c = new MimeMessageHelper(b);
-//				c.setFrom(fromEmailAddress);
-//				c.setTo(emailString);
-//				c.setSubject("News letter from Bookstack library");
-//				c.setText(email);
-//			};
-//			javaMailSender.send(a);
-//		}
-//		
-//	}
+	public void sendEmail(String email) {
+		
+		List<String> emails = authorizationClient.getEmails();
+		
+		for(String emailString: emails) {
+			MimeMessagePreparator a = b -> {
+				MimeMessageHelper c = new MimeMessageHelper(b);
+				c.setFrom(fromEmailAddress);
+				c.setTo(emailString);
+				c.setSubject("News letter from Bookstack library");
+				c.setText(email);
+			};
+			javaMailSender.send(a);
+		}
+		
+	}
 
 	
 }

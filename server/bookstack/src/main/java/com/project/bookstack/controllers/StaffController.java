@@ -10,6 +10,7 @@ import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
+import com.project.bookstack.dto.EmailDTO;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
 import com.project.bookstack.dto.Search;
 import com.project.bookstack.dto.UserDTO;
@@ -59,10 +60,10 @@ public class StaffController {
 		staffService.uploadRecord(rentRenewReturnRequestDTO);
 	}
 
-//	@PostMapping("/email")
-//	public void sendEmail(@RequestBody EmailDTO emailDTO) {
-//		staffService.sendEmail(emailDTO.getEmail());
-//	}
+	@PostMapping("/email")
+	public void sendEmail(@RequestBody EmailDTO emailDTO) {
+		staffService.sendEmail(emailDTO.getEmail());
+	}
 	
 	@PostMapping(value = "/book", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
 	public List<Member> addBook(@ModelAttribute BookWithImageDto bookWithImageDto) {
