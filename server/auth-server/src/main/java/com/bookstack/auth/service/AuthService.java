@@ -2,7 +2,9 @@ package com.bookstack.auth.service;
 
 import java.util.List;
 
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -33,6 +35,14 @@ public class AuthService {
 	    }
 
 	    userRepository.saveAll(users);
+	}
+	public List<User> findAll() {
+		// TODO Auto-generated method stub
+		return userRepository.findAll();
+	}
+	public List<User> getSearchedUsers(String search) {
+		// TODO Auto-generated method stub
+		return userRepository.searchUsers(search, PageRequest.of(0, 5));
 	}
 	
 }

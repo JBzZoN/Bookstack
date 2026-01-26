@@ -6,11 +6,13 @@ import java.util.List;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
+import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
 import com.project.bookstack.dto.Search;
+import com.project.bookstack.dto.UserDTO;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.services.StaffService;
 
@@ -23,6 +25,8 @@ public class StaffController {
 	
 	public final StaffService staffService;
 	
+	public final AuthorizationClient authorizationClient;
+	
 	// BOOKS RELATED
 	
 	@GetMapping("/books")
@@ -31,7 +35,7 @@ public class StaffController {
 	}
 	
 	@GetMapping("/members")
-	public List<Member> getAllMembers() {
+	public List<UserDTO> getAllMembers() {
 		return staffService.getAllMembers();
 	}
 	
@@ -40,10 +44,10 @@ public class StaffController {
 		return staffService.getGenre(id);
 	}
 	
-//	@PostMapping("/search/user")
-//	public List<User> searchUsers(@RequestBody Search userSearch) {
-//		return staffService.searchUsers(userSearch.search());
-//	}
+	@PostMapping("/search/user")
+	public List<UserDTO> searchUsers(@RequestBody Search userSearch) {
+		return staffService.searchUsers(userSearch.search());
+	}
 	
 	@PostMapping("/search/book")
 	public List<BookSearchDTO> searchBooks(@RequestBody Search bookSearch) {

@@ -19,34 +19,34 @@ function MemberProfile() {
                     <tbody>
                         <tr>
                             <td>Name</td>
-                            <td>{member.user.name}</td>
+                            <td>{member.name}</td>
                         </tr>
                         <tr>
                             <td>Email</td>
-                            <td>{member.user.email}</td>
+                            <td>{member.email}</td>
                         </tr>
                         
                         <tr>
                             <td>Phone no</td>
-                            <td>{member.user.phone}</td>
+                            <td>{member.phone}</td>
                         </tr>
                         
                         <tr>
                             <td>Address</td>
-                            <td>{member.user.address}</td>
+                            <td>{member.address}</td>
                         </tr>
                         
                         <tr>
                             <td>Date of birth</td>
-                            <td>{member.user.dob}</td>
+                            <td>{member.dob}</td>
                         </tr>
                         <tr>
                             <td>Membership type</td>
-                            <td>{member.membershipData.membershipType}</td>
+                            <td>{member.membershipType}</td>
                         </tr>
                         <tr>
                             <td>Username</td>
-                            <td>{member.user.username}</td>
+                            <td>{member.username}</td>
                         </tr>
                         
                         <tr>

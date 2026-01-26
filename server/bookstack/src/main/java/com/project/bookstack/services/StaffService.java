@@ -20,11 +20,13 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
 import com.project.bookstack.dto.RentRenewReturnRecordDTO;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
+import com.project.bookstack.dto.UserDTO;
 import com.project.bookstack.entities.Book;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.Record;
@@ -55,6 +57,8 @@ public class StaffService {
 	private final StaffRecordDetailRepository staffRecordDetailRepository;
 	
 	private final JavaMailSender javaMailSender;
+	
+	private final AuthorizationClient authorizationClient;
 	
 	@Value("${bookstack.from.email}")
 	public String fromEmailAddress;
@@ -87,9 +91,23 @@ public class StaffService {
 		return bookDto;
 	}
 
-	public List<Member> getAllMembers() {
-		List<Member> result = staffMemberRepository.findAll();
-		return result;
+	public List<UserDTO> getAllMembers() {
+		List<UserDTO> searchResults = authorizationClient.getUsers();
+		List<Member> memberResults = staffMemberRepository.findAll();
+		
+		List<UserDTO> finalOutput = searchResults.stream().map((e) -> {
+			for(Member m : memberResults) {
+				if(m.getUserId() == e.getUserId()) {
+					e.setMemberEnd(m.getMemberEnd());
+					e.setMembershipType(m.getMembershipData().getMembershipType());
+					e.setMemberStart(m.getMemberStart());
+				}
+			}
+
+			return e;
+		}).toList();
+		
+		return searchResults;
 	}
 
 	public List<Member> addBook(BookWithImageDto bookWithImageDto) {
@@ -98,7 +116,7 @@ public class StaffService {
 		
 		try {
 			Files.copy(image.getInputStream(),
-					Path.of("uploads").resolve(image.getOriginalFilename()),
+					Path.of("uploads/staff/image").resolve(image.getOriginalFilename()),
 					StandardCopyOption.REPLACE_EXISTING);
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
@@ -135,12 +153,11 @@ public class StaffService {
 		return staffBookRepository.getGenreList(id);
 	}
 
-//	public List<User> searchUsers(String search) {
-//		// TODO Auto-generated method stub
-//		List<User> searchResults = staffUserRepository.searchUsers(search, PageRequest.of(0, 5));
-//		return  searchResults;
-//	}
-	
+	public List<UserDTO> searchUsers(String search) {
+		// TODO Auto-generated method stub
+		return  authorizationClient.getSearchedUsers(search);
+	}
+
 	public List<BookSearchDTO> searchBooks(String search) {
 		// TODO Auto-generated method stub
 		List<Book> searchResults = staffBookRepository.searchBooks(search, PageRequest.of(0, 5));

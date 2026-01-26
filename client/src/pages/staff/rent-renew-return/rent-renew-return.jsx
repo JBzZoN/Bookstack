@@ -156,7 +156,7 @@ function RentRenewReturn() {
                 setOnBookSearch(true, i)
                 const timer = setTimeout(async () => {
                   if(value.length < 2) return;
-                  const response = await axios.post("http://localhost:7070/staff/search/book", {"search" : value})
+                  const response = await axios.post("http://localhost:7070/staff/search/book", {"search" : value}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
                   setSearchBookResults(response.data, i)
                   setOnBookSearch(false, i)
                 }, 500);

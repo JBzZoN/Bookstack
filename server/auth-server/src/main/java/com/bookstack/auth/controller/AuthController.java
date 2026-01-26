@@ -1,5 +1,7 @@
 package com.bookstack.auth.controller;
 
+import java.util.List;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -26,6 +28,16 @@ public class AuthController {
 	private final AuthService authService;
 	private final AuthenticationManager authMgr;
 	private final JwtUtil jwtUtil;
+	
+	@GetMapping("/users")
+	public List<User> getString() {
+		return authService.findAll();
+	}
+	
+	@PostMapping("/search/users")
+	public List<User> getUsers(@RequestParam String search) {
+		return authService.getSearchedUsers(search);
+	}
 	
 	@PostMapping("/login")
 	public ResponseEntity<?> onLogin(@RequestBody LoginRequest request) {
