@@ -1,19 +1,11 @@
 package com.project.bookstack.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+public record AdminDetailDto(
+    String isbn,
+    String title,
+    String author,
+    String description,
+    String publisher,
+    Integer edition
+) {}
 
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-
-public class AdminDetailDto {
-
-    private Integer isbn;
-    private String title;
-    private String author;
-    private String description;
-    private String publisher;
-    private Integer edition;
-}

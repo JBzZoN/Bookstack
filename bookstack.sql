@@ -296,3 +296,29 @@ INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
 (03, 08, 1),
 (07, 09, 1),
 (08, 10, 1);
+
+CREATE TABLE Bookstack.book_like (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+
+    created_at DATETIME NOT NULL,
+
+    CONSTRAINT uq_user_book_like
+        UNIQUE (user_id, book_id),
+
+    CONSTRAINT fk_book_likes_user
+        FOREIGN KEY (user_id)
+        REFERENCES Bookstack.user_table(user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_book_likes_book
+        FOREIGN KEY (book_id)
+        REFERENCES Bookstack.book_table(book_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+

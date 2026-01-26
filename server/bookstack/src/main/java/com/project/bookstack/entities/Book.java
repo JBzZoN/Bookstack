@@ -1,13 +1,13 @@
 package com.project.bookstack.entities;
 
-
-
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
+import java.util.Set;
 
 
 @Entity
-@Table(name = "book_table", schema = "Bookstack")
+@Table(name = "book_table")
 public class Book {
 
 
@@ -17,12 +17,12 @@ public class Book {
 	    private Integer bookId;
 
 	    @Column(name = "isbn")
-	    private Integer isbn;
+	    private String isbn;
 
-	    @Column(name = "title", length = 25)
+	    @Column(name = "title", length = 50)
 	    private String title;
 
-	    @Column(name = "author", length = 25)
+	    @Column(name = "author", length = 50)
 	    private String author;
 
 	    @Column(name = "description", columnDefinition = "TEXT")
@@ -33,9 +33,6 @@ public class Book {
 
 	    @Column(name = "edition")
 	    private Integer edition;   // YEAR mapped as Integer
-
-	    @Column(name = "book_category")
-	    private Character bookCategory;
 
 	    @Column(name = "action", length = 15)
 	    private String action;
@@ -48,6 +45,9 @@ public class Book {
 
 	    @Column(name = "number_of_copies_remaining")
 	    private Integer numberOfCopiesRemaining;
+	    
+	    @Column(name = "book_image")
+	    private String bookImage;
 
 	    /* ------------------ Relationship ------------------ */
 
@@ -58,6 +58,27 @@ public class Book {
 	        foreignKey = @ForeignKey(name = "staff_id")
 	    )
 	    private Staff staff;
-
 	    
+	    @ManyToMany
+	    @JoinTable(
+	        name = "book_genre",
+	        joinColumns = @JoinColumn(name = "book_id"),
+	        inverseJoinColumns = @JoinColumn(name = "genre_id")
+	    )
+	    private Set<BookGenre> genres;
+
+	    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	    private List<BookRating> ratings;
+
+	    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
+	    private List<BookComment> comments;
+	    
+	    @ManyToMany
+	    @JoinTable(
+	        name = "book_like",
+	        joinColumns = @JoinColumn(name = "book_id"),
+	        inverseJoinColumns = @JoinColumn(name = "user_id")
+	    )
+	    private Set<User> likedByUsers;
+
 }
