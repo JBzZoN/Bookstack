@@ -1,0 +1,177 @@
+package com.project.bookstack.repositories;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+
+import com.project.bookstack.dto.member.BookCardDTO;
+import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.entities.Book;
+
+@Repository
+public interface MemberRepository extends JpaRepository<Book, Integer> {
+	
+	/* SQL equivalent:
+		  SELECT 
+		    b.book_id,
+		    b.title,
+		    b.author,
+		    b.book_image,
+		    COALESCE(AVG(r.rating), 0) AS avg_rating,
+		    CASE
+		 	    WHEN EXISTS (
+		 	        SELECT 1
+		 	        FROM book_like bl
+		           WHERE bl.book_id = b.book_id
+		 	          AND bl.user_id = ?
+		 	    )
+		 	    THEN true
+		 	    ELSE false
+		 	 END AS liked_by_current_user
+		  FROM book_table b
+		  LEFT JOIN book_rating r ON r.book_id = b.book_id
+		  GROUP BY b.book_id, b.title, b.author,b.book_image;
+	*/
+	@Query("""
+	    SELECT b.bookId,b.title,b.author,b.bookImage,
+		    COALESCE(AVG(r.rating), 0),
+		    CASE
+	            WHEN EXISTS (
+	                SELECT 1
+	                FROM BookLike bl
+	                WHERE bl.book = b
+	                  AND bl.user.userId = :userId
+	            )
+	            THEN true
+	            ELSE false
+			END
+	    FROM Book b
+		LEFT JOIN b.ratings r
+	    GROUP BY b.bookId, b.title, b.author,b.bookImage
+	""")
+	List<BookCardDTO> getAllBooks(@Param("userId") Integer userId);
+	
+	
+	/* SQL equivalent:
+		   SELECT
+			    b.book_id,
+			    b.title,
+			    b.author,
+			    b.book_image,
+			    COALESCE(AVG(r.rating), 0) AS avg_rating,
+			    true
+			FROM book_table b
+			INNER JOIN book_like bl
+			        ON bl.book_id = b.book_id AND bl.user_id = ?
+			LEFT JOIN book_rating r
+			       ON r.book_id = b.book_id
+			GROUP BY
+			    b.book_id,
+			    b.title,
+			    b.author,
+		    	b.book_image;
+	*/
+	
+	@Query("""
+	    SELECT b.bookId,b.title,b.author,b.bookImage,
+		    COALESCE(AVG(r.rating), 0),
+		    true
+	    FROM Book b
+	    INNER JOIN b.likedByUsers l
+		LEFT JOIN b.ratings r
+		WHERE l.userId = :userId
+	    GROUP BY b.bookId, b.title, b.author, b.bookImage
+	""")
+	List<BookCardDTO> getAllLikedBooks(@Param("userId") Integer userId);
+	
+	/* SQL equivalent
+	 		SELECT
+			    b.book_id,
+			    b.title,
+			    b.author,
+			    b.book_image,
+			    COUNT(DISTINCT bg.genre_id) AS genre_count,
+			    COALESCE(AVG(r.rating), 0) AS avg_rating,
+			    CASE
+			        WHEN EXISTS (
+			            SELECT 1
+			            FROM book_like bl
+			            WHERE bl.book_id = b.book_id
+			              AND bl.user_id = ?
+			        ) THEN true
+			        ELSE false
+			    END AS current_user_like
+			FROM book_table b
+			JOIN book_genre bg
+			       ON bg.book_id = b.book_id
+			LEFT JOIN book_rating r
+			       ON r.book_id = b.book_id
+			WHERE bg.genre_id IN (
+			          SELECT DISTINCT bg2.genre_id
+			          FROM book_genre bg2
+			          JOIN member_book_table mb
+			               ON bg2.book_id = mb.book_id
+			          WHERE mb.user_id = ?
+			      )
+			  AND b.book_id NOT IN (
+			          SELECT book_id
+			          FROM member_book_table
+			          WHERE user_id = ?
+			      )
+			GROUP BY
+			    b.book_id,
+			    b.title,
+			    b.author,
+			    b.book_image
+			LIMIT 10;
+	*/
+	@Query("""
+		SELECT new com.project.bookstack.dto.BookCardDTO(
+		    b.bookId,
+		    b.title,
+		    b.author,
+		    b.bookImage,
+		    COALESCE(AVG(r.rating), 0),
+		    CASE
+		        WHEN EXISTS (
+		            SELECT 1
+		            FROM BookLike bl
+		            WHERE bl.book = b
+		              AND bl.user.userId = :userId
+		        )
+		        THEN true
+		        ELSE false
+		    END
+		)
+		FROM Book b
+		JOIN b.genres g
+		LEFT JOIN b.ratings r
+		WHERE g.genreId IN (
+		    SELECT DISTINCT g2.genreId
+		    FROM MemberBook mb
+		    JOIN mb.book b2
+		    JOIN b2.genres g2
+		    WHERE mb.user.userId = :userId
+		)
+		AND b.bookId NOT IN (
+		    SELECT mb2.book.bookId
+		    FROM MemberBook mb2
+		    WHERE mb2.user.userId = :userId
+		)
+		GROUP BY b.bookId, b.title, b.author, b.bookImage
+		LIMIT 10
+	""")
+	List<BookCardDTO> getRecommendedBooks(@Param("userId") Integer userId);
+	
+	
+//	@Query("""
+//		    SELECT b.bookId,b.isbn,b.title,b.author,b.description,
+//			    b.publisher,b.edition,b.action,b.actionDate,b.numberOfCopies,
+//			    b.numberOfCopiesRemaining,b.bookImage
+//			    FROM Book b
+//	""")
+//	List<BookCardDTO> getAllBooks();
+}

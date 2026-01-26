@@ -1,0 +1,32 @@
+package com.project.bookstack.entities;
+
+import java.time.LocalDate;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+@Entity
+@Table(name = "book_table") 
+@Data
+public class Member {
+    @Id
+    @Column(name = "book_id", nullable = false)
+    private int userId;
+
+    private String title;
+
+    private String author;
+    
+    private String image;
+    
+    @Enumerated(EnumType.STRING)
+    private Enum genre;
+    
+    private String publisher;
+    
+    private String isbn;
+    
+    private int numberOfCopies;
+    
+    private int numberOfCopiesAvailable;
+}

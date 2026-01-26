@@ -1,0 +1,33 @@
+package com.project.bookstack.repositories;
+
+import java.util.List;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
+
+import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.entities.Book;
+
+@Repository
+public interface MemberRepository extends JpaRepository<Book, Integer> {
+	
+	@Query("""
+		    SELECT b.bookId,b.isbn,b.title,b.author,b.description,
+			    b.publisher,b.edition,b.action,b.actionDate,b.numberOfCopies,
+			    b.numberOfCopiesRemaining,b.bookImage
+			    FROM Book b
+	""")
+	List<BookDTO> findAllBooks();
+	
+//	@Query("""
+//		    SELECT new com.project.bookstack.dto.BookDTO(
+//		        b.bookId,
+//		        b.title,
+//		        b.author
+//		    )
+//		    FROM Book b
+//		""")
+//		List<BookDTO> findAllBooks();
+    
+}
