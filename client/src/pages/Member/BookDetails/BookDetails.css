@@ -12,5 +12,21 @@
   color: black;
 }
 
+.rating {
+  margin-top: 0.3rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.rating-value {
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.star {
+  color: #facc15; /* gold */
+  font-size: 1.70rem;
+}
 
 

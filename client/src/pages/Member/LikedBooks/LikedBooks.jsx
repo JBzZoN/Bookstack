@@ -1,32 +1,32 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
-import { allBooksCardData } from '../../../api/member';
+import { allLikedBooksCardData } from '../../../api/member';
 import { useState, useEffect } from 'react';
 
-function BrowseBooks () {
-    const [allBooksCard, setAllBooksCard] = useState([]);
+function LikedBooks () {
+    const [allLikedBooksCard, setAllLikedBooksCard] = useState([]);
 
     useEffect(() => {
-        allBooksCardData()
+        allLikedBooksCardData()
             .then(res => {
-                setAllBooksCard(Array.isArray(res.data) ? res.data : []);
+                setAllLikedBooksCard(Array.isArray(res.data) ? res.data : []);
             })
             .catch(err => {
                 console.error("Failed to fetch books", err);
-                setAllBooksCard([]);
+                setAllLikedBooksCard([]);
             });
     }, []);
 
     return (
         <div className='mb-5 p-2'>
             <div className="container browse-title text-center">
-                <h1 className="display-4">Explore Our Collection</h1>
-                <p className="lead">Find your next adventure between the pages.</p>
+                <h1 className="display-4">Books You Love</h1>
+                <p className="lead">All the books you’ve marked as favorites, in one place.</p>
             </div>
 
             <div className='mt-4 container vertical-scroll'>
                     {
-                        allBooksCard.map((book) => (
+                        allLikedBooksCard.map((book) => (
                             <BookCard
                                 key={book.bookId}
                                 title={book.title}
@@ -43,4 +43,4 @@ function BrowseBooks () {
     )
 }
 
-export default BrowseBooks
+export default LikedBooks

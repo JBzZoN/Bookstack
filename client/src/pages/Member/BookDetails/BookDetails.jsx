@@ -2,6 +2,7 @@ import BookCard from '../../../components/Member/BookCard/BookCard'
 import '../BookDetails/BookDetails.css'
 import { allBooksData } from '../../../dummy-data/all-books-data'
 import { useParams } from 'react-router-dom';
+import ReviewsSection from '../../../components/Member/ReviewSection/ReviewSection';
 
 function BookDetails () {
     const { id } = useParams();
@@ -29,100 +30,70 @@ console.log("ID =", id);
     const copyAvailable = book.stock || "Out of Stock - No Copy Available";
     
     return (
-        <div>
-            <div className="container py-5" style={{ marginTop: "50px" }}>
+        <div className='p-2'>
+            <div className="container py-5 mt-5">
 
                 <div className="details-card">
                     <div className="row g-5">
 
-                    <div className="col-lg-5 text-center">
-                        <img src={image} className="img-fluid book-cover" alt="Book Cover" />
-                    </div>
-
-                    <div className="col-lg-7">
-
-                        <h1 className="h1-c font-montserrat display-5">{title}</h1>
-                        <h4 className="fw-normal text-secondary">by {author}</h4>
-
-                        <div className="d-flex align-items-center gap-3 my-4">
-                            <div className="text-warning fs-5">
-                                <i className="bi bi-star-fill"></i>
-                                <i className="bi bi-star-fill"></i>
-                                <i className="bi bi-star-fill"></i>
-                                <i className="bi bi-star-fill"></i>
-                                <i className="bi bi-star-half"></i>
-                            </div>
-
-                            <span className="badge fs-6" style={{ backgroundColor: "rgba(var(--brand-teal-rgb), 0.1)", color: "var(--brand-teal)" }}>Available</span>
+                        <div className="col-lg-5 text-center">
+                            <img src={image} className="img-fluid book-cover" alt="Book Cover" />
                         </div>
 
-                        <p className="lead">{summary}</p>
+                        <div className="col-lg-7">
 
-                        <hr className="my-4" />
+                            <h1 className="h1-c font-montserrat display-5">{title}</h1>
+                            <h4 className="fw-normal text-secondary">by {author}</h4>
 
-                        <div className="row">
-
-                        <div className="col-md-6">
-                            <p><strong>Genre:</strong> {genre}</p>
-                            <p><strong>Publisher:</strong> {publisher}</p>
-                        </div>
-
-                        <div className="col-md-6">
-                            <p><strong>ISBN:</strong> {isbn}</p>
-                            <p><strong>Copies Available:</strong> {copyAvailable}</p>
-                        </div>
-
-                        </div>
-
-                        <div className="d-grid gap-2 d-md-flex mt-4">
-                            <button className="btn btn-outline">
-                                <i className="bi bi-book-fill me-2"></i>
-                                Borrow Now
-                            </button>
-
-                            <button className="btn btn-outline-danger btn-lg">
-                                <i className="bi bi-heart me-2"></i>
-                                Add to Wishlist
-                            </button>
-                        </div>
-
-                    </div>
-
-                    </div>
-                </div>
-
-                <div className="my-5">
-
-                    <h2 className="font-montserrat">Reviews</h2>
-
-                    <div className="card mt-3">
-                        <div className="card-body">
-
-                            <div className="d-flex align-items-center mb-2">
-                                <img src="https://placehold.co/40x40/e0e7ff/4338ca?text=J" className="rounded-circle me-2" alt="Avatar"/>
-                                <strong>Jane Doe</strong>
-
-                                <div className="text-warning ms-auto">
-                                    <i className="bi bi-star-fill"></i>
-                                    <i className="bi bi-star-fill"></i>
-                                    <i className="bi bi-star-fill"></i>
-                                    <i className="bi bi-star-fill"></i>
-                                    <i className="bi bi-star-fill"></i>
+                            <div className="d-flex align-items-center gap-3 my-4">
+                                <div className="rating">
+                                    <span className="rating-value">3.5</span>
+                                    <span className="star">★</span>
                                 </div>
+
+                                <span className="badge fs-6" style={{ backgroundColor: "rgba(var(--brand-teal-rgb), 0.1)", color: "var(--brand-teal)" }}>Available</span>
                             </div>
 
-                            <p>
-                            An absolutely captivating read! The concept is so unique and
-                            thought-provoking. I couldn't put it down and finished it in just two
-                            days. Highly recommended!
-                            </p>
+                            <p className="lead">{summary}</p>
+
+                            <hr className="my-4" />
+
+                            <div className="row">
+
+                            <div className="col-md-6">
+                                <p><strong>Genre:</strong> {genre}</p>
+                                <p><strong>Publisher:</strong> {publisher}</p>
+                            </div>
+
+                            <div className="col-md-6">
+                                <p><strong>ISBN:</strong> {isbn}</p>
+                                <p><strong>Copies Available:</strong> {copyAvailable}</p>
+                            </div>
+
+                            </div>
+
+                            <div className="d-grid gap-2 d-md-flex mt-4">
+                                <button className="btn btn-outline">
+                                    <i className="bi bi-book-fill me-2"></i>
+                                    Borrow Now
+                                </button>
+
+                                <button className="btn btn-outline-danger btn-lg">
+                                    <i className="bi bi-heart me-2"></i>
+                                    Add to Wishlist
+                                </button>
+                            </div>
 
                         </div>
-                    </div>
 
+                    </div>
                 </div>
 
                 <div className="my-5">
+                    <ReviewsSection bookId={book.id} />
+                </div>
+
+                <div className="">
 
                     <h2 className="font-montserrat">You Might Also Like</h2>
 
