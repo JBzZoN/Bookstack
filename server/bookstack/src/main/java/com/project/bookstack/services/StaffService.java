@@ -76,7 +76,7 @@ public class StaffService {
 		            b.getAuthor(),                     // String author
 		            b.getDescription(),                // String description
 		            b.getPublisher(),                  // String publisher
-		            b.getStaff().getUserId(),                        // Long userId
+		            b.getStaff().getUserId(),          // Long userId
 		            b.getAction(),                     // String action
 		            b.getActionDate(),                 // LocalDate actionDate
 		            b.getBookId(),          // Long bookId
