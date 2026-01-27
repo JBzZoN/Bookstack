@@ -1,9 +1,30 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import "./Books.css";
 import { bookData } from "../../../dummy-data/book-data";
+import { getBooks } from "../Service/connection";
 
 export default function Books() {
   const books = bookData.results;
+  const [properties, setProperties] = useState([])
+
+   const getPropertiesList = async () => {
+    const response = await getBooks()
+    console.log(response)
+    setProperties(response)
+   // console.log(response['data'])
+    if (response['status'] == 'success') {
+      // set the properties and re-render the component UI
+      setProperties(response)
+      
+    }
+  }
+
+  useEffect(() => {
+    // load the properties automatically when this component is launched
+    getPropertiesList()
+    console.log(properties);
+  }, [])
+
 
   return (
     <div className="books-container">
@@ -19,18 +40,18 @@ export default function Books() {
             <th>Count</th>
           </tr>
         </thead>
-        <tbody>
-          {books.map((book) => (
-            <tr key={book.id}>
-              <td>{book.id}</td>
-              <td>{book.title}</td>
-              <td>{book.authors.map(a => a.name).join(", ")}</td>
-              <td>{book.subjects.slice(0, 3).join(", ")}</td> {/* first 3 subjects */}
-              <td>{book.languages.join(", ")}</td>
-              <td>{book.download_count}</td>
-            </tr>
-          ))}
-        </tbody>
+       <tbody>
+  {properties.map((book, index) => (
+    <tr key={book.isbn ?? index}>
+      <td>{book.isbn}</td>
+      <td>{book.title}</td>
+      <td>{book.author}</td>
+      <td>{book.description}</td>
+      <td>{book.publisher}</td>
+      <td>{book.edition}</td>
+    </tr>
+  ))}
+</tbody>
       </table>
     </div>
   );

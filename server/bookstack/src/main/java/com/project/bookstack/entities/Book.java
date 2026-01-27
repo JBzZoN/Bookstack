@@ -3,7 +3,9 @@ package com.project.bookstack.entities;
 
 
 import jakarta.persistence.*;
+import java.time.Year;
 import java.time.LocalDate;
+
 
 
 @Entity
@@ -32,8 +34,8 @@ public class Book {
 	    private String publisher;
 
 	    @Column(name = "edition")
-	    private Integer edition;   // YEAR mapped as Integer
-
+	    private Integer edition;
+	    
 	    @Column(name = "book_category")
 	    private Character bookCategory;
 

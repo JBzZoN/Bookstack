@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Staff_data } from "../../../dummy-data/staff-data";
 import { useNavigate } from "react-router-dom";
 import "./Staff.css";
+import { getstaffs } from "../Service/connection";
 
 export default function Staff() {
     const navigate = useNavigate();
@@ -10,6 +11,27 @@ export default function Staff() {
     const handleRemove = (id) => {
         setStaff(staff.filter((s) => s.id !== id));
     };
+
+     const [properties, setProperties] = useState([])
+    
+       const getPropertiesList = async () => {
+        const response = await getstaffs()
+        console.log(response)
+        setProperties(response)
+       // console.log(response['data'])
+        if (response['status'] == 'success') {
+          // set the properties and re-render the component UI
+          setProperties(response)
+          
+        }
+      }
+    
+      useEffect(() => {
+        // load the properties automatically when this component is launched
+        getPropertiesList()
+        console.log(properties);
+      }, [])
+    
 
     return (
         <div className="staff-container">
@@ -29,19 +51,19 @@ export default function Staff() {
                         <th>ID</th>
                         <th>Name</th>
                         <th>Salary</th>
-                        <th>Status</th>
-                        <th>Payment</th>
+                        <th>phone</th>
+                        <th>status</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {staff.map((s) => (
-                        <tr key={s.id}>
-                            <td>{s.id}</td>
+                    {properties.map((s) => (
+                        <tr key={s.user_if}>
+                            <td>{s.user_id}</td>
                             <td>{s.name}</td>
                             <td>₹{s.salary}</td>
+                            <td>{s.phone}</td>
                             <td>{s.status}</td>
-                            <td>{s.paymentStatus}</td>
                             <td>
                                 <button 
                                     className="edit-btn"

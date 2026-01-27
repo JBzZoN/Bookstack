@@ -1,74 +1,180 @@
 import React, { useState } from "react";
-import "./AddStaff.css";
-
 
 export default function AddStaff() {
-    const [form, setForm] = useState({
-        name: "",
-        salary: "",
-        status: "active",
-        paymentStatus: "pending",
+  const [formData, setFormData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    address: "",
+    dob: "",
+    username: "",
+    password: "",
+    roleType: "",
+    salary: "",
+    dateHired: "",
+    status: "active"
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    console.log(formData);
+
+    await fetch("http://localhost:8080/admin/staff/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(formData)
     });
+  };
 
+  return (
+    <div className="container mt-5">
+      <div className="card shadow-lg">
+        <div className="card-header bg-primary text-white">
+          <h4 className="mb-0">Add Staff Member</h4>
+        </div>
 
-    const handleChange = (e) => {
-        setForm({ ...form, [e.target.name]: e.target.value });
-    };
+        <div className="card-body">
+          <form onSubmit={handleSubmit}>
+            <div className="row g-3">
 
+              {/* Name */}
+              <div className="col-md-6">
+                <label className="form-label">Name</label>
+                <input
+                  className="form-control"
+                  name="name"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        console.log("New Staff Added:", form);
-        alert("Staff added successfully!");
-    };
+              {/* Email */}
+              <div className="col-md-6">
+                <label className="form-label">Email</label>
+                <input
+                  type="email"
+                  className="form-control"
+                  name="email"
+                  onChange={handleChange}
+                  required
+                />
+              </div>
 
+              {/* Phone */}
+              <div className="col-md-6">
+                <label className="form-label">Phone</label>
+                <input
+                  className="form-control"
+                  name="phone"
+                  onChange={handleChange}
+                />
+              </div>
 
-return (
-<div className="add-staff-container">
-<h2>Add New Staff</h2>
+              {/* Address */}
+              <div className="col-md-6">
+                <label className="form-label">Address</label>
+                <input
+                  className="form-control"
+                  name="address"
+                  onChange={handleChange}
+                />
+              </div>
 
+              {/* DOB */}
+              <div className="col-md-4">
+                <label className="form-label">Date of Birth</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="dob"
+                  onChange={handleChange}
+                />
+              </div>
 
-<form className="staff-form" onSubmit={handleSubmit}>
-    <label>Name</label>
-    <input
-    type="text"
-    name="name"
-    value={form.name}
-    onChange={handleChange}
-    required
-    />
+              {/* Username */}
+              <div className="col-md-4">
+                <label className="form-label">Username</label>
+                <input
+                  className="form-control"
+                  name="username"
+                  onChange={handleChange}
+                />
+              </div>
 
+              {/* Password */}
+              <div className="col-md-4">
+                <label className="form-label">Password</label>
+                <input
+                  type="password"
+                  className="form-control"
+                  name="password"
+                  onChange={handleChange}
+                />
+              </div>
 
-    <label>Salary</label>
-    <input
-    type="number"
-    name="salary"
-    value={form.salary}
-    onChange={handleChange}
-    required
-    />
+              {/* Role */}
+              <div className="col-md-4">
+                <label className="form-label">Role Type</label>
+                <input
+                  className="form-control"
+                  name="roleType"
+                  placeholder="Librarian / Admin"
+                  onChange={handleChange}
+                />
+              </div>
 
+              {/* Salary */}
+              <div className="col-md-4">
+                <label className="form-label">Salary</label>
+                <input
+                  type="number"
+                  className="form-control"
+                  name="salary"
+                  onChange={handleChange}
+                />
+              </div>
 
-    <label>Status</label>
-    <select name="status" value={form.status} onChange={handleChange}>
-    <option value="active">Active</option>
-    <option value="inactive">Inactive</option>
-    </select>
+              {/* Date Hired */}
+              <div className="col-md-4">
+                <label className="form-label">Date Hired</label>
+                <input
+                  type="date"
+                  className="form-control"
+                  name="dateHired"
+                  onChange={handleChange}
+                />
+              </div>
 
+              {/* Status */}
+              <div className="col-md-6">
+                <label className="form-label">Status</label>
+                <select
+                  className="form-select"
+                  name="status"
+                  value={formData.status}
+                  onChange={handleChange}
+                >
+                  <option value="active">Active</option>
+                  <option value="inactive">Inactive</option>
+                  <option value="suspended">Suspended</option>
+                </select>
+              </div>
 
-    <label>Payment Status</label>
-    <select
-    name="paymentStatus"
-    value={form.paymentStatus}
-    onChange={handleChange}
-    >
-    <option value="paid">Paid</option>
-    <option value="pending">Pending</option>
-    </select>
+            </div>
 
-
-    <button type="submit" className="submit-btn">Add Staff</button>
-    </form>
+            <div className="mt-4 text-end">
+              <button className="btn btn-success px-4" type="submit">
+                Save Staff
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
     </div>
-    );
-    }
+  );
+}

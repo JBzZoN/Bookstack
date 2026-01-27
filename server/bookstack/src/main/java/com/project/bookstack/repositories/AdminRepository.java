@@ -14,6 +14,7 @@ import org.springframework.data.repository.query.FluentQuery.FetchableFluentQuer
 import org.springframework.stereotype.Repository;
 
 import com.project.bookstack.dto.AdminDetailDto;
+import com.project.bookstack.dto.StaffDetailDto;
 import com.project.bookstack.entities.Book;
 
 import jakarta.transaction.Transactional;
@@ -35,4 +36,18 @@ public interface AdminRepository extends JpaRepository<Book,Long>{
 			   from Book b
 			""")
 			List<AdminDetailDto> getAllBooks();
+
+	@Transactional
+	@Query("""
+		    select new com.project.bookstack.dto.StaffDetailDto(
+		        s.userId,
+		        u.name,
+		        s.salary,
+		        u.phone,
+		        s.status
+		    )
+		    from Staff s
+		    join s.user u
+		""")
+	List<StaffDetailDto> getAllStaff();
 }

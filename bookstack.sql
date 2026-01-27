@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`staff_table` (
   `user_id` INT AUTO_INCREMENT,
   `salary` FLOAT NULL,
   `date_hired` DATE NULL,
+  `status` VARCHAR(10) NULL,
   PRIMARY KEY (`user_id`),
   CONSTRAINT `staff_user`
     FOREIGN KEY (`user_id`)
@@ -243,10 +244,10 @@ INSERT INTO member_table (user_id, membership_type, member_start, member_end) VA
 (7, 'Premium', '2022-03-01', '2023-02-28'),
 (8, 'Premium', '2022-02-01', '2023-02-21');
 
-INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
-(4, 35000, '2020/06/15'),
-(5, 40000, '2019/04/10'),
-(9, 42000, '2021/09/01');
+INSERT INTO staff_table (user_id, salary, `date_hired`,`status`) VALUES
+(4, 35000, '2020/06/15',"active"),
+(5, 40000, '2019/04/10',"inactive"),
+(9, 42000, '2021/09/01',"active");
 
 INSERT INTO book_table (isbn, title, author, description, publisher, edition, book_category, user_id, action, action_date, book_id, number_of_copies, number_of_copies_remaining) VALUES
 (10001, 'Python Basics', 'Mark Lutz', 'Intro to Python', 'OReilly', 2021, 'T', 04, 'Added', '2025-01-10', 01, 10, 8),
