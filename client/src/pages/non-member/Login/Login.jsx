@@ -2,27 +2,40 @@ import React, { useState } from "react";
 import "./Login.css";
 import logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
 
 function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = (e) => {
-    e.preventDefault(); // ⛔ VERY IMPORTANT
+  const handleLogin = async (e) => {
+    e.preventDefault(); 
 
-    const normalizedEmail = email.trim().toLowerCase();
+    const normalizedUsername = email.trim();
+    let response;
+    try {
+          response = await axios.post("http://localhost:7070/auth/login", {"username": normalizedUsername, "password": password})
+    }catch(e) {
+      alert("Invalid credentials")
+    }
 
-    if (normalizedEmail === "member@email.com") {
-      navigate("/member/home");
+    const data = response.data
+
+    localStorage.setItem("currentUser", JSON.stringify(data))
+    console.log(localStorage.getItem("currentUser"))
+
+    if (data.role === "Member") {
+       navigate("/member/home");
     } 
-    else if (normalizedEmail === "admin@email.com") {
+    else if (data.role === "Admin") {
       navigate("/admin/books");
     } 
-    else if (normalizedEmail === "staff@email.com") {
+    else if (data.role === "Librarian") {
       navigate("/staff/books");
     } 
     else {
+      
       alert("Invalid email");
     }
   };
@@ -58,9 +71,9 @@ function Login() {
 
             <form onSubmit={handleLogin}>
               <div className="mb-3">
-                <label className="form-label">Email</label>
+                <label className="form-label">Username</label>
                 <input
-                  type="email"
+                  type="text"
                   className="form-control form-control-lg"
                   required
                   value={email}

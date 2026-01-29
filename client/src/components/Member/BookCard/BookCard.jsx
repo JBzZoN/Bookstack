@@ -3,6 +3,8 @@ import './BookCard.css';
 import heartFilled from './../../../assets/heart-filled.png/';
 import heartOutline from './../../../assets/heart-outline.png';
 import star from './../../../assets/images/member/star.png';
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLike } from "../../../redux/slices/likeSlice";
 
 function BookCard({ title, author, image, rating, like, link }) {
   const [liked, setLiked] = useState(like);
@@ -35,7 +37,7 @@ function BookCard({ title, author, image, rating, like, link }) {
               className={`heart-wrapper ${liked ? 'liked' : ''}`}
               onClick={handleLikeClick}
             >
-              <img
+              <img onClick={() => dispatchEvent(toggleLike(book.bookId))}
                 src={liked ? heartFilled : heartOutline}
                 alt="like"
               />

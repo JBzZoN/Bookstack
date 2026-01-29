@@ -1,9 +1,12 @@
 import axios from "axios";
 
-const API_BASE_URL = "http://localhost:8080";
+const API_BASE_URL = "http://localhost:7070";
 
 const api = axios.create({
-  baseURL: API_BASE_URL
+  baseURL: API_BASE_URL,
+  headers: {
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+  }
 });
 
 export const allBooksCardData = () => {
@@ -45,4 +48,6 @@ export const bookDetailsData = (id) => {
 export const mightLikedBooksData = (id) => {
   return api.get(`/member/might-liked-books/${id}`);
 };
+
+
 

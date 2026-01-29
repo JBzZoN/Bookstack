@@ -34,9 +34,6 @@ function BookDetails () {
         });
     }, [id]);
 
-    console.log(bookDetails);
-
-
     if (!bookDetails) {
         return (
         <div className="container py-5">
