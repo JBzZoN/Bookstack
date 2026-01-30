@@ -1,0 +1,21 @@
+package com.project.bookstack.services;
+
+
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.project.bookstack.entities.Book;
+import com.project.bookstack.repositories.MemberRepository;
+
+@Service
+public class MemberService {
+
+	private final MemberRepository memberRepository = null;
+
+	public List<Book> getAllBooks() {
+		return memberRepository.findAll();
+	}
+	
+}

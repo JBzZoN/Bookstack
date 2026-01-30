@@ -1,0 +1,12 @@
+package com.project.bookstack.dto;
+
+public record MemberDetailDto(
+		String bookImage,
+		String title,
+		String author,
+		
+) {}
+
+
+
+

@@ -1,7 +1,43 @@
 .myaccount-title {
     padding: 4rem 2rem;
-    background: linear-gradient(135deg, rgba(99, 102, 241, 0.95), rgba(236, 72, 153, 0.95));
+    background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
     border-radius: 1.5rem;
     color: white;
     margin-top:45px;
+}
+
+.custom-tabs .nav-link {
+  border: none;
+  color: #6c757d;
+  background: transparent;
+  font-weight: 500;
+  transition: all 0.3s ease;
+}
+
+.custom-tabs .nav-link.active {
+  background: transparent;
+  color: black;
+  border: 2px solid transparent;
+  border-radius: 0.375rem;
+
+  background-image:
+    linear-gradient(#fff, #fff),
+    linear-gradient(
+      90deg,
+      #4f0bc5,
+      rgb(236, 94, 117)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+  transition: all 0.3s ease;
+}
+
+/* Remove bottom border line */
+.custom-tabs.nav-tabs {
+  border-bottom: none;
 }

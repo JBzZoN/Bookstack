@@ -1,0 +1,5 @@
+package com.project.bookstack.dto.member;
+
+public class BookDTO {
+
+}

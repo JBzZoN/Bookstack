@@ -2,8 +2,8 @@ import '../MyAccount/MyAccount.css'
 
 function MyAccount () {
     return (
-        <div>
-            <div className="container py-4" style={{ marginTop: "50px" }}>
+        <div className='m-5'>
+            <div className="container py-4">
 
                 <div className="myaccount-title text-center mb-5">
                     <h1 className="font-montserrat display-4">My Account</h1>
@@ -12,7 +12,7 @@ function MyAccount () {
 
                 <div className="content-card" style={{ margin: "auto" }}>
 
-                    <ul className="nav nav-tabs nav-fill mb-4">
+                    <ul className="nav nav-tabs nav-fill mb-4 custom-tabs">
 
                         <li className="nav-item">
                             <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#borrowed">

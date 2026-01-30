@@ -1,0 +1,10 @@
+package com.project.bookstack.services;
+
+import java.util.List;
+
+import com.project.bookstack.dto.BookCardDTO;
+
+public interface MemberService {
+
+    List<BookCardDTO> getAllBooks();
+}
