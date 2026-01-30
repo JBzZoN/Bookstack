@@ -32,6 +32,7 @@ public class SecurityConfiguration {
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
 			.requestMatchers("/staff/**").hasAuthority("Librarian")
+			.requestMatchers("/book/**").hasAnyAuthority("Member", "Admin", "Librarian")
 			.anyRequest().authenticated()
 		)
 		// Session management - STATELESS for JWT

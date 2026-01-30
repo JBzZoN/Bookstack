@@ -54,6 +54,39 @@ public class RouteConfiguration {
 	}
 	
 	@Bean
+	public RouterFunction<ServerResponse> bookExpressRoute() {
+
+	    return GatewayRouterFunctions.route("book-route")
+	        .route(
+	            RequestPredicates.path("/book/**"),
+	            HandlerFunctions.http()
+	        )
+	        .before((request) -> {
+
+	            String authHeader = request.headers().firstHeader("Authorization");
+
+	            if (authHeader != null && authHeader.startsWith("Bearer ")) {
+
+	                String token = authHeader.substring(7);
+
+	                // ✅ validate JWT
+	                String userId = jwtUtil.validateAndGetUserId(token);
+
+	                // ✅ add header for downstream service
+	                return ServerRequest.from(request)
+	                        .header("X-User-Id", userId)
+	                        .build();
+	            }
+
+	            return request;
+	        })
+	        .before(
+	            BeforeFilterFunctions.uri("http://localhost:4000")
+	        )
+	        .build();
+	}
+	
+	@Bean
 	public RouterFunction<ServerResponse> bookstackServerRoute() {
 
 	    return GatewayRouterFunctions.route("login-route")
