@@ -18,9 +18,9 @@ function ViewMembers() {
         }
       }
     )
+    
     setMembers(response.data)
   }
-
   useEffect(() => {
     getAllMembers()
   }, [])
@@ -56,6 +56,7 @@ function ViewMembers() {
                   <button
                     className="btn btn-sm btn-primary"
                     onClick={() => {
+                      console.log(e)
                       navigate('/staff/members/profile', { state: { member: e } })
                     }}
                   >

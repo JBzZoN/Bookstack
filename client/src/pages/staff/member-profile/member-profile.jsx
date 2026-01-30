@@ -7,6 +7,7 @@ function MemberProfile() {
 
   const location = useLocation()
   const member = location.state.member
+  console.log(member)
 
   return (
     <div className="container profile-container mb-5">

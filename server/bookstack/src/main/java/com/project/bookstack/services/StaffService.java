@@ -97,6 +97,7 @@ public class StaffService {
 		List<UserDTO> finalOutput = searchResults.stream().map((e) -> {
 			for(Member m : memberResults) {
 				if(m.getUserId() == e.getUserId()) {
+					System.out.println(m.getMembershipData().getMembershipType());
 					e.setMemberEnd(m.getMemberEnd());
 					e.setMembershipType(m.getMembershipData().getMembershipType());
 					e.setMemberStart(m.getMemberStart());
@@ -104,9 +105,8 @@ public class StaffService {
 			}
 
 			return e;
-		}).toList();
-		
-		return searchResults;
+		}).filter(e ->  e.getRoleType().equals("Member")).toList();
+		return finalOutput;
 	}
 
 	public List<Member> addBook(BookWithImageDto bookWithImageDto) {
