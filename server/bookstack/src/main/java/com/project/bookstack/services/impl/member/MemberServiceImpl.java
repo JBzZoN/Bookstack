@@ -8,11 +8,11 @@ import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
+import com.project.bookstack.clients.BookClientService;
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookCoreDTO;
 import com.project.bookstack.dto.member.BookDTO;
 import com.project.bookstack.repositories.member.MemberRepository;
-import com.project.bookstack.services.member.BookClientService;
 import com.project.bookstack.services.member.MemberService;
 
 import lombok.RequiredArgsConstructor;

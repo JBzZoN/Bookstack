@@ -26,6 +26,7 @@ public class AuthService {
 	
 	@Autowired
 	UserRepository userRepository;
+	
 	public void migratePasswordsToBCrypt() {
 	    List<User> users = userRepository.findAll();
 
@@ -36,6 +37,7 @@ public class AuthService {
 
 	    userRepository.saveAll(users);
 	}
+	
 	public List<User> findAll() {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
@@ -51,6 +53,23 @@ public class AuthService {
 									.map(e -> e.getEmail())
 									.toList();
 		return emails;
+	}
+
+	public boolean existsByUsername(String username) {
+		return userRepository.existsByUsername(username);
+	}
+
+	public boolean existsByEmail(String email) {
+		return userRepository.existsByEmail(email);
+	}
+
+	public void save(User user) {
+	    
+	    if (!userRepository.existsById(user.getUserId())) {
+	        userRepository.save(user);
+	    } else {
+	        System.out.println("user already exists, skipping save.");
+	    }
 	}
 	
 }

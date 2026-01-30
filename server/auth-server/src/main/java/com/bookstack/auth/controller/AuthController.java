@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstack.auth.dto.LoginRequest;
+import com.bookstack.auth.dto.UserCreateRequest;
 import com.bookstack.auth.dto.UserResponseDto;
 import com.bookstack.auth.entities.User;
 import com.bookstack.auth.security.JwtUtil;
@@ -25,10 +26,12 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthController {
 
+    private final PasswordEncoder passwordEncoder;
+
 	private final AuthService authService;
 	private final AuthenticationManager authMgr;
 	private final JwtUtil jwtUtil;
-	
+
 	@GetMapping("/users")
 	public List<User> getString() {
 		return authService.findAll();
@@ -89,5 +92,33 @@ public class AuthController {
 	public void bcrypt() {
 		authService.migratePasswordsToBCrypt();
 	}
+	
+	@PostMapping("/internal/register-after-payment")
+	public ResponseEntity<String> registerAfterPayment(
+	        @RequestBody UserCreateRequest request) {
+
+	    if (authService.existsByUsername(request.getUsername())) {
+	        return ResponseEntity.badRequest().body("Username already exists");
+	    }
+
+	    if (authService.existsByEmail(request.getEmail())) {
+	        return ResponseEntity.badRequest().body("Email already exists");
+	    }
+
+	    User user = new User();
+	    user.setName(request.getName());
+	    user.setEmail(request.getEmail());
+	    user.setPhone(request.getPhone());
+	    user.setAddress(request.getAddress());
+	    user.setDob(request.getDob());
+	    user.setUsername(request.getUsername());
+	    user.setPassword(passwordEncoder.encode(request.getPassword()));
+	    user.setRoleType("MEMBER");
+
+	    authService.save(user);
+
+	    return ResponseEntity.ok("User created");
+	}
+
 	
 }

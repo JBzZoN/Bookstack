@@ -6,8 +6,11 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
+import com.project.bookstack.clients.AuthClient;
+import com.project.bookstack.dto.UserCreateRequest;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;
 import com.project.bookstack.repositories.MembershipRepository;
@@ -19,56 +22,58 @@ import com.razorpay.Utils;
 import lombok.RequiredArgsConstructor;
 
 @RestController
-@RequestMapping("/membership")
+@RequestMapping("/member/membership")
 @RequiredArgsConstructor
 public class MembershipController {
 
     private final RazorpayService razorpayService;
     private final MemberRepository memberRepository;
     private final MembershipRepository membershipRepository;
+    private final AuthClient authClient;
+
+    @Value("${razorpay.key.id}")
+    private String razorpayKeyId;
 
     @Value("${razorpay.key.secret}")
     private String razorpayKeySecret;
 
     /**
-     * STEP 1: Start payment (create Razorpay order)
+     * STEP 1: Create Razorpay Order (PUBLIC)
      */
     @PostMapping("/start-payment")
     public Map<String, Object> startPayment(
             @RequestParam String membershipType) throws Exception {
 
-        // Validate membership type from DB
         MembershipData plan = membershipRepository
                 .findById(membershipType)
                 .orElseThrow(() ->
                         new IllegalArgumentException("Invalid membership type"));
 
-        int amount = plan.getYearlyCost(); // assuming yearly for now
+        int amount = plan.getYearlyCost();
 
         Order order = razorpayService.createOrder(amount);
 
         Map<String, Object> response = new HashMap<>();
         response.put("orderId", order.get("id"));
         response.put("amount", amount);
-        response.put("key", "rzp_test_xxxxx"); // test key only
+        response.put("key", razorpayKeyId);
 
         return response;
     }
 
     /**
-     * STEP 2: Payment success callback
+     * STEP 2: Payment Success → CREATE MEMBER (NO TOKEN HERE)
      */
     @PostMapping("/payment-success")
     public ResponseEntity<String> paymentSuccess(
-            @org.springframework.web.bind.annotation.RequestBody Map<String, String> data,
-            @RequestHeader("Authorization") String token) throws Exception {
+            @RequestBody Map<String, String> data) throws Exception {
 
+        // Razorpay fields
         String orderId = data.get("razorpay_order_id");
         String paymentId = data.get("razorpay_payment_id");
         String signature = data.get("razorpay_signature");
-        String membershipType = data.get("membershipType"); // sent from frontend
 
-        // 1️⃣ Verify Razorpay signature
+        // Verify signature
         String payload = orderId + "|" + paymentId;
         String expectedSignature = Utils.getHash(payload, razorpayKeySecret);
 
@@ -76,38 +81,36 @@ public class MembershipController {
             return ResponseEntity.badRequest().body("Invalid payment signature");
         }
 
-        // 2️⃣ Extract userId from JWT
-        int userId = extractUserIdFromJWT(token);
+        // Build request for Auth Service
+        UserCreateRequest req = new UserCreateRequest();
+        req.setName(data.get("fullName"));
+        req.setEmail(data.get("email"));
+        req.setPhone(data.get("phone"));
+        req.setAddress(data.get("address"));
+        req.setDob(LocalDate.parse(data.get("dob")));
+        req.setUsername(data.get("username"));
+        req.setPassword(data.get("password"));
 
-        // 3️⃣ Activate or renew membership
-        Member member = memberRepository.findById(userId)
-                .orElse(new Member());
+        // 🔥 CALL AUTH SERVICE
+        authClient.registerAfterPayment(req);
 
-        member.setUserId(userId);
-        member.setMembershipType(membershipType);
+        // Optional: save membership record in bookstack DB
+        Member member = new Member();
+        member.setMembershipType(data.get("membershipType"));
         member.setMemberStart(LocalDate.now());
         member.setMemberEnd(LocalDate.now().plusDays(365));
 
         memberRepository.save(member);
 
-        return ResponseEntity.ok("Membership Activated Successfully");
+        return ResponseEntity.ok("Payment successful. Please login.");
     }
 
+
     /**
-     * STEP 3: Payment failure (no DB change)
+     * OPTIONAL: Payment failed
      */
     @PostMapping("/payment-failed")
     public ResponseEntity<String> paymentFailed() {
         return ResponseEntity.ok("Payment Failed");
-    }
-
-    /**
-     * Utility: Extract userId from JWT
-     * (Replace with your actual JWT logic)
-     */
-    private int extractUserIdFromJWT(String token) {
-        // token = "Bearer xxxxx"
-        // TODO: implement real JWT parsing
-        return 1; // placeholder for now
     }
 }

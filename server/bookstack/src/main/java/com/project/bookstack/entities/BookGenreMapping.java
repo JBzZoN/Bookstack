@@ -10,7 +10,7 @@ import lombok.Data;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "book_genre")
+@Table(name = "genre_table")
 @Data
 public class BookGenreMapping {
 

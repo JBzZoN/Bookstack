@@ -170,7 +170,7 @@ function Membership() {
                           billing: billing,          // monthly / yearly
                           amount: billing === "monthly" ? plan.monthly : plan.yearly
                         }));
-                        window.location.href = "/order-summary";
+                        window.location.href = "/register";
                       }}
                     >
                       Choose Plan

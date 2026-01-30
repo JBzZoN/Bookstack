@@ -1,35 +1,36 @@
 import React from "react";
 import "./OrderSummary.css";
 import logo from "../../../assets/logo.png";
-import { Link } from "react-router-dom";
 
-/*
-  OrderSummary Component
-  ----------------------
-  Displays selected plan details before registration.
-  Acts as a confirmation step in the membership flow.
-*/
 function OrderSummary() {
+
   const plan = JSON.parse(localStorage.getItem("selectedPlan"));
+  const registerData = JSON.parse(localStorage.getItem("registerData"));
 
-  const startPayment = async (plan) => {
+  // 🔒 Safety check
+  if (!plan || !registerData) {
+    alert("Invalid flow. Please choose plan and register again.");
+    window.location.href = "/membership";
+    return null;
+  }
 
-    const token = localStorage.getItem("token"); // JWT after login/register
+  const startPayment = async () => {
 
-    // 1️⃣ Call backend to create order
+    // 1️⃣ CREATE ORDER (PUBLIC API – NO TOKEN)
     const res = await fetch(
-      `/membership/start-payment?membershipType=${plan.type}`,
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      }
+      `http://localhost:7070/member/membership/start-payment?membershipType=${plan.type}`,
+      { method: "POST" }
     );
+
+    if (!res.ok) {
+      const text = await res.text();
+      alert(text);
+      return;
+    }
 
     const data = await res.json();
 
-    // 2️⃣ Razorpay checkout
+    // 2️⃣ OPEN RAZORPAY
     const options = {
       key: data.key,
       amount: data.amount * 100,
@@ -40,23 +41,36 @@ function OrderSummary() {
 
       handler: async function (response) {
 
-        // 3️⃣ Notify backend on success
-        await fetch("/membership/payment-success", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            membershipType: plan.type
-          })
-        });
+        // 3️⃣ PAYMENT SUCCESS → SEND ALL DATA TO BACKEND
+        const successRes = await fetch(
+          "http://localhost:7070/member/membership/payment-success",
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              ...registerData,            // fullName, email, phone, address, dob, username, password
+              membershipType: plan.type,
+              billing: plan.billing,
+              amount: plan.amount,
+              razorpay_order_id: response.razorpay_order_id,
+              razorpay_payment_id: response.razorpay_payment_id,
+              razorpay_signature: response.razorpay_signature
+            })
+          }
+        );
 
-        alert("Membership Activated!");
-        window.location.href = "/login"; // or dashboard
+        if (!successRes.ok) {
+          const text = await successRes.text();
+          alert(text);
+          return;
+        }
+
+        // 4️⃣ CLEAN TEMP DATA
+        localStorage.removeItem("selectedPlan");
+        localStorage.removeItem("registerData");
+
+        alert("Payment successful! Please login.");
+        window.location.href = "/login";
       }
     };
 
@@ -66,54 +80,34 @@ function OrderSummary() {
 
   return (
     <div className="body1">
-
-      {/* MAIN CONTENT */}
       <main className="order-page container d-flex flex-column align-items-center justify-content-center">
 
-        {/* Brand header */}
-        <div className="d-flex align-items-center gap-2 text-decoration-none">
+        <div className="d-flex align-items-center gap-2">
           <img className="logo-img" src={logo} alt="logo" />
-
           <div className="logo-title">
             <span style={{ color: "#0a0d9f" }}>Book</span>
             <span style={{ color: "#111827" }}>Stack</span>
           </div>
         </div>
 
-        {/* Card layout */}
         <div className="row w-100 justify-content-center padding">
           <div className="col-lg-6 col-md-8">
-
             <div className="content-card text-center">
-              <h3 className="font-montserrat mb-4">
-                Order Summary
-              </h3>
+              <h3>Order Summary</h3>
+              <p>{plan.type} Plan</p>
+              <p>₹{plan.amount}</p>
+              <p className="text-secondary">Billed {plan.billing}</p>
 
-              <p className="h5">{plan.type} Plan</p>
-              <p className="h5 fw-bold">₹{plan.amount}</p>
-
-              <p className="text-secondary small">
-                Billed {plan.billing}. Membership benefits apply.
-              </p>
-
-              <p className="text-secondary small">
-                Billed annually. Full access, 7 book borrow limit, no late fees.
-              </p>
-
-              <hr />
-
-              <div className="d-grid mt-4">
-                <button
-                  className="btn-outline w-100"
-                  onClick={() => startPayment(plan)}
-                >
-                  Pay & Continue
-                </button>
-              </div>
+              <button
+                className="btn-outline w-100"
+                onClick={startPayment}
+              >
+                Pay & Continue
+              </button>
             </div>
-
           </div>
         </div>
+
       </main>
     </div>
   );
