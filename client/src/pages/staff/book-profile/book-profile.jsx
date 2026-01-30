@@ -7,18 +7,18 @@ function BookProfile() {
   const location = useLocation()
 
   const genreColorMap = {
-    "Fantasy": "text-bg-primary",
-    "Science Fiction": "text-bg-info",
-    "Fiction": "text-bg-secondary",
-    "Non-Fiction": "text-bg-dark",
-    "History": "text-bg-warning",
-    "Biography & Memoir": "text-bg-success",
-    "Business & Economics": "text-bg-success",
-    "Philosophy": "text-bg-light",
-    "Psychology": "text-bg-info",
-    "Programming & Technology": "text-bg-danger",
-    "Science": "text-bg-primary",
-    "Self-Help": "text-bg-warning"
+      "Fantasy": "text-bg-primary",
+      "Science Fiction": "text-bg-info",
+      "Fiction": "text-bg-secondary",
+      "Non-Fiction": "text-bg-dark",
+      "History": "text-bg-warning",
+      "Biography & Memoir": "text-bg-success",
+      "Business & Economics": "text-bg-success",
+      "Philosophy": "text-bg-light",
+      "Psychology": "text-bg-info",
+      "Programming & Technology": "text-bg-warning",
+      "Science": "text-bg-primary",
+      "Self-Help": "text-bg-warning"
   }
 
   const book = location.state.book

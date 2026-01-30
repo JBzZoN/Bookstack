@@ -42,3 +42,14 @@
 .list-group-item:hover {
     background-color: #f4f3ff;
 }
+/* Member search dropdown */
+.member-search-dropdown {
+    position: absolute;
+    top: calc(100% + 4px);   /* 👈 forces it BELOW input */
+    left: 0;
+    right: 0;
+
+    z-index: 9999;          /* 👈 above cards, tables, everything */
+    max-height: 260px;
+    overflow-y: auto;
+}

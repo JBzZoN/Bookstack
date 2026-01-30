@@ -213,45 +213,48 @@ return (
 
     {/* MEMBER SEARCH */}
     <div className="card soft-card mb-4 position-relative">
-      <div className="form-floating">
-        <input
-          type="text"
-          className="form-control"
-          id="floatingInput"
-          value={searchString}
-          onChange={onSearchMember}
-          autoComplete="off"
-          onFocus={() => setSearchBarOn(true)}
-          onBlur={() => setTimeout(() => setSearchBarOn(false), 500)}
-        />
-        <label htmlFor="floatingInput">
-          {searchResultUser
-            ? searchResultUser.name
-            : "Search for members based on name, username or email"}
-        </label>
-      </div>
+      <div className="form-floating position-relative">
+  <input
+    type="text"
+    className="form-control"
+    id="floatingInput"
+    placeholder="Search member"
+    value={searchString}
+    onChange={onSearchMember}
+    autoComplete="off"
+    onFocus={() => setSearchBarOn(true)}
+    onBlur={() => setTimeout(() => setSearchBarOn(false), 500)}
+  />
+  <label htmlFor="floatingInput">
+    {searchResultUser
+      ? searchResultUser.name
+      : "Search for members based on name, username or email"}
+  </label>
 
-      {(searchResults.length > 0) &&
-        (searchBarOn) &&
-        (searchString.length >= 2) && (
-          <div className="list-group position-absolute w-100 shadow mt-1">
-            {searchResults.map((user) => (
-              <div
-                key={user.id}
-                className="list-group-item list-group-item-action"
-                onClick={() => {
-                  setSearchResultUser(user)
-                  setSearchString("")
-                }}
-              >
-                <strong>{user.name}</strong><br />
-                <small className="text-muted">
-                  {user.username} • {user.email}
-                </small>
-              </div>
-            ))}
+  {(searchResults.length > 0) &&
+    (searchBarOn) &&
+    (searchString.length >= 2) && (
+      <div className="list-group member-search-dropdown">
+        {searchResults.map((user) => (
+          <div
+            key={user.id}
+            className="list-group-item list-group-item-action"
+            onClick={() => {
+              setSearchResultUser(user)
+              setSearchString("")
+            }}
+          >
+            <strong>{user.name}</strong><br />
+            <small className="text-muted">
+              {user.username} • {user.email}
+            </small>
           </div>
-        )}
+        ))}
+      </div>
+    )}
+</div>
+
+        
     </div>
 
     {/* ACTION BUTTONS */}
