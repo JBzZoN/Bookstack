@@ -14,5 +14,5 @@ public class BookstackApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BookstackApplication.class, args);
 	}
-
+	
 }

@@ -28,19 +28,19 @@ SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='ONLY_FULL_GROUP_BY,STRICT_TRANS_TABLES,NO_ZERO_IN_DATE,NO_ZERO_DATE,ERROR_FOR_DIVISION_BY_ZERO,NO_ENGINE_SUBSTITUTION';
 
 -- -----------------------------------------------------
--- Schema Bookstack
+-- Schema bookstack
 -- -----------------------------------------------------
 
 -- -----------------------------------------------------
--- Schema Bookstack
+-- Schema bookstack
 -- -----------------------------------------------------
-CREATE SCHEMA IF NOT EXISTS `Bookstack` DEFAULT CHARACTER SET utf8 ;
-USE `Bookstack` ;
+CREATE SCHEMA IF NOT EXISTS `bookstack` DEFAULT CHARACTER SET utf8 ;
+USE `bookstack` ;
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`user_table`
+-- Table `bookstack`.`user_table`
 -- -----------------------------------------------------
--- CREATE TABLE IF NOT EXISTS `Bookstack`.`user_table` (
+-- CREATE TABLE IF NOT EXISTS `bookstack`.`user_table` (
 --   `name` CHAR(30) NULL,
 --   `email` VARCHAR(30) NULL,
 --   `phone` CHAR(10) NULL,
@@ -55,9 +55,9 @@ USE `Bookstack` ;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`membership_data_table`
+-- Table `bookstack`.`membership_data_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`membership_data_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`membership_data_table` (
   `membership_type` CHAR(8) NOT NULL,
   `borrow_limit` INT NULL,
   `borrow_period` INT NULL,
@@ -71,9 +71,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`Member_table`
+-- Table `bookstack`.`member_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`Member_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`member_table` (
   `user_id` INT,
   `membership_type` CHAR(8) NULL,
   `member_start` DATE NULL,
@@ -82,21 +82,21 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`Member_table` (
   INDEX `membership_type_idx` (`membership_type` ASC) VISIBLE,
   -- CONSTRAINT `member_user`
     -- FOREIGN KEY (`user_id`)
-    -- REFERENCES `Bookstack`.`member_table` (`user_id`)
+    -- REFERENCES `bookstack`.`member_table` (`user_id`)
     -- ON DELETE NO ACTION
     -- ON UPDATE NO ACTION,
   CONSTRAINT `membership_type`
     FOREIGN KEY (`membership_type`)
-    REFERENCES `Bookstack`.`membership_data_table` (`membership_type`)
+    REFERENCES `bookstack`.`membership_data_table` (`membership_type`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`staff_table`
+-- Table `bookstack`.`staff_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`staff_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`staff_table` (
   `user_id` INT,
   `salary` FLOAT NULL,
   `date_hired` DATE NULL,
@@ -104,7 +104,7 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`staff_table` (
   -- ,
   -- CONSTRAINT `staff_user`
     -- FOREIGN KEY (`user_id`)
-    -- REFERENCES `Bookstack`.`member_table` (`user_id`)
+    -- REFERENCES `bookstack`.`member_table` (`user_id`)
     -- ON DELETE NO ACTION
     -- ON UPDATE NO ACTION
     )
@@ -112,9 +112,9 @@ ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`Record_table`
+-- Table `bookstack`.`record_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`Record_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`record_table` (
   `member_id` INT,
   `staff_id` INT,
   record_id INT AUTO_INCREMENT,
@@ -124,21 +124,21 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`Record_table` (
   INDEX `staff_id_idx` (`staff_id` ASC) VISIBLE,
   CONSTRAINT `member_record`
     FOREIGN KEY (`member_id`)
-    REFERENCES `Bookstack`.`Member_table` (`user_id`)
+    REFERENCES `bookstack`.`member_table` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `staff_record`
     FOREIGN KEY (`staff_id`)
-    REFERENCES `Bookstack`.`staff_table` (`user_id`)
+    REFERENCES `bookstack`.`staff_table` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`book_table`
+-- Table `bookstack`.`book_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`book_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`book_table` (
   `isbn` INT NULL,
   `title` VARCHAR(25) NULL,
   `author` VARCHAR(25) NULL,
@@ -156,16 +156,16 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`book_table` (
   INDEX `staff_id_idx` (`user_id` ASC) VISIBLE,
   CONSTRAINT `staff_id`
     FOREIGN KEY (`user_id`)
-    REFERENCES `Bookstack`.`staff_table` (`user_id`)
+    REFERENCES `bookstack`.`staff_table` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`record_Detail_table`
+-- Table `bookstack`.`record_detail_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`record_Detail_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`record_detail_table` (
   `record_detail_id` INT AUTO_INCREMENT,
   `record_id` INT,
   `status` CHAR(10) NULL,
@@ -178,21 +178,21 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`record_Detail_table` (
   INDEX `record_id_idx` (`record_id` ASC) VISIBLE,
   CONSTRAINT `book_record`
     FOREIGN KEY (`book_id`)
-    REFERENCES `Bookstack`.`book_table` (`book_id`)
+    REFERENCES `bookstack`.`book_table` (`book_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `record_id`
     FOREIGN KEY (`record_id`)
-    REFERENCES `Bookstack`.`Record_table` (record_id)
+    REFERENCES `bookstack`.`record_table` (record_id)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- -----------------------------------------------------
--- Table `Bookstack`.`member_book_table`
+-- Table `bookstack`.`member_book_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `Bookstack`.`member_book_table` (
+CREATE TABLE IF NOT EXISTS `bookstack`.`member_book_table` (
   `user_id` INT,
   `book_id` INT,
   `copy_count` INT NULL,
@@ -200,23 +200,23 @@ CREATE TABLE IF NOT EXISTS `Bookstack`.`member_book_table` (
   INDEX `book_id_idx` (`book_id` ASC) VISIBLE,
   CONSTRAINT `mb_member`
     FOREIGN KEY (`user_id`)
-    REFERENCES `Bookstack`.`Member_table` (`user_id`)
+    REFERENCES `bookstack`.`member_table` (`user_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION,
   CONSTRAINT `mb_book`
     FOREIGN KEY (`book_id`)
-    REFERENCES `Bookstack`.`book_table` (`book_id`)
+    REFERENCES `bookstack`.`book_table` (`book_id`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
 -- 1. Add image column to book_table
-ALTER TABLE Bookstack.book_table
+ALTER TABLE bookstack.book_table
 ADD COLUMN book_image VARCHAR(255) NULL AFTER description;
 
 -- 2. Create genre table
-CREATE TABLE IF NOT EXISTS Bookstack.genre_table (
+CREATE TABLE IF NOT EXISTS bookstack.genre_table (
   genre_id INT AUTO_INCREMENT,
   genre_name VARCHAR(50) NOT NULL,
   PRIMARY KEY (genre_id),
@@ -224,29 +224,29 @@ CREATE TABLE IF NOT EXISTS Bookstack.genre_table (
 ) ENGINE = InnoDB;
 
 -- 3. Create book_genre mapping table (many-to-many)
-CREATE TABLE IF NOT EXISTS Bookstack.book_genre (
+CREATE TABLE IF NOT EXISTS bookstack.book_genre (
   book_id INT NOT NULL,
   genre_id INT NOT NULL,
   PRIMARY KEY (book_id, genre_id),
   CONSTRAINT fk_book_genre_book
     FOREIGN KEY (book_id)
-    REFERENCES Bookstack.book_table (book_id)
+    REFERENCES bookstack.book_table (book_id)
     ON DELETE CASCADE,
   CONSTRAINT fk_book_genre_genre
     FOREIGN KEY (genre_id)
-    REFERENCES Bookstack.genre_table (genre_id)
+    REFERENCES bookstack.genre_table (genre_id)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 -- 4. Remove old non-normalized category column
-ALTER TABLE Bookstack.book_table
+ALTER TABLE bookstack.book_table
 DROP COLUMN book_category;
 
-ALTER TABLE Bookstack.book_table
+ALTER TABLE bookstack.book_table
 DROP COLUMN edition;
 
 -- Table to store user ratings for books (one rating per user per book)
-CREATE TABLE IF NOT EXISTS Bookstack.book_rating (
+CREATE TABLE IF NOT EXISTS bookstack.book_rating (
   rating_id INT NOT NULL AUTO_INCREMENT,
   book_id INT NOT NULL,
   user_id INT NOT NULL,
@@ -258,18 +258,18 @@ CREATE TABLE IF NOT EXISTS Bookstack.book_rating (
 
   CONSTRAINT fk_rating_book
     FOREIGN KEY (book_id)
-    REFERENCES Bookstack.book_table (book_id)
+    REFERENCES bookstack.book_table (book_id)
     ON DELETE CASCADE,
 
   CONSTRAINT fk_rating_user
     FOREIGN KEY (user_id)
-    REFERENCES Bookstack.member_table (user_id)
+    REFERENCES bookstack.member_table (user_id)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
 
 -- Table to store comments made by users on books
-CREATE TABLE IF NOT EXISTS Bookstack.book_comment (
+CREATE TABLE IF NOT EXISTS bookstack.book_comment (
   comment_id INT NOT NULL AUTO_INCREMENT,
   book_id INT NOT NULL,
   user_id INT NOT NULL,
@@ -280,12 +280,12 @@ CREATE TABLE IF NOT EXISTS Bookstack.book_comment (
 
   CONSTRAINT fk_comment_book
     FOREIGN KEY (book_id)
-    REFERENCES Bookstack.book_table (book_id)
+    REFERENCES bookstack.book_table (book_id)
     ON DELETE CASCADE,
 
   CONSTRAINT fk_comment_user
     FOREIGN KEY (user_id)
-    REFERENCES Bookstack.member_table (user_id)
+    REFERENCES bookstack.member_table (user_id)
     ON DELETE CASCADE
 ) ENGINE = InnoDB;
 
@@ -496,7 +496,7 @@ INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, t
 (06, 06, 'Returned', 06, 1, '2025-05-28', true),
 (07, 07, 'Issued', 07, 1, '2025-06-18', true);
 
-INSERT INTO Member_table (user_id,membership_type,member_start,member_end)
+INSERT INTO member_table (user_id,membership_type,member_start,member_end)
 VALUES
 (11,'Standard','2025-01-01','2025-12-31'),
 (12,'Premium','2025-02-01','2026-01-31'),
@@ -511,6 +511,34 @@ VALUES
 (13,4,1);    -- Suresh Rao → Atomic Habits
 
 -- ANOTHER DATABASE
+
+
+CREATE TABLE bookstack.book_like (
+    like_id INT AUTO_INCREMENT PRIMARY KEY,
+
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+
+    CONSTRAINT uq_user_book_like
+        UNIQUE (user_id, book_id),
+
+    CONSTRAINT fk_book_likes_user
+        FOREIGN KEY (user_id)
+        REFERENCES bookstack.member_table(user_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE,
+
+    CONSTRAINT fk_book_likes_book
+        FOREIGN KEY (book_id)
+        REFERENCES bookstack.book_table(book_id)
+        ON DELETE CASCADE
+        ON UPDATE CASCADE
+);
+
+insert into book_like (user_id, book_id) values 
+(1, 1),   -- user 1 likes book 1
+(1, 5),   -- user 1 likes book 5
+(2, 1);   -- user 2 likes book 1
 
 CREATE DATABASE IF NOT EXISTS authorization;
 USE authorization;
@@ -529,9 +557,9 @@ CREATE TABLE IF NOT EXISTS `authorization`.`user_table` (
 ENGINE = InnoDB;
 
 INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
-('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
-('Bob Mathew', 'bob.mathew@example.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
-('Clara Thomas', 'clara.thomas@example.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
+('Alice Johnson', 'mayurbedare2003@gmail.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
+('Bob Mathew', 'jboneplus7t@gmail.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
+('Clara Thomas', 'namangova@gmail.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
 ('David Roy', 'david.roy@example.com', '9898765432', '78 Palm St, Trivandrum', '1989-11-22', 'davidr', 'roy123', 'Librarian', 4),
 ('Eva George', 'eva.george@example.com', '9786543210', '90 Rose Lane, Kochi', '1992-09-30', 'evag', 'eva321', 'Librarian', 5),
 ('Frank Wilson', 'frank.wilson@example.com', '9754321980', '101 Maple St, Thrissur', '1985-06-10', 'frankw', 'frank555', 'Admin', 6),
@@ -543,4 +571,3 @@ INSERT INTO user_table (name, email, phone, address, dob, username, password, ro
 ('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member', 12),
 ('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member', 13),
 ('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian', 14);
-

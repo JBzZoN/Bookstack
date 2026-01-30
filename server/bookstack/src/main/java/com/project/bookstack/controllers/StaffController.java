@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.bookstack.client.AuthorizationClient;
+import com.project.bookstack.configuration.KafkaConfiguration;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
@@ -16,6 +17,7 @@ import com.project.bookstack.dto.Search;
 import com.project.bookstack.dto.UserDTO;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.services.StaffService;
+import com.sun.net.httpserver.Request;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,6 +25,8 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @RestController
 public class StaffController {
+
+    private final KafkaConfiguration kafkaConfiguration;
 	
 	public final StaffService staffService;
 	
@@ -62,11 +66,13 @@ public class StaffController {
 
 	@PostMapping("/email")
 	public void sendEmail(@RequestBody EmailDTO emailDTO) {
+		System.out.println("EMail sent");
 		staffService.sendEmail(emailDTO.getEmail());
 	}
 	
 	@PostMapping(value = "/book", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<Member> addBook(@ModelAttribute BookWithImageDto bookWithImageDto) {
+	public List<Member> addBook(@ModelAttribute BookWithImageDto bookWithImageDto, @RequestHeader("X-User-Id") String userId) {
+		System.out.println("-----------------------------------------------" + userId + "-----------------------------------------------");
 		return staffService.addBook(bookWithImageDto);
 	}
 	

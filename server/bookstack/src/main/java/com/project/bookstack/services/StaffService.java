@@ -14,6 +14,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -24,6 +25,7 @@ import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
+import com.project.bookstack.dto.EmailDTO;
 import com.project.bookstack.dto.RentRenewReturnRecordDTO;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
 import com.project.bookstack.dto.UserDTO;
@@ -56,12 +58,9 @@ public class StaffService {
 	
 	private final StaffRecordDetailRepository staffRecordDetailRepository;
 	
-	private final JavaMailSender javaMailSender;
-	
 	private final AuthorizationClient authorizationClient;
 	
-	@Value("${bookstack.from.email}")
-	public String fromEmailAddress;
+	private final KafkaTemplate<String, EmailDTO> kafkaTemplate;
 	
 	public List<BookDto> getAllBooks() {
 		// TODO Auto-generated method stub
@@ -215,20 +214,7 @@ public class StaffService {
 	}
 
 	public void sendEmail(String email) {
-		
-		List<String> emails = authorizationClient.getEmails();
-		
-		for(String emailString: emails) {
-			MimeMessagePreparator a = b -> {
-				MimeMessageHelper c = new MimeMessageHelper(b);
-				c.setFrom(fromEmailAddress);
-				c.setTo(emailString);
-				c.setSubject("News letter from Bookstack library");
-				c.setText(email);
-			};
-			javaMailSender.send(a);
-		}
-		
+		kafkaTemplate.send("email-topic", new EmailDTO(email));
 	}
 
 	
