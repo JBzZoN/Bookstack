@@ -2,8 +2,8 @@ import React from 'react'
 import '../MemberHome/MemberHome.css'
 import { Link, Outlet } from 'react-router-dom'; 
 import { useState,useEffect } from 'react'; 
-import { newArrivals } from '../../../dummy-data/new-arrivals.js';
-import { trendingBooks } from '../../../dummy-data/trending-books.js';
+import { useDispatch } from "react-redux";
+import { loadLikesFromBackend } from "../../../redux/slices/likeSlice.js";
 import BookCard from '../../../components/Member/BookCard/BookCard.jsx';
 import banner1 from '../../../assets/images/member/banner1.png';
 import banner2 from '../../../assets/images/member/banner2.png';
@@ -15,6 +15,13 @@ import banner7 from '../../../assets/images/member/banner7.png';
 import { recommendedBooksData,trendingBooksData,newArrivedBooksData } from '../../../api/member.js'
 
 function MemberHome() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 🔥 Load likes once when page opens
+    dispatch(loadLikesFromBackend());
+  }, [dispatch]);
+
   const [recommendedBooks, setRecommendedBooks] = useState([]);
   const [trendingBooks, setTrendingBooks] = useState([]);
   const [newArrivedBooks, setNewArrivedBooks] = useState([]); 
@@ -112,6 +119,7 @@ function MemberHome() {
               recommendedBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
+                  bookId={book.bookId}
                   title={book.title}
                   author={book.author}
                   image={book.bookImage}
@@ -136,6 +144,7 @@ function MemberHome() {
               trendingBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
+                  bookId={book.bookId}
                   title={book.title}
                   author={book.author}
                   image={book.bookImage}
@@ -175,6 +184,7 @@ function MemberHome() {
               newArrivedBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
+                  bookId={book.bookId}
                   title={book.title}
                   author={book.author}
                   image={book.bookImage}

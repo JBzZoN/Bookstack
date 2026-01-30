@@ -23,7 +23,7 @@ public class BookLikeController {
     @PostMapping("/toggle")
     public Map<String, Boolean> toggleLike(@RequestBody Map<String, Integer> body) {
 
-        Integer userId = 11; // later from SecurityContext
+        Integer userId = 1; // later from SecurityContext
         Integer bookId = body.get("bookId");
 
         boolean liked = bookLikeService.toggleLike(userId, bookId);
@@ -33,7 +33,7 @@ public class BookLikeController {
 
     @GetMapping
     public List<Integer> getLikedBooks() {
-        Integer userId = 11;
+        Integer userId = 1;
         return bookLikeService.getLikedBooks(userId);
     }
 }

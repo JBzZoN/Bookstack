@@ -118,7 +118,7 @@ function BookDetails () {
                 </div>
 
                 <div className="my-5">
-                    {/* <ReviewsSection bookId={book.id} /> */}
+                    <ReviewsSection bookId={id} />
                 </div>
 
                 <div className="">
@@ -130,6 +130,7 @@ function BookDetails () {
                             mightLikedBooks.map((book) => (
                                 <BookCard
                                     key={book.bookId}
+                                    bookId={book.bookId}
                                     title={book.title}
                                     author={book.author}
                                     image={book.bookImage}

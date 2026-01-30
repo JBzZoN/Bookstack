@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.project.bookstack.dto.member.ReviewDTO;
 import com.project.bookstack.entities.Member;
 
 @Repository

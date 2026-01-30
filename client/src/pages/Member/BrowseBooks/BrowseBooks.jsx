@@ -29,6 +29,7 @@ function BrowseBooks () {
                         allBooksCard.map((book) => (
                             <BookCard
                                 key={book.bookId}
+                                bookId={book.bookId}
                                 title={book.title}
                                 author={book.author}
                                 image={book.bookImage}

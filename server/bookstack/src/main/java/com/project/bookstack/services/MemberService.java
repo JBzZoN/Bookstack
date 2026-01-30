@@ -4,6 +4,7 @@ import java.util.List;
 
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.dto.member.ReviewDTO;
 
 public interface MemberService {
 	
@@ -26,5 +27,5 @@ public interface MemberService {
 	BookDTO getBookDetails(Integer bookId);
 
 	List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId);
-    
+
 }

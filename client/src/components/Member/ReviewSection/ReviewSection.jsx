@@ -1,23 +1,48 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
 
-function ReviewsSection() {
+function ReviewsSection({ bookId }) {
   const [showForm, setShowForm] = useState(false);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
+  const [reviews, setReviews] = useState([]);
 
-  const handleSubmit = () => {
+  /* ---------------- FETCH REVIEWS ---------------- */
+
+  useEffect(() => {
+    axios
+      .get(`http://localhost:7070/member/books/${bookId}/reviews`)
+      .then(res => setReviews(res.data))
+      .catch(err => console.error(err));
+  }, [bookId]);
+
+  /* ---------------- SUBMIT REVIEW ---------------- */
+
+  const handleSubmit = async () => {
     if (!comment || rating === 0) {
       alert("Please add rating and comment");
       return;
     }
 
-    // later: API call here
-    console.log({ comment, rating });
+    await axios.post(
+      `http://localhost:7070/member/books/${bookId}/reviews`,
+      { comment, rating }
+    );
+
+    // reload reviews
+    const res = await axios.get(
+      `http://localhost:7070/member/books/${bookId}/reviews`
+    );
+    setReviews(res.data);
 
     setComment("");
     setRating(0);
     setShowForm(false);
   };
+
+  /* ---------------- UI ---------------- */
+
+  const hasScroll = reviews.length > 3;
 
   return (
     <div className="my-5">
@@ -40,7 +65,7 @@ function ReviewsSection() {
 
             {/* Star Rating */}
             <div className="mb-3">
-              {[1, 2, 3, 4, 5].map((star) => (
+              {[1, 2, 3, 4, 5].map(star => (
                 <i
                   key={star}
                   className={`bi ${
@@ -48,18 +73,17 @@ function ReviewsSection() {
                   } me-1`}
                   style={{ cursor: "pointer", fontSize: "1.3rem" }}
                   onClick={() => setRating(star)}
-                ></i>
+                />
               ))}
             </div>
 
-            {/* Comment Input */}
             <textarea
               className="form-control mb-3"
               rows="3"
               placeholder="Write your review..."
               value={comment}
-              onChange={(e) => setComment(e.target.value)}
-            ></textarea>
+              onChange={e => setComment(e.target.value)}
+            />
 
             <button className="btn btn-outline" onClick={handleSubmit}>
               Submit Review
@@ -68,35 +92,38 @@ function ReviewsSection() {
         </div>
       )}
 
-      {/* Existing Review */}
-      <div className="card">
-        <div className="card-body">
+      {/* Reviews List */}
+      <div
+        className="review-list"
+        style={{
+          maxHeight: hasScroll ? "320px" : "auto",
+          overflowY: hasScroll ? "auto" : "visible"
+        }}
+      >
+        {reviews.slice(0).map((review, index) => (
+          <div className="card mb-3" key={index}>
+            <div className="card-body">
 
-          <div className="d-flex align-items-center mb-2">
-            <img
-              src="https://placehold.co/40x40/e0e7ff/4338ca?text=J"
-              className="rounded-circle me-2"
-              alt="Avatar"
-            />
+              <div className="d-flex align-items-center mb-2">
+                <img
+                  src={review.userAvatar || "https://placehold.co/40"}
+                  className="rounded-circle me-2"
+                  alt="Avatar"
+                />
 
-            <strong>Jane Doe</strong>
+                <strong>{review.userName}</strong>
 
-            <div className="text-warning ms-auto">
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
-              <i className="bi bi-star-fill"></i>
+                <div className="text-warning ms-auto">
+                  {[...Array(review.rating)].map((_, i) => (
+                    <i key={i} className="bi bi-star-fill"></i>
+                  ))}
+                </div>
+              </div>
+
+              <p className="mb-0">{review.comment}</p>
             </div>
           </div>
-
-          <p className="mb-0">
-            An absolutely captivating read! The concept is so unique and
-            thought-provoking. I couldn't put it down and finished it in just two
-            days. Highly recommended!
-          </p>
-
-        </div>
+        ))}
       </div>
 
     </div>
