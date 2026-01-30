@@ -1,0 +1,10 @@
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/AuthApplication.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/controller/AuthController.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/dto/LoginRequest.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/dto/UserResponseDto.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/entities/User.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/repository/UserRepository.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/security/JwtUtil.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/security/SecurityConfiguration.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/service/AuthService.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/auth-server/src/main/java/com/bookstack/auth/service/CustomUserDetailsService.java

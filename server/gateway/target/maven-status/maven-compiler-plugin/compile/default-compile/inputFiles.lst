@@ -1,0 +1,6 @@
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/gateway/src/main/java/com/bookstack/gateway/GatewayApplication.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/gateway/src/main/java/com/bookstack/gateway/configuration/CorsConfig.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/gateway/src/main/java/com/bookstack/gateway/routing/RouteConfiguration.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/gateway/src/main/java/com/bookstack/gateway/security/JwtFilter.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/gateway/src/main/java/com/bookstack/gateway/security/JwtUtil.java
+/home/sunbeam/Work/Downloads/Bookstack (2)/server/gateway/src/main/java/com/bookstack/gateway/security/SecurityConfiguration.java

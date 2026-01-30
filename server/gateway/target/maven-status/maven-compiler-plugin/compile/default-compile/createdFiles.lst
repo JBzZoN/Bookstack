@@ -1,0 +1,6 @@
+com/bookstack/gateway/security/JwtFilter.class
+com/bookstack/gateway/security/JwtUtil.class
+com/bookstack/gateway/GatewayApplication.class
+com/bookstack/gateway/security/SecurityConfiguration.class
+com/bookstack/gateway/configuration/CorsConfig.class
+com/bookstack/gateway/routing/RouteConfiguration.class

@@ -1,0 +1,11 @@
+com/bookstack/auth/security/JwtUtil.class
+com/bookstack/auth/entities/User.class
+com/bookstack/auth/dto/LoginRequest.class
+com/bookstack/auth/dto/UserResponseDto.class
+com/bookstack/auth/controller/AuthController.class
+com/bookstack/auth/dto/UserResponseDto$UserResponseDtoBuilder.class
+com/bookstack/auth/security/SecurityConfiguration.class
+com/bookstack/auth/repository/UserRepository.class
+com/bookstack/auth/service/CustomUserDetailsService.class
+com/bookstack/auth/service/AuthService.class
+com/bookstack/auth/AuthApplication.class
