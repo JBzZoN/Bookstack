@@ -10,7 +10,6 @@ import { Link } from "react-router-dom";
   Acts as a confirmation step in the membership flow.
 */
 function OrderSummary() {
-<<<<<<< HEAD
   const plan = JSON.parse(localStorage.getItem("selectedPlan"));
 
   const startPayment = async (plan) => {
@@ -65,8 +64,6 @@ function OrderSummary() {
     rzp.open();
   };
 
-=======
->>>>>>> dbe5b9d610df6362b972374f80d7e19a866013e9
   return (
     <div className="body1">
 
@@ -92,17 +89,12 @@ function OrderSummary() {
                 Order Summary
               </h3>
 
-<<<<<<< HEAD
               <p className="h5">{plan.type} Plan</p>
               <p className="h5 fw-bold">₹{plan.amount}</p>
 
               <p className="text-secondary small">
                 Billed {plan.billing}. Membership benefits apply.
               </p>
-=======
-              <p className="h5">Premium Plan</p>
-              <p className="h5 fw-bold">₹3000</p>
->>>>>>> dbe5b9d610df6362b972374f80d7e19a866013e9
 
               <p className="text-secondary small">
                 Billed annually. Full access, 7 book borrow limit, no late fees.
@@ -111,18 +103,12 @@ function OrderSummary() {
               <hr />
 
               <div className="d-grid mt-4">
-<<<<<<< HEAD
                 <button
                   className="btn-outline w-100"
                   onClick={() => startPayment(plan)}
                 >
                   Pay & Continue
                 </button>
-=======
-                <Link to="/register" className="btn-outline w-100">
-                  Next: Register
-                </Link>
->>>>>>> dbe5b9d610df6362b972374f80d7e19a866013e9
               </div>
             </div>
 

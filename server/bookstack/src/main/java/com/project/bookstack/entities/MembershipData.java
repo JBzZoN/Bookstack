@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 @Entity
-@Table(name = "membership_data_table", schema = "Bookstack")
-@Getter
-@Setter
-@NoArgsConstructor
-@AllArgsConstructor
+@Table(name = "membership_data_table")
+@Data
 public class MembershipData {
 
     @Id

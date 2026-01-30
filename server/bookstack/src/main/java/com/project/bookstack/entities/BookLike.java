@@ -23,27 +23,10 @@ public class BookLike {
     @Column(name = "like_id")
     private Integer likeId;
 
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-        name = "user_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_book_likes_user")
-    )
-    private User user;
-
-    @ManyToOne(fetch = FetchType.LAZY, optional = false)
-    @JoinColumn(
-        name = "book_id",
-        nullable = false,
-        foreignKey = @ForeignKey(name = "fk_book_likes_book")
-    )
-    private Book book;
-
-    @Column(
-        name = "created_at",
-        nullable = false,
-        updatable = false
-    )
-    private LocalDateTime createdAt;
-     
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
+    
+    @Column(name = "book_id", nullable = false)
+    private Integer bookId;
+    
 }
