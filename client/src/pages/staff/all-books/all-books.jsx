@@ -17,7 +17,7 @@ function AllBooks() {
         "Business & Economics": "text-bg-success",
         "Philosophy": "text-bg-light",
         "Psychology": "text-bg-info",
-        "Programming & Technology": "text-bg-danger",
+        "Programming & Technology": "text-bg-warning",
         "Science": "text-bg-primary",
         "Self-Help": "text-bg-warning"
     }
@@ -82,8 +82,11 @@ function AllBooks() {
                                     </span>
                                 ))}
                                 {e.genreList.length > 2 && (
-                                    <span className="badge rounded-pill text-bg-danger"></span>
+                                <span className="badge rounded-pill text-bg-info">
+                                    +{e.genreList.length - 2}
+                                </span>
                                 )}
+
                             </div>
                         </div>
 

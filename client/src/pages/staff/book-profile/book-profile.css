@@ -1,7 +1,7 @@
-/* Container */
+/* Container (bigger) */
 .book-container-lol {
-    margin-top: 100px;
-    width: 800px !important;
+    margin-top: 80px;
+    max-width: 950px;
 }
 
 /* Card */
@@ -10,16 +10,12 @@
     border: none;
     background: #ffffff;
     box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
 }
 
-/* Gradient header (same as member profile) */
+/* Gradient header */
 .book-header {
-    border-top-left-radius: 18px;
-    border-top-right-radius: 18px;
-    border-bottom-left-radius: 0;
-    border-bottom-right-radius: 0;
-
-    height: 120px;
+    height: 140px;
     background: linear-gradient(
         90deg,
         #4f0bc5,
@@ -27,48 +23,45 @@
     );
 }
 
-/* Whitener (kept, refined) */
-.whitener {
-    height: 100px;
-    width: 100px;
-    background-color: white;
-    border-radius: 50%;
-    top: 60px;
+/* Image wrapper INSIDE card */
+.book-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: -75px; /* overlap header like member profile */
 }
 
-/* Book image (same size as before) */
+/* Book image */
 .book-image-lol {
-    height: 150px;
-    width: 150px;
-    border-radius: 10px;
+    height: 170px;
+    width: 130px;
+    border-radius: 12px;
     object-fit: cover;
     border: 5px solid #ffffff;
     outline: 3px solid #4f0bc5;
-    top: 60px;
     background: #f4f4f4;
 }
 
 /* Body */
 .book-body {
-    padding: 1.5rem 2rem 2rem;
+    padding: 2rem 2.5rem 2.5rem;
 }
 
 /* Table */
 .book-table td {
     font-size: 14px;
-    padding: 0.6rem;
+    padding: 0.7rem;
     vertical-align: top;
 }
 
 .book-table td:first-child {
     font-weight: 600;
     color: #555;
-    width: 30%;
+    width: 28%;
 }
 
-/* Summary text */
+/* Summary */
 .book-summary {
-    line-height: 1.6;
+    line-height: 1.7;
     color: #444;
 }
 
@@ -76,5 +69,5 @@
 .go-back {
     width: 100%;
     border-radius: 10px;
-    padding: 0.45rem 1.2rem;
+    padding: 0.5rem 1.2rem;
 }

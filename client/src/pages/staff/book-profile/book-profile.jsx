@@ -26,24 +26,24 @@ function BookProfile() {
   return (
     <div className="container book-container-lol mb-5">
 
-      <div className="card book position-relative book-card-lol">
+      <div className="card book-card-lol">
 
         {/* Gradient header */}
         <div className="book-header"></div>
 
-        {/* Whitener + image */}
-        <div className="position-absolute top-0 start-50 translate-middle whitener"></div>
+        {/* Image INSIDE the card */}
+        <div className="book-image-wrapper">
+          <img
+            src={book.image.startsWith("http")
+              ? book.image
+              : `http://localhost:7070/staff/image/${book.image}`}
+            className="book-image-lol"
+            alt="book"
+          />
+        </div>
 
-        <img
-          src={book.image.startsWith("http")
-            ? book.image
-            : `http://localhost:7070/staff/image/${book.image}`}
-          className="position-absolute top-0 start-50 translate-middle book-image-lol"
-          alt="book"
-        />
-
-        <div className="card-body book-body mt-5">
-          <table className="table book-table mt-4">
+        <div className="card-body book-body">
+          <table className="table book-table">
             <tbody>
               <tr>
                 <td>Title</td>
