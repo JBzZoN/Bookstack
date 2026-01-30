@@ -15,6 +15,49 @@
     position: sticky;   /* 👈 KEY */
     top: 0;             /* 👈 KEY */
 }
+/* Toggle row */
+.sidebar-toggle {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+/* Chevron */
+.chevron {
+    font-size: 0.8rem;
+    transition: transform 0.2s ease;
+}
+
+.chevron.open {
+    transform: rotate(180deg);
+}
+
+/* Sub menu */
+.sidebar-subnav {
+    list-style: none;
+    padding-left: 1rem;
+    margin-top: 0.3rem;
+}
+
+.sidebar-subnav li {
+    margin-bottom: 0.25rem;
+}
+
+/* Sub links */
+.sidebar-sublink {
+    display: block;
+    padding: 0.4rem 0.75rem;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #555;
+    text-decoration: none;
+}
+
+.sidebar-sublink:hover {
+    background: #f4f3ff;
+    color: #4f0bc5;
+}
 
 
 .staff-layout {

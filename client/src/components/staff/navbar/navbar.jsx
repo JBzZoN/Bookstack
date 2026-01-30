@@ -1,10 +1,14 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
-import './navbar.css';
+import React, { useState } from 'react'
+import { Link } from 'react-router-dom'
+import './navbar.css'
 
 function StaffNavbar() {
+
+  const [booksOpen, setBooksOpen] = useState(false)
+
   return (
     <aside className="staff-sidebar">
+
       <div className="sidebar-brand">
         <Link to="/staff/books" className="brand-link">
           BookStack
@@ -12,36 +16,39 @@ function StaffNavbar() {
       </div>
 
       <ul className="sidebar-nav">
-        <li className="sidebar-item dropdown">
-          <span
-            className="sidebar-link dropdown-toggle"
-            role="button"
-            data-bs-toggle="dropdown"
-            aria-expanded="false"
+
+        {/* Books expandable section */}
+        <li className="sidebar-item">
+          <div
+            className="sidebar-link sidebar-toggle"
+            onClick={() => setBooksOpen(!booksOpen)}
           >
             Books
-          </span>
+            <span className={`chevron ${booksOpen ? 'open' : ''}`}>▾</span>
+          </div>
 
-          <ul className="dropdown-menu staff-dropdown">
-            <li>
-              <Link className="dropdown-item" to="/staff/books/add">
-                Add New
-              </Link>
-            </li>
-            <li>
-              <Link className="dropdown-item" to="/staff/books">
-                View All
-              </Link>
-            </li>
-            <li><hr className="dropdown-divider" /></li>
-            <li>
-              <Link className="dropdown-item" to="/staff/transaction">
-                Rent, renew or return
-              </Link>
-            </li>
-          </ul>
+          {booksOpen && (
+            <ul className="sidebar-subnav">
+              <li>
+                <Link className="sidebar-sublink" to="/staff/books/add">
+                  Add New
+                </Link>
+              </li>
+              <li>
+                <Link className="sidebar-sublink" to="/staff/books">
+                  View All
+                </Link>
+              </li>
+              <li>
+                <Link className="sidebar-sublink" to="/staff/transaction">
+                  Rent, renew or return
+                </Link>
+              </li>
+            </ul>
+          )}
         </li>
 
+        {/* Other links */}
         <li className="sidebar-item">
           <Link className="sidebar-link" to="/staff/members">
             Members
@@ -53,6 +60,7 @@ function StaffNavbar() {
             Send Newsletter
           </Link>
         </li>
+
       </ul>
 
       <div className="sidebar-footer">
@@ -60,8 +68,9 @@ function StaffNavbar() {
           Log out
         </Link>
       </div>
+
     </aside>
-  );
+  )
 }
 
-export default StaffNavbar;
+export default StaffNavbar
