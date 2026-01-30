@@ -1,7 +1,0 @@
-.red-gradient-nav {
-  background: linear-gradient(90deg, #7a0000, #b30000, #ff4d4d);
-  padding: 0.6rem 1rem;
-
-  /* improves contrast for text/icons */
-  box-shadow: 0 2px 10px rgba(0,0,0,0.3);
-}
