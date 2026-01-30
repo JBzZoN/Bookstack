@@ -100,7 +100,6 @@ CREATE TABLE IF NOT EXISTS `bookstack`.`staff_table` (
   `user_id` INT,
   `salary` FLOAT NULL,
   `date_hired` DATE NULL,
-  `status` varchar(10),
   PRIMARY KEY (`user_id`)
   -- ,
   -- CONSTRAINT `staff_user`
@@ -135,166 +134,85 @@ CREATE TABLE IF NOT EXISTS `bookstack`.`record_table` (
     ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
-
--- -----------------------------------------------------
--- Table `bookstack`.`book_table`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bookstack`.`book_table` (
-  `isbn` INT NULL,
-  `title` VARCHAR(25) NULL,
-  `author` VARCHAR(25) NULL,
-  `description` TEXT NULL,
-  `publisher` VARCHAR(45) NULL,
-  `edition` YEAR NULL,
-  `book_category` CHAR NULL,
-  `user_id` INT,
-  `action` CHAR(15) NULL,
-  `action_date` DATE NULL,
-  `book_id` INT AUTO_INCREMENT,
-  `number_of_copies` INT NULL,
-  `number_of_copies_remaining` INT NULL,
-  PRIMARY KEY (`book_id`),
-  INDEX `staff_id_idx` (`user_id` ASC) VISIBLE,
-  CONSTRAINT `staff_id`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `bookstack`.`staff_table` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
 -- -----------------------------------------------------
 -- Table `bookstack`.`record_detail_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bookstack`.`record_detail_table` (
-  `record_detail_id` INT AUTO_INCREMENT,
-  `record_id` INT,
-  `status` CHAR(10) NULL,
-  `book_id` INT,
-  `total_copies` INT NULL,
-  `due_Date` DATE NULL,
-  `fine_paid` BOOLEAN,
-  PRIMARY KEY (`record_detail_id`),
-  INDEX `book_id_idx` (`book_id` ASC) VISIBLE,
-  INDEX `record_id_idx` (`record_id` ASC) VISIBLE,
-  CONSTRAINT `book_record`
-    FOREIGN KEY (`book_id`)
-    REFERENCES `bookstack`.`book_table` (`book_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `record_id`
-    FOREIGN KEY (`record_id`)
-    REFERENCES `bookstack`.`record_table` (record_id)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS bookstack.record_detail_table (
+  record_detail_id INT AUTO_INCREMENT PRIMARY KEY,
 
+  record_id INT NOT NULL,
+  book_id INT NOT NULL,         
+
+  status CHAR(10),
+  total_copies INT,
+  due_date DATE,
+  fine_paid BOOLEAN,
+
+  INDEX idx_record_id (record_id),
+  INDEX idx_book_id (book_id),
+
+  CONSTRAINT fk_record_detail_record
+    FOREIGN KEY (record_id)
+    REFERENCES bookstack.record_table (record_id)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE = InnoDB;
 
 -- -----------------------------------------------------
 -- Table `bookstack`.`member_book_table`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `bookstack`.`member_book_table` (
-  `user_id` INT,
-  `book_id` INT,
-  `copy_count` INT NULL,
-  PRIMARY KEY (`user_id`, `book_id`),
-  INDEX `book_id_idx` (`book_id` ASC) VISIBLE,
-  CONSTRAINT `mb_member`
-    FOREIGN KEY (`user_id`)
-    REFERENCES `bookstack`.`member_table` (`user_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION,
-  CONSTRAINT `mb_book`
-    FOREIGN KEY (`book_id`)
-    REFERENCES `bookstack`.`book_table` (`book_id`)
-    ON DELETE NO ACTION
-    ON UPDATE NO ACTION)
-ENGINE = InnoDB;
+CREATE TABLE IF NOT EXISTS bookstack.member_book_table (
+    user_id INT NOT NULL,
+    book_id INT NOT NULL,
+    copy_count INT DEFAULT 1,
+    PRIMARY KEY (user_id, book_id),
+    FOREIGN KEY (user_id)
+        REFERENCES bookstack.member_table(user_id)
+        ON DELETE CASCADE
+) ENGINE = InnoDB;
 
-
--- 1. Add image column to book_table
-ALTER TABLE bookstack.book_table
-ADD COLUMN book_image VARCHAR(255) NULL AFTER description;
 
 -- 2. Create genre table
 CREATE TABLE IF NOT EXISTS bookstack.genre_table (
-  genre_id INT AUTO_INCREMENT,
-  genre_name VARCHAR(50) NOT NULL,
-  PRIMARY KEY (genre_id),
-  UNIQUE (genre_name)
+    genre_id INT AUTO_INCREMENT PRIMARY KEY,
+    genre_name VARCHAR(50) UNIQUE NOT NULL
 ) ENGINE = InnoDB;
 
 -- 3. Create book_genre mapping table (many-to-many)
 CREATE TABLE IF NOT EXISTS bookstack.book_genre (
-  book_id INT NOT NULL,
-  genre_id INT NOT NULL,
-  PRIMARY KEY (book_id, genre_id),
-  CONSTRAINT fk_book_genre_book
-    FOREIGN KEY (book_id)
-    REFERENCES bookstack.book_table (book_id)
-    ON DELETE CASCADE,
-  CONSTRAINT fk_book_genre_genre
-    FOREIGN KEY (genre_id)
-    REFERENCES bookstack.genre_table (genre_id)
-    ON DELETE CASCADE
+    book_id INT NOT NULL,
+    genre_id INT NOT NULL,
+    PRIMARY KEY (book_id, genre_id),
+    CONSTRAINT fk_book_genre_genre
+        FOREIGN KEY (genre_id)
+        REFERENCES bookstack.genre_table (genre_id)
+        ON DELETE CASCADE
 ) ENGINE = InnoDB;
-
--- 4. Remove old non-normalized category column
-ALTER TABLE bookstack.book_table
-DROP COLUMN book_category;
-
-ALTER TABLE bookstack.book_table
-DROP COLUMN edition;
 
 -- Table to store user ratings for books (one rating per user per book)
 CREATE TABLE IF NOT EXISTS bookstack.book_rating (
-  rating_id INT NOT NULL AUTO_INCREMENT,
-  book_id INT NOT NULL,
-  user_id INT NOT NULL,
-  rating TINYINT NOT NULL CHECK (rating BETWEEN 1 AND 5),
-  rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-  PRIMARY KEY (rating_id),
-  UNIQUE KEY uq_book_user_rating (book_id, user_id),
-
-  CONSTRAINT fk_rating_book
-    FOREIGN KEY (book_id)
-    REFERENCES bookstack.book_table (book_id)
-    ON DELETE CASCADE,
-
-  CONSTRAINT fk_rating_user
+    rating_id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT NOT NULL,
+    user_id INT NOT NULL,
+    rating TINYINT CHECK (rating BETWEEN 1 AND 5),
+    rating_date DATETIME DEFAULT CURRENT_TIMESTAMP,
+    UNIQUE (book_id, user_id),
     FOREIGN KEY (user_id)
-    REFERENCES bookstack.member_table (user_id)
-    ON DELETE CASCADE
+        REFERENCES bookstack.member_table(user_id)
+        ON DELETE CASCADE
 ) ENGINE = InnoDB;
-
 
 -- Table to store comments made by users on books
 CREATE TABLE IF NOT EXISTS bookstack.book_comment (
-  comment_id INT NOT NULL AUTO_INCREMENT,
-  book_id INT NOT NULL,
-  user_id INT NOT NULL,
-  comment TEXT NOT NULL,
-  comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
-
-  PRIMARY KEY (comment_id),
-
-  CONSTRAINT fk_comment_book
-    FOREIGN KEY (book_id)
-    REFERENCES bookstack.book_table (book_id)
-    ON DELETE CASCADE,
-
-  CONSTRAINT fk_comment_user
+    comment_id INT AUTO_INCREMENT PRIMARY KEY,
+    book_id INT NOT NULL,
+    user_id INT NOT NULL,
+    comment TEXT NOT NULL,
+    comment_date DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (user_id)
-    REFERENCES bookstack.member_table (user_id)
-    ON DELETE CASCADE
+        REFERENCES bookstack.member_table(user_id)
+        ON DELETE CASCADE
 ) ENGINE = InnoDB;
-
-ALTER TABLE book_table
-MODIFY isbn VARCHAR(13);
-
-ALTER TABLE book_table
-MODIFY title VARCHAR(255);
 
 
 SET SQL_MODE=@OLD_SQL_MODE;
@@ -336,60 +254,11 @@ INSERT INTO member_table (user_id, membership_type, member_start, member_end) VA
 (7, 'Premium', '2022-03-01', '2023-02-28'),
 (8, 'Premium', '2022-02-01', '2023-02-21');
 
-INSERT INTO staff_table (user_id, salary, `date_hired`, status) VALUES
-(4, 35000, '2020/06/15', 'active'),
-(5, 40000, '2019/04/10', 'active'),
-(9, 42000, '2021/09/01', 'inactive'),
-(14,39000,'2022-02-15', 'inactive');
-
-
-INSERT INTO book_table
-(isbn, title, author, description, book_image, publisher, user_id, action, action_date, number_of_copies, number_of_copies_remaining)
-VALUES
-('9780061120084','To Kill a Mockingbird','Harper Lee','Classic novel on justice and morality.',
- 'https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg','HarperCollins',4,'Added','2025-08-10',10,8),
-
-('9780743273565','The Great Gatsby','F. Scott Fitzgerald','American classic novel.',
- 'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg','Scribner',5,'Added','2025-08-15',8,6),
-
-('9780544003415','The Hobbit','J.R.R. Tolkien','Fantasy adventure.',
- 'https://covers.openlibrary.org/b/isbn/9780544003415-L.jpg','HarperCollins',9,'Added','2025-08-20',12,9),
-
-('9781455586691','Atomic Habits','James Clear','Building good habits.',
- 'https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg','Avery',14,'Added','2025-08-22',14,11),
-
-('9780307387899','Sapiens','Yuval Noah Harari','History of humankind.',
- 'https://covers.openlibrary.org/b/isbn/9780307387899-L.jpg','Harper',4,'Added','2025-08-25',11,9),
-
-('9780140449136','Meditations','Marcus Aurelius','Stoic philosophy.',
- 'https://covers.openlibrary.org/b/isbn/9780140449136-L.jpg','Penguin',5,'Added','2025-08-28',7,5),
-
-('9780812981605','Rich Dad Poor Dad','Robert Kiyosaki','Personal finance lessons.',
- 'https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg','Plata',9,'Added','2025-09-01',9,7),
-
-('9780307474278','The Lean Startup','Eric Ries','Startup methodology.',
- 'https://covers.openlibrary.org/b/isbn/9780307474278-L.jpg','Crown',14,'Added','2025-09-05',8,6),
-
-('9780062315007','The Alchemist','Paulo Coelho','Spiritual journey.',
- 'https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg','HarperOne',4,'Added','2025-09-08',10,8),
-
-('9780140449266','The Republic','Plato','Political philosophy.',
- 'https://covers.openlibrary.org/b/isbn/9780140449266-L.jpg','Penguin',5,'Added','2025-09-10',6,4),
-
-('9780132350884','Clean Code','Robert C. Martin','Software craftsmanship.',
- 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg','Prentice Hall',9,'Added','2025-09-12',15,12),
-
-('9780134685991','Effective Java','Joshua Bloch','Java best practices.',
- 'https://covers.openlibrary.org/b/isbn/9780134685991-L.jpg','Addison-Wesley',14,'Added','2025-09-15',10,7),
-
-('9780596517748','JavaScript: The Good Parts','Douglas Crockford','JavaScript insights.',
- 'https://covers.openlibrary.org/b/isbn/9780596517748-L.jpg','OReilly',4,'Added','2025-09-18',9,6),
-
-('9780262033848','AI: A Modern Approach','Stuart Russell','AI fundamentals.',
- 'https://covers.openlibrary.org/b/isbn/9780262033848-L.jpg','Pearson',5,'Added','2025-09-20',8,5),
-
-('9780131103627','The C Programming Language','Kernighan & Ritchie','C language classic.',
- 'https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg','Prentice Hall',9,'Added','2025-09-22',12,9);
+INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
+(4, 35000, '2020/06/15'),
+(5, 40000, '2019/04/10'),
+(9, 42000, '2021/09/01'),
+(14,39000,'2022-02-15');
 
 
 -- =========================
@@ -514,32 +383,44 @@ VALUES
 -- ANOTHER DATABASE
 
 
-CREATE TABLE bookstack.book_like (
+CREATE TABLE IF NOT EXISTS bookstack.book_like (
     like_id INT AUTO_INCREMENT PRIMARY KEY,
-
-    user_id INT NOT NULL,
     book_id INT NOT NULL,
-
-    CONSTRAINT uq_user_book_like
-        UNIQUE (user_id, book_id),
-
-    CONSTRAINT fk_book_likes_user
-        FOREIGN KEY (user_id)
+    user_id INT NOT NULL,
+    UNIQUE (book_id, user_id),
+    FOREIGN KEY (user_id)
         REFERENCES bookstack.member_table(user_id)
         ON DELETE CASCADE
-        ON UPDATE CASCADE,
-
-    CONSTRAINT fk_book_likes_book
-        FOREIGN KEY (book_id)
-        REFERENCES bookstack.book_table(book_id)
-        ON DELETE CASCADE
-        ON UPDATE CASCADE
-);
+) ENGINE = InnoDB;
 
 insert into book_like (user_id, book_id) values 
 (1, 1),   -- user 1 likes book 1
 (1, 5),   -- user 1 likes book 5
 (2, 1);   -- user 2 likes book 1
+
+-- CREATE TABLE IF NOT EXISTS `bookstack`.`book_table` (
+--   `isbn` INT NULL,
+--   `title` VARCHAR(25) NULL,
+--   `author` VARCHAR(25) NULL,
+--   `description` TEXT NULL,
+--   `publisher` VARCHAR(45) NULL,
+--   `edition` YEAR NULL,
+--   `book_category` CHAR NULL,
+--   `user_id` INT,
+--   `action` CHAR(15) NULL,
+--   `action_date` DATE NULL,
+--   `book_id` INT AUTO_INCREMENT,
+--   `number_of_copies` INT NULL,
+--   `number_of_copies_remaining` INT NULL,
+--   PRIMARY KEY (`book_id`),
+--   INDEX `staff_id_idx` (`user_id` ASC) VISIBLE,
+--   CONSTRAINT `staff_id`
+--     FOREIGN KEY (`user_id`)
+--     REFERENCES `bookstack`.`staff_table` (`user_id`)
+--     ON DELETE NO ACTION
+--     ON UPDATE NO ACTION)
+-- ENGINE = InnoDB;
+
 
 CREATE DATABASE IF NOT EXISTS authorization;
 USE authorization;
@@ -558,9 +439,9 @@ CREATE TABLE IF NOT EXISTS `authorization`.`user_table` (
 ENGINE = InnoDB;
 
 INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
-('Alice Johnson', 'mayurbedare2003@gmail.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
-('Bob Mathew', 'jboneplus7t@gmail.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
-('Clara Thomas', 'namangova@gmail.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
+('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),
+('Bob Mathew', 'bob.mathew@example.com', '9823456789', '34 Lake Rd, Kochi', '1995-07-20', 'bobm', 'bob456', 'Member', 2),
+('Clara Thomas', 'clara.thomas@example.com', '9812345670', '56 Hill View, Kollam', '2000-02-05', 'clarat', 'clara789', 'Member', 3),
 ('David Roy', 'david.roy@example.com', '9898765432', '78 Palm St, Trivandrum', '1989-11-22', 'davidr', 'roy123', 'Librarian', 4),
 ('Eva George', 'eva.george@example.com', '9786543210', '90 Rose Lane, Kochi', '1992-09-30', 'evag', 'eva321', 'Librarian', 5),
 ('Frank Wilson', 'frank.wilson@example.com', '9754321980', '101 Maple St, Thrissur', '1985-06-10', 'frankw', 'frank555', 'Admin', 6),
@@ -572,3 +453,146 @@ INSERT INTO user_table (name, email, phone, address, dob, username, password, ro
 ('Priya Shah','priya@example.com','9822222222','Surat','1997-08-19','priya','pass','Member', 12),
 ('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member', 13),
 ('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian', 14);
+
+CREATE DATABASE IF NOT EXISTS book_db;
+USE book_db;
+
+CREATE TABLE IF NOT EXISTS `book_db`.`book_table` (
+    book_id INT AUTO_INCREMENT PRIMARY KEY,
+    isbn VARCHAR(13) NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    author VARCHAR(255) NOT NULL,
+    description TEXT,
+    book_image VARCHAR(255),
+    publisher VARCHAR(100),
+    action CHAR(15) NULL,
+    action_date DATE NULL,
+    number_of_copies INT NOT NULL,
+    number_of_copies_remaining INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+) ENGINE = InnoDB;
+
+USE book_db;
+
+INSERT INTO book_table
+(
+    isbn,
+    title,
+    author,
+    description,
+    book_image,
+    publisher,
+    action,
+    action_date,
+    number_of_copies,
+    number_of_copies_remaining
+)
+VALUES
+('9780061120084', 'To Kill a Mockingbird', 'Harper Lee',
+ 'Classic novel on justice and morality.',
+ 'https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg',
+ 'HarperCollins',
+ 'CREATED', '2024-01-10',
+ 10, 8),
+
+('9780743273565', 'The Great Gatsby', 'F. Scott Fitzgerald',
+ 'American classic novel.',
+ 'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg',
+ 'Scribner',
+ 'CREATED', '2024-01-12',
+ 8, 6),
+
+('9780544003415', 'The Hobbit', 'J.R.R. Tolkien',
+ 'Fantasy adventure.',
+ 'https://covers.openlibrary.org/b/isbn/9780544003415-L.jpg',
+ 'HarperCollins',
+ 'CREATED', '2024-01-15',
+ 12, 9),
+
+('9781455586691', 'Atomic Habits', 'James Clear',
+ 'Building good habits.',
+ 'https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg',
+ 'Avery',
+ 'CREATED', '2024-01-18',
+ 14, 11),
+
+('9780307387899', 'Sapiens', 'Yuval Noah Harari',
+ 'History of humankind.',
+ 'https://covers.openlibrary.org/b/isbn/9780307387899-L.jpg',
+ 'Harper',
+ 'CREATED', '2024-01-20',
+ 11, 9),
+
+('9780140449136', 'Meditations', 'Marcus Aurelius',
+ 'Stoic philosophy.',
+ 'https://covers.openlibrary.org/b/isbn/9780140449136-L.jpg',
+ 'Penguin',
+ 'CREATED', '2024-01-22',
+ 7, 5),
+
+('9780812981605', 'Rich Dad Poor Dad', 'Robert Kiyosaki',
+ 'Personal finance lessons.',
+ 'https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg',
+ 'Plata',
+ 'CREATED', '2024-01-25',
+ 9, 7),
+
+('9780307474278', 'The Lean Startup', 'Eric Ries',
+ 'Startup methodology.',
+ 'https://covers.openlibrary.org/b/isbn/9780307474278-L.jpg',
+ 'Crown',
+ 'CREATED', '2024-01-28',
+ 8, 6),
+
+('9780062315007', 'The Alchemist', 'Paulo Coelho',
+ 'Spiritual journey.',
+ 'https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg',
+ 'HarperOne',
+ 'CREATED', '2024-02-01',
+ 10, 8),
+
+('9780140449266', 'The Republic', 'Plato',
+ 'Political philosophy.',
+ 'https://covers.openlibrary.org/b/isbn/9780140449266-L.jpg',
+ 'Penguin',
+ 'CREATED', '2024-02-03',
+ 6, 4),
+
+('9780132350884', 'Clean Code', 'Robert C. Martin',
+ 'Software craftsmanship.',
+ 'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
+ 'Prentice Hall',
+ 'CREATED', '2024-02-06',
+ 15, 12),
+
+('9780134685991', 'Effective Java', 'Joshua Bloch',
+ 'Java best practices.',
+ 'https://covers.openlibrary.org/b/isbn/9780134685991-L.jpg',
+ 'Addison-Wesley',
+ 'CREATED', '2024-02-08',
+ 10, 7),
+
+('9780596517748', 'JavaScript: The Good Parts', 'Douglas Crockford',
+ 'JavaScript insights.',
+ 'https://covers.openlibrary.org/b/isbn/9780596517748-L.jpg',
+ 'OReilly',
+ 'CREATED', '2024-02-10',
+ 9, 6),
+
+('9780262033848', 'AI: A Modern Approach', 'Stuart Russell',
+ 'AI fundamentals.',
+ 'https://covers.openlibrary.org/b/isbn/9780262033848-L.jpg',
+ 'Pearson',
+ 'CREATED', '2024-02-12',
+ 8, 5),
+
+('9780131103627', 'The C Programming Language', 'Kernighan & Ritchie',
+ 'C language classic.',
+ 'https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg',
+ 'Prentice Hall',
+ 'CREATED', '2024-02-15',
+ 12, 9);
+
+
+
