@@ -1,12 +1,13 @@
 package com.project.bookstack.controllers;
 
 import org.springframework.http.ResponseEntity;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.project.bookstack.services.AdminService;
+import com.project.bookstack.services.impl.AdminServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 
@@ -16,11 +17,11 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminController {
 
-	private final AdminService adminService;
+	private final AdminServiceImpl adminServiceImpl;
 	
 	@GetMapping("/books")
 	public ResponseEntity<?> getAllBooks(){
-		ResponseEntity<?> responseEntity = ResponseEntity.ok(adminService.getAllBooks());
+		ResponseEntity<?> responseEntity = ResponseEntity.ok("ohk");
 		return responseEntity;
 	}
 }

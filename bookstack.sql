@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `bookstack`.`staff_table` (
   `user_id` INT,
   `salary` FLOAT NULL,
   `date_hired` DATE NULL,
+  `status` VARCHAR(10)
   PRIMARY KEY (`user_id`)
   -- ,
   -- CONSTRAINT `staff_user`
@@ -258,11 +259,11 @@ INSERT INTO member_table (user_id, membership_type, member_start, member_end) VA
 (7, 'Premium', '2022-03-01', '2023-02-28'),
 (8, 'Premium', '2022-02-01', '2023-02-21');
 
-INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
-(4, 35000, '2020/06/15'),
-(5, 40000, '2019/04/10'),
-(9, 42000, '2021/09/01'),
-(14,39000,'2022-02-15');
+INSERT INTO staff_table (user_id, salary, `date_hired`,status) VALUES
+(4, 35000, '2020/06/15',"active"),
+(5, 40000, '2019/04/10',"inactive"),
+(9, 42000, '2021/09/01',"active"),
+(14,39000,'2022-02-15',"active");
 
 
 INSERT INTO book_table

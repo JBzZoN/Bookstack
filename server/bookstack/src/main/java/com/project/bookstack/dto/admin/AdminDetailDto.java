@@ -1,4 +1,4 @@
-package com.project.bookstack.dto;
+package com.project.bookstack.dto.admin;
 
 public record AdminDetailDto(
     String isbn,

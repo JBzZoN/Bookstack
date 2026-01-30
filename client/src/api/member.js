@@ -2,11 +2,23 @@ import axios from "axios";
 
 const API_BASE_URL = "http://localhost:7070";
 
+// const api = axios.create({
+//   baseURL: API_BASE_URL,
+//   headers: {
+//     Authorization: `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+//   }
+// });
+
 const api = axios.create({
-  baseURL: API_BASE_URL,
-  headers: {
-    Authorization: `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+  baseURL: API_BASE_URL
+});
+
+api.interceptors.request.use((config) => {
+  const user = JSON.parse(localStorage.getItem("currentUser"));
+  if (user?.token) {
+    config.headers.Authorization = `Bearer ${user.token}`;
   }
+  return config;
 });
 
 export const allBooksCardData = () => {
