@@ -7,14 +7,41 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   z-index: 1030;
 }
-.navbar .nav-link {
-  font-weight: 700;
+.member-navbar .nav-link {
+  font-weight: 750;
   color: #2f344b;
   transition: color 0.25s;
+  font-size: large;
 }
+
+.member-image-fix {
+  margin-left: 20px;
+  width: 40px;
+  height: 40px;
+}
+
+#member-margin {
+  margin-left: 10px;
+}
+
 #id1,
-.navbar .nav-link.active{
-  color: indianred;
+.member-navbar .nav-link.active{
+  background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
+
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+#img-size {
+  margin-left: 10px;
+  width: 40px;
+  height: 40px;
 }
 
 .btn-upgrade {

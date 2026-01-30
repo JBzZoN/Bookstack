@@ -1,8 +1,17 @@
 import '../../../components/Member/Navbar/Navbar.css'
-import { NavLink,Link } from 'react-router-dom';
+import { NavLink,Link, useNavigate } from 'react-router-dom';
 import logo from '../../../assets/logo.png'
+import logout from '../../../assets/images/member/logout.png'
+import likesList from '../../../assets/images/member/likes-cart.png'
 
 function Navbar () {
+    const navigate=useNavigate();
+    const handleLogout = () => {
+        navigate("/login")
+    };
+    const handleLikedBooks = () => {
+        navigate("/member/liked-books")
+    };
     return (
         <nav className="member-navbar navbar navbar-expand-lg fixed-top">
             <div className="container">
@@ -25,11 +34,12 @@ function Navbar () {
                         <input className="form-control me-2" type="search" placeholder="Search by Book, Author, ISBN..." aria-label="Search"/>
                     </form>
 
-                    <div className="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 navbar-nav">
-                        <NavLink to="/member/home" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
+                    <div className="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 navbar-nav ">
+                        <NavLink to="/member/home" id="member-margin" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
                         <NavLink to="/member/browse" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Browse Books</NavLink>
                         <NavLink to="/member/account" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>My Account</NavLink>
-                        <button to="/membership" className="btn btn-upgrade mt-2 mt-lg-0">Upgrade</button>
+                        <img id="img-size" src={likesList} onClick={handleLikedBooks}></img>
+                        <img className="member-image-fix" src={logout} onClick={handleLogout}></img>
                     </div>
 
                 </div>

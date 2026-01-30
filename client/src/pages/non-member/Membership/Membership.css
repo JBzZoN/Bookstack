@@ -1,0 +1,197 @@
+/* =========================================================
+   GLOBAL BRAND VARIABLES
+   ---------------------------------------------------------
+   Single source of truth for brand colors
+   ========================================================= */
+:root {
+  --brand-indigo: #6366f1;
+  --brand-pink: #ec4899;
+  --brand-teal: #2dd4bf;
+}
+
+/* =========================================================
+   PAGE WRAPPER
+   ---------------------------------------------------------
+   Isolated background to avoid body-level color conflicts
+   ========================================================= */
+.body1 {
+  background-color: rgba(255, 255, 255, 0.9);
+}
+
+/* =========================================================
+   HEADER / BRAND
+   ========================================================= */
+.main-header {
+  padding: 1rem 0;
+}
+
+.brand-name {
+  font-size: 1.75rem;
+  font-weight: 800;
+  font-family: "Montserrat", sans-serif;
+}
+
+.brand-name img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
+}
+
+.book-part {
+  color: #0a0d9f;
+}
+
+.stack-part {
+  color: #332b2b;
+}
+
+/* =========================================================
+   HERO SECTION
+   ========================================================= */
+.page-hero {
+  padding: 4rem 2rem;
+  text-align: center;
+}
+
+.page-hero h1,
+.page-hero p {
+  background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* =========================================================
+   BILLING / CURRENCY TOGGLES
+   ========================================================= */
+.billing-toggle {
+  display: inline-flex;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 99px;
+  padding: 0.5rem;
+}
+
+.billing-toggle .btn {
+  border-radius: 99px;
+  font-weight: 700;
+  border: none;
+  padding: 0.5rem 1.5rem;
+}
+
+.billing-toggle .btn.active {
+  background: white;
+  color: var(--brand-indigo);
+}
+
+/* =========================================================
+   PLAN CARDS
+   ========================================================= */
+.plan-card {
+  background: #ffffff;
+  border-radius: 1rem;
+  padding: 2rem;
+  height: 100%;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.07);
+  transition: transform 0.3s;
+  cursor: pointer;
+}
+
+.plan-card.active {
+  background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
+  color: white;
+  transform: scale(1.05);
+}
+
+.plan-card.active .btn {
+  background: white;
+  color: var(--brand-indigo);
+}
+
+/* Feature icons */
+.plan-card i.bi-check-circle-fill {
+  color: var(--brand-teal);
+}
+
+.plan-card i.bi-x-circle-fill {
+  color: #ff4d4f;
+}
+
+/* =========================================================
+   FAQ SECTION
+   ========================================================= */
+.faq-accordion .accordion-item {
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+.faq-accordion .accordion-button {
+  font-weight: 700;
+  padding: 1rem 1.25rem;
+}
+
+/* Prevent undefined RGB variable bug */
+.faq-accordion .accordion-button:not(.collapsed) {
+  background-color: rgba(99, 102, 241, 0.1);
+  color: var(--brand-indigo);
+}
+
+.faq-accordion .accordion-body {
+  font-size: 0.95rem;
+  line-height: 1.6;
+}
+
+/* =========================================================
+   TEXT UTILITIES (EXPLICIT — NO AMBIGUITY)
+   ========================================================= */
+.text-bold {
+  font-weight: bold;
+  color: black;
+}
+
+.text-black {
+  color: black;
+}
+
+.text-white {
+  color: white;
+}
+
+/* =========================================================
+   BUTTON UTILITIES
+   ========================================================= */
+.btn-gradient-outline {
+  background: transparent;
+  color: #4f0bc5;
+  border: 2px solid transparent;
+  border-radius: 0.375rem;
+
+  background-image:
+    linear-gradient(#fff, #fff),
+    linear-gradient(
+      90deg,
+      #4f0bc5,
+      rgb(236, 94, 117)
+    );
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+
+  transition: all 0.3s ease;
+}
+
+.btn-gradient-outline:hover {
+  background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
+  color: white;
+  border-color: transparent;
+}

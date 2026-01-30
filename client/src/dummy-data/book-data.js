@@ -1,4 +1,4 @@
-export const Book_data = {
+export const bookData = {
   "count": 77182,
   "next": "https://gutendex.com/books/?page=2",
   "previous": null,
@@ -1293,7 +1293,7 @@ export const Book_data = {
     },
     {
       "id": 1080,
-      "title": "A Modest Proposal: For preventing the children of poor people in Ireland, from being a burden on their parents or country, and for making them beneficial to the publick",
+      "title": "A Modest Proposal: For preventing the children of poor people in Ireland",
       "authors": [
         {
           "name": "Swift, Jonathan",
