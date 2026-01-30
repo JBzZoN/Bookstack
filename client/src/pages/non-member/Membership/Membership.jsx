@@ -162,6 +162,7 @@ function Membership() {
                   </ul>
 
                   <div className="d-grid">
+<<<<<<< HEAD
                     <button
                       className={isActive ? "btn btn-lg" : "btn btn-gradient-outline"}
                       onClick={() => {
@@ -175,6 +176,14 @@ function Membership() {
                     >
                       Choose Plan
                     </button>
+=======
+                    <Link
+                      to="/order-summary"
+                      className={isActive ? "btn btn-lg" : "btn btn-gradient-outline"}
+                    >
+                      Choose Plan
+                    </Link>
+>>>>>>> dbe5b9d610df6362b972374f80d7e19a866013e9
                   </div>
                 </div>
               </div>

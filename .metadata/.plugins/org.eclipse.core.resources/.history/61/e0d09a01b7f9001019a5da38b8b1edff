@@ -1,0 +1,27 @@
+package com.project.bookstack.services.impl;
+
+import java.util.List;
+
+import org.springframework.stereotype.Service;
+
+import com.project.bookstack.dto.BookCardDTO;
+import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.repositories.AdminRepository;
+import com.project.bookstack.repositories.MemberRepository;
+import com.project.bookstack.services.MemberService;
+
+import lombok.RequiredArgsConstructor;
+
+@Service
+@RequiredArgsConstructor
+public class MemberServiceImpl implements MemberService {
+
+    private final MemberRepository memberRepository;
+
+    @Override
+    public List<BookCardDTO> getAllBooks(Integer userId) {
+    	Integer userId = 7; 
+        return memberRepository.getAllBooks(userId);
+    }
+    
+}

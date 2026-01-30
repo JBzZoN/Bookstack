@@ -1,0 +1,10 @@
+@Entity
+@Table(name = "genre_table")
+public class GenreEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer genreId;
+
+    private String genreName;
+}

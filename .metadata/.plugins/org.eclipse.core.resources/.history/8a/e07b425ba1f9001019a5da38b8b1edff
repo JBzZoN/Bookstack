@@ -1,0 +1,5 @@
+package com.project.bookstack.services.impl;
+
+public class MemberServiceImpl {
+
+}
