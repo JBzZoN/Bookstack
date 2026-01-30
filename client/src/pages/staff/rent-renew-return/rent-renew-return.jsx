@@ -205,65 +205,102 @@ function RentRenewReturn() {
     return code;
   }
 
-  return (
 
-    <div className='container mt-3 mb-5'>
-      <Title string={"Rent, renew or return"}/>
-      <div className="form-floating mb-3">
-      <input type="text" className="form-control" id="floatingInput" placeholder="name@example.com" value={searchString}
-      onChange={onSearchMember} autoComplete="off"
-      onFocus={() => setSearchBarOn(true)}
-      onBlur={() => setTimeout(() => setSearchBarOn(false), 500)}
-      />
-      <label htmlFor="floatingInput">{searchResultUser?searchResultUser.name: "Search for members based on name, username or email"}</label>
-      {(searchResults.length > 0) && (searchBarOn) && (searchString.length >= 2) && (
-            <div
-              className="list-group position-absolute shadow mt-1 w-100"
-              style={{ zIndex: 1000 }}
-            >
-              {searchResults.map((user) => (
-                <div
-                  key={user.id}
-                  className="list-group-item list-group-item-action"
-                  onClick={() => {
-                    setSearchResultUser(user)
-                    setSearchString("")
-                  }}
-                >
-                  <strong>{user.name}</strong><br />
-                  <small className="text-muted">
-                    {user.username} • {user.email}
-                  </small>
-                </div>
-              ))}
-            </div>
-          )}
-    </div>
-    
+return (
+  <div className="container mt-3 mb-5 rent-container">
 
-    
-    <div className='d-flex justify-content-between'>
-      <button className='btn btn-primary mb-4' onClick={() => {addRows()}}>Add more records</button>
-      <button className='btn btn-danger mb-4' onClick={() => {if(rows.length == 1) return;removeRows()}}>Remove last record</button>
-    </div>
-      <table className='table table-striped table-danger'>
-      <thead>
-        <tr>
-          <th>Rent, renew or return</th>
-        <th>Book</th>
-        <th>Number of copies</th>
-        </tr>
-      </thead>
-      <tbody>
-        {addForms()}
-      </tbody>
-    </table>
-    
-      <button className='btn btn-primary mb-5' onClick={onSubmit}>Submit</button>
-      <div style={{height: "200px"}}></div>
+    <Title string={"Rent, renew or return"} />
+
+    {/* MEMBER SEARCH */}
+    <div className="card soft-card mb-4 position-relative">
+      <div className="form-floating">
+        <input
+          type="text"
+          className="form-control"
+          id="floatingInput"
+          value={searchString}
+          onChange={onSearchMember}
+          autoComplete="off"
+          onFocus={() => setSearchBarOn(true)}
+          onBlur={() => setTimeout(() => setSearchBarOn(false), 500)}
+        />
+        <label htmlFor="floatingInput">
+          {searchResultUser
+            ? searchResultUser.name
+            : "Search for members based on name, username or email"}
+        </label>
+      </div>
+
+      {(searchResults.length > 0) &&
+        (searchBarOn) &&
+        (searchString.length >= 2) && (
+          <div className="list-group position-absolute w-100 shadow mt-1">
+            {searchResults.map((user) => (
+              <div
+                key={user.id}
+                className="list-group-item list-group-item-action"
+                onClick={() => {
+                  setSearchResultUser(user)
+                  setSearchString("")
+                }}
+              >
+                <strong>{user.name}</strong><br />
+                <small className="text-muted">
+                  {user.username} • {user.email}
+                </small>
+              </div>
+            ))}
+          </div>
+        )}
     </div>
 
-  )
+    {/* ACTION BUTTONS */}
+    <div className="d-flex justify-content-between mb-3">
+      <button
+        className="btn btn-outline-primary"
+        onClick={addRows}
+      >
+        + Add more records
+      </button>
+
+      <button
+        className="btn btn-outline-danger"
+        onClick={() => {
+          if (rows.length === 1) return
+          removeRows()
+        }}
+      >
+        − Remove last record
+      </button>
+    </div>
+
+    {/* RECORDS TABLE */}
+    <div className="card soft-card mb-4">
+      <table className="table records-table align-middle">
+        <thead>
+          <tr>
+            <th>Rent / Renew / Return</th>
+            <th>Book</th>
+            <th>Number of copies</th>
+          </tr>
+        </thead>
+        <tbody>
+          {addForms()}
+        </tbody>
+      </table>
+    </div>
+
+    <button
+      className="btn btn-primary px-4 mb-5"
+      onClick={onSubmit}
+    >
+      Submit
+    </button>
+
+    <div style={{ height: "200px" }}></div>
+  </div>
+)
+
 }
 
 export default RentRenewReturn

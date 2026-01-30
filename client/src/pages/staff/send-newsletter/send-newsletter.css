@@ -34,3 +34,50 @@
 .send-button {
     width: 300px;
 }
+
+/* Card styling (no size change) */
+.profile {
+    border-radius: 18px;
+    border: none;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
+}
+
+/* Header gradient */
+.profile .card-header {
+    background: linear-gradient(
+        90deg,
+        rgba(79, 11, 197, 0.85),
+        rgba(236, 94, 117, 0.85)
+    );
+    color: #ffffff;
+    font-weight: 600;
+    letter-spacing: 0.4px;
+    border-bottom: none;
+}
+
+/* Primary button gradient ONLY (size untouched) */
+.button-out {
+    background: linear-gradient(
+        90deg,
+        rgba(79, 11, 197, 0.85),
+        rgba(236, 94, 117, 0.85)
+    );
+    border: none;
+    color: #ffffff;
+}
+
+.button-out:hover {
+    opacity: 0.92;
+}
+
+/* Secondary button subtle refinement */
+.send-button.btn-outline-secondary {
+    border-radius: 10px;
+}
+
+/* Textarea focus (no resizing) */
+textarea.form-control:focus {
+    border-color: rgba(79, 11, 197, 0.6);
+    box-shadow: 0 0 0 0.15rem rgba(79, 11, 197, 0.25);
+}
