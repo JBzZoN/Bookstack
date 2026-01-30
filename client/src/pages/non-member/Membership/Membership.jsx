@@ -162,12 +162,19 @@ function Membership() {
                   </ul>
 
                   <div className="d-grid">
-                    <Link
-                      to="/order-summary"
+                    <button
                       className={isActive ? "btn btn-lg" : "btn btn-gradient-outline"}
+                      onClick={() => {
+                        localStorage.setItem("selectedPlan", JSON.stringify({
+                          type: plan.title,          // Basic / Premium / Standard
+                          billing: billing,          // monthly / yearly
+                          amount: billing === "monthly" ? plan.monthly : plan.yearly
+                        }));
+                        window.location.href = "/order-summary";
+                      }}
                     >
                       Choose Plan
-                    </Link>
+                    </button>
                   </div>
                 </div>
               </div>

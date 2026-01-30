@@ -1,20 +1,20 @@
-package com.project.bookstack.controllers;
+package com.project.bookstack.controllers.member;
 
 import java.util.List;
 
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookDTO;
-import com.project.bookstack.services.MemberService;
+import com.project.bookstack.services.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
-@CrossOrigin(origins = "http://localhost:5173")
 @RestController
 @RequestMapping("/member")
 @RequiredArgsConstructor
@@ -23,7 +23,8 @@ public class MemberController {
     private final MemberService memberService;
 
     @GetMapping("/books")
-    public List<BookCardDTO> getAllBooks() {
+    public List<BookCardDTO> getAllBooks(@RequestHeader("X-User-Id") String id) {
+    	System.out.println(id);
         return memberService.getAllBooks();
     }
     
@@ -71,5 +72,5 @@ public class MemberController {
     public List<BookCardDTO> getMightAlsoLikedBooks(@PathVariable("id") Integer bookId) {
         return memberService.getMightAlsoLikedBooks(bookId);
     }
-
+    
 }

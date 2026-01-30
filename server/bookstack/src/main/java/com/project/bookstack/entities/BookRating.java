@@ -6,11 +6,7 @@ import lombok.Data;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(
-    name = "book_rating",
-    uniqueConstraints = @UniqueConstraint(columnNames = {"book_id", "user_id"})
-)
-@Data
+@Table(name = "book_rating")
 public class BookRating {
 
     @Id
@@ -18,17 +14,13 @@ public class BookRating {
     @Column(name = "rating_id")
     private Integer ratingId;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private Integer bookId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
 
     @Column(name = "rating", nullable = false)
     private Integer rating;
-
-    @Column(name = "rating_date")
-    private LocalDateTime ratingDate;
 }
+

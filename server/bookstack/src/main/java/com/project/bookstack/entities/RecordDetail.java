@@ -24,13 +24,8 @@ public class RecordDetail {
     )
     private Record record;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "book_id",
-        referencedColumnName = "book_id",
-        foreignKey = @ForeignKey(name = "book_record")
-    )
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private Integer book;
 
     /* ------------------ Other Columns ------------------ */
 

@@ -10,6 +10,60 @@ import { Link } from "react-router-dom";
   Acts as a confirmation step in the membership flow.
 */
 function OrderSummary() {
+  const plan = JSON.parse(localStorage.getItem("selectedPlan"));
+
+  const startPayment = async (plan) => {
+
+    const token = localStorage.getItem("token"); // JWT after login/register
+
+    // 1️⃣ Call backend to create order
+    const res = await fetch(
+      `/membership/start-payment?membershipType=${plan.type}`,
+      {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${token}`
+        }
+      }
+    );
+
+    const data = await res.json();
+
+    // 2️⃣ Razorpay checkout
+    const options = {
+      key: data.key,
+      amount: data.amount * 100,
+      currency: "INR",
+      name: "BookStack",
+      description: `${plan.type} Membership`,
+      order_id: data.orderId,
+
+      handler: async function (response) {
+
+        // 3️⃣ Notify backend on success
+        await fetch("/membership/payment-success", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`
+          },
+          body: JSON.stringify({
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_signature: response.razorpay_signature,
+            membershipType: plan.type
+          })
+        });
+
+        alert("Membership Activated!");
+        window.location.href = "/login"; // or dashboard
+      }
+    };
+
+    const rzp = new window.Razorpay(options);
+    rzp.open();
+  };
+
   return (
     <div className="body1">
 
@@ -35,8 +89,12 @@ function OrderSummary() {
                 Order Summary
               </h3>
 
-              <p className="h5">Premium Plan</p>
-              <p className="h5 fw-bold">₹3000</p>
+              <p className="h5">{plan.type} Plan</p>
+              <p className="h5 fw-bold">₹{plan.amount}</p>
+
+              <p className="text-secondary small">
+                Billed {plan.billing}. Membership benefits apply.
+              </p>
 
               <p className="text-secondary small">
                 Billed annually. Full access, 7 book borrow limit, no late fees.
@@ -45,9 +103,12 @@ function OrderSummary() {
               <hr />
 
               <div className="d-grid mt-4">
-                <Link to="/register" className="btn-outline w-100">
-                  Next: Register
-                </Link>
+                <button
+                  className="btn-outline w-100"
+                  onClick={() => startPayment(plan)}
+                >
+                  Pay & Continue
+                </button>
               </div>
             </div>
 
