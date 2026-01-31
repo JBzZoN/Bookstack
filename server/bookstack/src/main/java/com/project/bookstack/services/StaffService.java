@@ -23,6 +23,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.dto.BookDto;
+import com.project.bookstack.dto.BookGenreRequestDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
 import com.project.bookstack.dto.EmailDTO;
@@ -109,40 +110,12 @@ public class StaffService {
 		return finalOutput;
 	}
 
-	public List<Member> addBook(BookWithImageDto bookWithImageDto) {
+	public List<Member> addBook(BookGenreRequestDto bookGenreRequestDto) {
 		
-		MultipartFile image = bookWithImageDto.imageFile();
-		
-		try {
-			Files.copy(image.getInputStream(),
-					Path.of("uploads/staff/image").resolve(image.getOriginalFilename()),
-					StandardCopyOption.REPLACE_EXISTING);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
-		Book book = Book.builder()
-		        .isbn(bookWithImageDto.isbn())
-		        .image(image.getOriginalFilename())
-		        .title(bookWithImageDto.title())
-		        .author(bookWithImageDto.author())
-		        .description(bookWithImageDto.description())
-		        .publisher(bookWithImageDto.publisher())
-		        .action("ADDED")
-		        .actionDate(LocalDate.now())
-		        .numberOfCopies(bookWithImageDto.copies())
-		        .numberOfCopiesRemaining(bookWithImageDto.copies())
-		        .staff(staffDetailsRepository.findById(bookWithImageDto.staffId()).get())
-		        .build();
-
-		
-		staffBookRepository.save(book);
-		
-		String[] genreList = bookWithImageDto.genres().split(",");
+		String[] genreList = bookGenreRequestDto.getGenres().split(",");
 		
 		for(String genre : genreList) {
-			staffBookRepository.addBookGenre(book.getBookId(), Integer.parseInt(genre));
+			staffBookRepository.addBookGenre(bookGenreRequestDto.getBookId(), Integer.parseInt(genre));
 		}
 		
 		return null;

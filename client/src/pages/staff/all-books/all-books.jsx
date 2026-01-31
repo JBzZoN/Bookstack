@@ -62,7 +62,7 @@ function AllBooks() {
                     <div className="card book-card" key={e.bookId}>
 
                         <img
-                            src={e.bookImage.startsWith("http") ? e.bookImage : `http://localhost:7070/staff/image/${e.image}`}
+                            src={e.bookImage.startsWith("http") ? e.bookImage : `http://localhost:7070/book/image/${e.bookImage}`}
                             className="card-img-top book-image"
                             alt="book"
                             style={{ height: "250px" }}

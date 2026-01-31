@@ -4,11 +4,13 @@ import java.util.List;
 
 
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.configuration.KafkaConfiguration;
 import com.project.bookstack.dto.BookDto;
+import com.project.bookstack.dto.BookGenreRequestDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
 import com.project.bookstack.dto.EmailDTO;
@@ -70,10 +72,10 @@ public class StaffController {
 		staffService.sendEmail(emailDTO.getEmail());
 	}
 	
-	@PostMapping(value = "/book", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
-	public List<Member> addBook(@ModelAttribute BookWithImageDto bookWithImageDto, @RequestHeader("X-User-Id") String userId) {
-		System.out.println("-----------------------------------------------" + userId + "-----------------------------------------------");
-		return staffService.addBook(bookWithImageDto);
+	@PostMapping(value = "/genre")
+	public ResponseEntity<?> addBook(@RequestBody BookGenreRequestDto bookGenreRequestDto) {
+		staffService.addBook(bookGenreRequestDto);
+		return ResponseEntity.ok("Book Genre Added");
 	}
 	
 }

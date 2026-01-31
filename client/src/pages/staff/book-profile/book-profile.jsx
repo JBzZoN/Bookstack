@@ -36,7 +36,7 @@ function BookProfile() {
           <img
             src={book.bookImage.startsWith("http")
               ? book.bookImage
-              : `http://localhost:7070/staff/image/${book.bookImage}`}
+              : `http://localhost:7070/book/image/${book.bookImage}`}
             className="book-image-lol"
             alt="book"
           />

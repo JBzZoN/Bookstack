@@ -1,19 +1,176 @@
 const express = require("express");
 const bookService = require("../services/book.service");
+const fs = require("fs")
+
+const multer = require("multer");
+
+const upload = multer({
+  dest: "images/"
+});
 
 const mysql2 = require("mysql2")
-pool = mysql2.createPool({
+const staffPool = mysql2.createPool({
   host: "localhost",
   port: "3306",
   user: "bookstack",
-  database: "book_db"
+  database: "book_db",
+  password: "bookstack"
 })
 
 const router = express.Router();
 
-router.get("/funny", (request, response) => {
-  response.send("funny manh!!!")
-})
+router.post("/search", (req, res) => {
+  const { search } = req.body;
+  const sql = `
+    SELECT
+      book_id,
+      isbn,
+      title,
+      author,
+      description,
+      book_image,
+      publisher,
+      number_of_copies,
+      number_of_copies_remaining
+    FROM book_table
+    WHERE
+      title LIKE ?
+      OR isbn LIKE ?
+      OR author LIKE ?
+      OR publisher LIKE ?
+    LIMIT 5
+  `;
+
+  const values = [
+    `%${search}%`,   // title contains
+    `${search}%`,    // isbn starts with
+    `%${search}%`,   // author contains
+    `%${search}%`    // publisher contains
+  ];
+
+  staffPool.query(sql, values, (error, rows) => {
+    if (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
+
+    // camelCase mapping (important for frontend)
+    const mapped = rows.map(b => ({
+      bookId: b.book_id,
+      isbn: b.isbn,
+      title: b.title,
+      author: b.author,
+      description: b.description,
+      bookImage: b.book_image,
+      publisher: b.publisher,
+      numberOfCopies: b.number_of_copies,
+      numberOfCopiesRemaining: b.number_of_copies_remaining
+    }));
+
+    res.status(200).send(mapped);
+  });
+});
+
+
+router.post("/add", upload.single("imageFile"), (request, response) => {
+
+  const {
+    title,
+    author,
+    publisher,
+    isbn,
+    copies,
+    description
+  } = request.body;
+
+  if (!request.file) {
+    return response.status(400).send({
+      status: "error",
+      message: "Book image is required"
+    }); 
+  }
+
+  // ONLY store filename in DB
+  const imageFileName = request.file.filename + ".jpg";
+
+  fs.rename(request.file.path, "images/" + imageFileName, (error) => {
+    if(error) 
+      response.sendStatus(500)
+
+    const sql = `
+    INSERT INTO book_table (
+      isbn,
+      title,
+      author,
+      description,
+      book_image,
+      publisher,
+      action,
+      action_date,
+      number_of_copies,
+      number_of_copies_remaining
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)
+  `;
+
+  const values = [
+    isbn,
+    title,
+    author,
+    description,
+    imageFileName,          // ✅ filename only
+    publisher,
+    "CREATED",
+    copies,
+    copies
+  ];
+
+  staffPool.query(sql, values, (error, result) => {
+    if (error) {
+      console.error(error);
+      return response.status(500).send({
+        status: "error",
+        message: "Failed to add book"
+      });
+    }
+
+    response.status(201).send({
+      status: "success",
+      bookId: result.insertId
+    });
+  });
+  })
+
+  
+});
+
+
+router.get("/all", (request, response) => {
+  const sql = "select * from book_table"
+
+  staffPool.query(sql, (error, data) => {
+    if (error) {
+      return response.sendStatus(500);
+    }
+
+    const mappedData = data.map(b => ({
+      action: b.action,
+      actionDate: b.action_date,
+      author: b.author,
+      bookId: b.book_id,
+      bookImage: b.book_image,
+      createdAt: b.created_at,
+      description: b.description,
+      isbn: b.isbn,
+      numberOfCopies: b.number_of_copies,
+      numberOfCopiesRemaining: b.number_of_copies_remaining,
+      publisher: b.publisher,
+      title: b.title,
+      updatedAt: b.updated_at
+    }));
+
+    response.status(200).send(mappedData);
+    });
+});
 
 router.get("/books", async (req, res) => {
   try {
