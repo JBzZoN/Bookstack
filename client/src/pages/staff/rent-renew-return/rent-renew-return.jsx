@@ -108,6 +108,55 @@ function RentRenewReturn() {
 
   const onVerify = async () => {
     console.log("Verify clicked")
+    if(searchResultUser == null) {
+      toast.error("No member selected")
+      return;
+    }
+
+    const output = {
+      staffId: STAFF_ID,
+      memberId: searchResultUser.userId,
+      records: []
+    } 
+
+    for(let a of rows) {
+      if(a.searchResultBook == null) {
+        toast.error("No book selected")
+        return;
+      }else if(a.numberOfCopies == null) {
+        toast.error("Invalid number of copies")
+        return;
+      }else if(a.numberOfCopies <= 0) {
+        toast.error("Invalid number of copies")
+        return;
+      }else {
+        if(a.recordType=="Rent") {
+          
+          // check if that number of books are available in book_table
+          const response = await axios.post("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+          const {noOfCopiesRemaining} = response.data
+
+
+          if(a.numberOfCopies > noOfCopiesRemaining) {
+            toast.warning("Only " + noOfCopiesRemaining + " copies are present for the book '" + a.searchResultBook.title + "'")
+            return;
+          }
+
+        }else if(a.recordType == "Renew") {
+
+          // on renew or return disable the copies entry bar and fetch and put the value there
+          // there is no status as renew
+          // just increment the due date
+
+        }else if(a.recordType == "Return") {
+
+          // increase number of books available (+ copies)
+          // set returned to 1
+
+        }
+      }
+    }
   }
 
   const onSubmit = async () => {
@@ -167,11 +216,19 @@ function RentRenewReturn() {
     }
 
     rows.forEach(e => {
-      output.records.push({
-        status: e.recordType,
-        bookId: e.searchResultBook.bookId,
-        copies: e.numberOfCopies
-      })
+      if(e.recordType == "Return") {
+        output.records.push({
+          status: "Returned",
+          bookId: e.searchResultBook.bookId,
+          copies: e.numberOfCopies
+        })
+      }else if(e.recordType == "Rent") {
+        output.records.push({
+          status: e.recordType,
+          bookId: e.searchResultBook.bookId,
+          copies: e.numberOfCopies
+        })
+      }
     })
     console.log(output)
 
