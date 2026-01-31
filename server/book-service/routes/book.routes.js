@@ -19,6 +19,30 @@ const staffPool = mysql2.createPool({
 
 const router = express.Router();
 
+router.post("/id", (req, res) => {
+  const {bookId} = req.body;
+  const sql = "select number_of_copies_remaining from book_table where book_id = ?"
+
+  staffPool.query(sql, [bookId], (error, data) => {
+    res.send({
+      noOfCopiesRemaining: data[0].number_of_copies_remaining
+    })
+  })
+})
+
+router.put("/id", (req, res) => {
+  const {bookId, noOfCopiesRemaining} = req.body;
+  const sql = "update book_table set number_of_copies_remaining = ? where book_id = ?"
+
+  staffPool.query(sql, [noOfCopiesRemaining, bookId], (error, data) => {
+    if(error) {
+      res.sendStatus(500)
+    }else {
+      res.sendStatus(200)
+    }
+  })
+})
+
 router.post("/search", (req, res) => {
   const { search } = req.body;
   const sql = `

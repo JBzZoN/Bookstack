@@ -42,6 +42,6 @@ public class RecordDetail {
     @Column(name = "due_Date")
     private LocalDate dueDate;
     
-    @Column(name = "fine_paid")
-    private Integer finePaid;
+    @Column(name = "returned")
+    private Integer returned;
 }

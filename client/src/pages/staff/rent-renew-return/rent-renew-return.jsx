@@ -105,6 +105,11 @@ function RentRenewReturn() {
   }
 
   const navigate = useNavigate()
+
+  const onVerify = async () => {
+    console.log("Verify clicked")
+  }
+
   const onSubmit = async () => {
 
     if(searchResultUser == null) {
@@ -130,21 +135,32 @@ function RentRenewReturn() {
         return;
       }else {
         if(a.recordType=="Rent") {
-
+          
           // check if that number of books are available in book_table
+          const response = await axios.post("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
+          const {noOfCopiesRemaining} = response.data
+
+
+          if(a.numberOfCopies > noOfCopiesRemaining) {
+            toast.warning("Only " + noOfCopiesRemaining + " copies are present for the book '" + a.searchResultBook.title + "'")
+            return;
+          }
           // reduce number of books remaining (- copies) in book_table
+          // by default returned is 0
+          const response2 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
 
         }else if(a.recordType == "Renew") {
 
-          // do sth with date
+          // on renew or return disable the copies entry bar and fetch and put the value there
+          // there is no status as renew
+          // just increment the due date
 
         }else if(a.recordType == "Return") {
 
           // increase number of books available (+ copies)
-
-          // do sth with fine
+          // set returned to 1
 
         }
       }
@@ -159,9 +175,9 @@ function RentRenewReturn() {
     })
     console.log(output)
 
-    const response = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    // const response = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-    navigate('/staff/books')
+    // navigate('/staff/books')
     toast.success("Added a record")
   }
 
@@ -171,13 +187,43 @@ function RentRenewReturn() {
       code.push(<tr>
         <td>
           <div className="form-floating mb-3">
-            <select id="inputState" className="form-select" onChange={e => setRecordType(e.target.value, i)}>
-              <option value="Rent">Rent</option>
-              <option value="Renew">Renew</option>
-              <option value="Return">Return</option>
-            </select>
-            
-            <label for="floatingInput">Rent, renew or return</label>
+            <div className="dropdown">
+              <button
+                className="btn btn-outline-primary dropdown-toggle"
+                type="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                {rows[i].recordType}
+              </button>
+
+              <ul className="dropdown-menu">
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => setRecordType("Rent", i)}
+                  >
+                    Rent
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => setRecordType("Renew", i)}
+                  >
+                    Renew
+                  </button>
+                </li>
+                <li>
+                  <button
+                    className="dropdown-item"
+                    onClick={() => setRecordType("Return", i)}
+                  >
+                    Return
+                  </button>
+                </li>
+              </ul>
+            </div>
             
           </div>
   
@@ -234,7 +280,10 @@ function RentRenewReturn() {
         </td>
         <td>
           <div className="form-floating mb-3">
-            <input type="number" className="form-control" id="floatingInput" placeholder="name@example.com" onChange={e=>setNumberOfCopies(e.target.value, i)}/>
+            <input type="number" className="form-control" id="floatingInput" placeholder="name@example.com" 
+            disabled={rows[i].recordType !== "Rent"}
+            onChange={e=>setNumberOfCopies(e.target.value, i)}
+            value={rows[i].recordType !== "Rent"? "" : rows[i].numberOfCopies}/>
             <label htmlFor="floatingInput">Count</label>
           </div>
         </td>
@@ -332,12 +381,21 @@ return (
       </table>
     </div>
 
-    <button
-      className="btn btn-primary px-4 mb-5"
-      onClick={onSubmit}
-    >
-      Submit
-    </button>
+    <div className="d-flex justify-content-between align-items-center mb-5">
+      <button
+        className="btn btn-outline-success px-4"
+        onClick={onVerify}
+      >
+        Verify
+      </button>
+
+      <button
+        className="btn btn-outline-primary px-4"
+        onClick={onSubmit}
+      >
+        Submit
+      </button>
+    </div>
 
     <div style={{ height: "200px" }}></div>
   </div>

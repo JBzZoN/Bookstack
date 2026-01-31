@@ -54,7 +54,7 @@ function ViewMembers() {
                 <td>{e.dob}</td>
                 <td>
                   <button
-                    className="btn btn-sm btn-primary"
+                    className="btn btn-sm btn-outline-primary"
                     onClick={() => {
                       console.log(e)
                       navigate('/staff/members/profile', { state: { member: e } })

@@ -158,7 +158,7 @@ function AddBooks() {
       </div>
 
 
-      <button className='btn btn-success mb-5' onClick={onSubmit}>Submit</button>
+      <button className='btn btn-outline-success mb-5' onClick={onSubmit}>Submit</button>
     </div>
   )
 }

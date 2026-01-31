@@ -9,4 +9,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class EmailDTO {
 	String email;
+	String emailId;
 }

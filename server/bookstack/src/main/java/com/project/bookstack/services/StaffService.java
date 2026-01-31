@@ -175,7 +175,7 @@ public class StaffService {
             detail.setBookId(r.getBookId());
             detail.setStatus(r.getStatus());
             detail.setTotalCopies(r.getCopies());
-            detail.setFinePaid(0);
+            detail.setReturned(0);
 
             if ("Rent".equalsIgnoreCase(r.getStatus())) {
                 detail.setDueDate(LocalDate.now().plusDays(14));
@@ -187,7 +187,7 @@ public class StaffService {
 	}
 
 	public void sendEmail(String email) {
-		kafkaTemplate.send("email-topic", new EmailDTO(email));
+		kafkaTemplate.send("email-topic", new EmailDTO(email, null));
 	}
 
 	
