@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.dto.member.BookNameReturnDateDTO;
 import com.project.bookstack.services.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +72,11 @@ public class MemberController {
     @GetMapping("/might-liked-books/{id}")
     public List<BookCardDTO> getMightAlsoLikedBooks(@PathVariable("id") Integer bookId) {
         return memberService.getMightAlsoLikedBooks(bookId);
+    }
+    
+    @GetMapping("/book-name-return-date")
+    public List<BookNameReturnDateDTO> getBookNameReturnDate() {
+    	return memberService.getBookNameReturnDate();
     }
     
 }

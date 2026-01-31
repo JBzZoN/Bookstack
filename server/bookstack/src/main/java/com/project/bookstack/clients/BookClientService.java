@@ -46,4 +46,7 @@ public interface BookClientService {
 	@PostMapping("book/might-liked-books/{bookId}")
 	List<BookCoreDTO> getMightAlsoLikedBooks(@PathVariable("bookId") Integer bookId , @RequestBody List<Integer> mightLikeBookIds);
 	
+	@GetMapping("book/book-name-return-date")
+	List<BookCoreDTO> getBookNameReturnDate();
+	
 }

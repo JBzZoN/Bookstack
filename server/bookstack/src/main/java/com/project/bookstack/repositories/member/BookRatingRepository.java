@@ -10,4 +10,5 @@ public interface BookRatingRepository
         extends JpaRepository<BookRating, Integer> {
 
     Optional<BookRating> findByBookIdAndUserId(Integer bookId, Integer userId);
+    
 }

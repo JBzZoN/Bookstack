@@ -31,4 +31,22 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	@Query("SELECT bgm.id.genreId FROM MemberBook mb JOIN BookGenreMapping bgm ON mb.id.bookId = bgm.id.bookId WHERE mb.id.bookId = :bookId")
 	List<Integer> getGenreIdsByBookId(@Param(value = "bookId") Integer bookId);
 	
+	@Query("""
+	        SELECT new com.project.bookstack.dto.member.ReviewDTO(
+	            c.userId,
+	            COALESCE(r.rating, 0),
+	            c.comment,
+	            c.createdAt
+	        )
+	        FROM BookComment c
+	        LEFT JOIN BookRating r
+	            ON r.bookId = c.bookId AND r.userId = c.userId
+	        WHERE c.bookId = :bookId
+	        ORDER BY c.createdAt DESC
+	    """)
+	List<ReviewDTO> findReviewsByBookId(@Param("bookId") Integer bookId);
+	
+	@Query("SELECT mb.id.bookId FROM MemberBook WHERE mb.id.userId = :userId")
+	List<Integer> getBookIdsByUserId(Integer userId);
+	
 }

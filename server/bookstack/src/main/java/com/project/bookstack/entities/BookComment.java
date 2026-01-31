@@ -16,15 +16,15 @@ public class BookComment {
     private Integer commentId;
 
     @Column(name = "book_id", nullable = false)
-    private Integer book;
+    private Integer bookId;
 
     @Column(name = "user_id", nullable = false)
-    private Integer user;
+    private Integer userId;
 
     @Column(name = "comment", nullable = false, columnDefinition = "TEXT")
     private String comment;
 
     @Column(name = "comment_date")
-    private LocalDateTime commentDate;
+    private LocalDateTime createdAt;
     
 }

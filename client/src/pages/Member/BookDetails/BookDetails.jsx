@@ -5,6 +5,9 @@ import ReviewsSection from '../../../components/Member/ReviewSection/ReviewSecti
 import star from '../../../assets/images/member/star.png'
 import { bookDetailsData,mightLikedBooksData } from '../../../api/member';
 import { use, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
+
 
 function BookDetails () {
     const [bookDetails, setBookDetails] = useState([]);
@@ -55,7 +58,11 @@ function BookDetails () {
     const rating = bookDetails.averageRatings || 0;
     const likedByUser = bookDetails.likedByCurrentUser || false;
 
-    const [like,setLike] = useState(false);
+    const dispatch = useDispatch();
+
+    const isLiked = useSelector(
+    (state) => state.likes.byBookId[id] ?? likedByUser
+    );
 
     return (
         <div className='p-2'>
@@ -106,10 +113,17 @@ function BookDetails () {
                                     Borrow Now
                                 </button>
 
-                                <button className="btn btn-outline-danger btn-lg">
-                                    <i className="bi bi-heart me-2"></i>
-                                    Add to Wishlist
+                                <button
+                                    className={`btn ${isLiked ? "btn-danger" : "btn-outline-danger"} btn-lg`}
+                                    onClick={() => {
+                                        dispatch(toggleLike(id));               // instant UI update
+                                        dispatch(syncLikeWithBackend(id));      // backend sync
+                                    }}
+                                    >
+                                    <i className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"} me-2`}></i>
+                                    {isLiked ? "Wishlisted" : "Add to Wishlist"}
                                 </button>
+
                             </div>
 
                         </div>
