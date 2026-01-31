@@ -34,9 +34,9 @@ function BookProfile() {
         {/* Image INSIDE the card */}
         <div className="book-image-wrapper">
           <img
-            src={book.image.startsWith("http")
-              ? book.image
-              : `http://localhost:7070/staff/image/${book.image}`}
+            src={book.bookImage.startsWith("http")
+              ? book.bookImage
+              : `http://localhost:7070/staff/image/${book.bookImage}`}
             className="book-image-lol"
             alt="book"
           />
