@@ -358,13 +358,13 @@ INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
 (02, 04, 07, '2025-06-10');
 
 INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date, fine_paid) VALUES
-(01, 01, 'Issued', 01, 1, '2025-01-20', true),
-(02, 02, 'Issued', 02, 1, '2025-02-15', true),
+(01, 01, 'Rent', 01, 1, '2025-01-20', true),
+(02, 02, 'Rent', 02, 1, '2025-02-15', true),
 (03, 03, 'Returned', 03, 1, '2025-03-22', false),
-(04, 04, 'Issued', 04, 1, '2025-04-15', true),
-(05, 05, 'Issued', 05, 2, '2025-05-20', false),
+(04, 04, 'Rent', 04, 1, '2025-04-15', true),
+(05, 05, 'Rent', 05, 2, '2025-05-20', false),
 (06, 06, 'Returned', 06, 1, '2025-05-28', true),
-(07, 07, 'Issued', 07, 1, '2025-06-18', true);
+(07, 07, 'Rent', 07, 1, '2025-06-18', true);
 
 INSERT INTO member_table (user_id,membership_type,member_start,member_end)
 VALUES

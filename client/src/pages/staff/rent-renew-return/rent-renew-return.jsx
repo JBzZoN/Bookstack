@@ -129,7 +129,13 @@ function RentRenewReturn() {
         toast.error("Invalid number of copies")
         return;
       }else {
-        
+        if(a.recordType=="Rent") {
+          
+        }else if(a.recordType == "Renew") {
+
+        }else if(a.recordType == "Return") {
+          
+        }
       }
     }
 
