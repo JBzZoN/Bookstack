@@ -106,10 +106,31 @@ function RentRenewReturn() {
 
   const navigate = useNavigate()
   const onSubmit = async () => {
+
+    if(searchResultUser == null) {
+      toast.error("No member selected")
+      return;
+    }
+
     const output = {
       staffId: STAFF_ID,
       memberId: searchResultUser.userId,
       records: []
+    } 
+
+    for(let a of rows) {
+      if(a.searchResultBook == null) {
+        toast.error("No book selected")
+        return;
+      }else if(a.numberOfCopies == null) {
+        toast.error("Invalid number of copies")
+        return;
+      }else if(a.numberOfCopies <= 0) {
+        toast.error("Invalid number of copies")
+        return;
+      }else {
+        
+      }
     }
 
     rows.forEach(e => {
@@ -119,6 +140,7 @@ function RentRenewReturn() {
         copies: e.numberOfCopies
       })
     })
+    console.log(output)
 
     const response = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 

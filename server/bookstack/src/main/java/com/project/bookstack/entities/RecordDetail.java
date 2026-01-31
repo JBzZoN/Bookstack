@@ -29,13 +29,7 @@ public class RecordDetail {
     )
     private Record record;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "book_id",
-        referencedColumnName = "book_id",
-        foreignKey = @ForeignKey(name = "book_record")
-    )
-    private Book book;
+    private Integer bookId;
 
     /* ------------------ Other Columns ------------------ */
 
@@ -47,4 +41,7 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
+    
+    @Column(name = "fine_paid")
+    private Integer finePaid;
 }

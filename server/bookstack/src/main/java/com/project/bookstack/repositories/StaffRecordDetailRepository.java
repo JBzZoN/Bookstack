@@ -12,7 +12,7 @@ public interface StaffRecordDetailRepository extends JpaRepository<RecordDetail,
 
     List<RecordDetail> findByRecord_RecordId(Integer recordId);
 
-    List<RecordDetail> findByBook_BookId(Long bookId);
+    List<RecordDetail> findByBookId(Long bookId);
 
     List<RecordDetail> findByStatus(String status);
 }

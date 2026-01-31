@@ -158,6 +158,8 @@ public class StaffService {
         // Staff reference (NO DB HIT)
         Staff staff = staffDetailsRepository.findById(rentRenewReturnRequestDTO.getStaffId()).get();
         record.setStaff(staff);
+        
+        System.out.println(rentRenewReturnRequestDTO);
 
         record.setDate(LocalDate.now());
 
@@ -169,13 +171,11 @@ public class StaffService {
 
             RecordDetail detail = new RecordDetail();
             detail.setRecord(record);
-
-            // Book reference (NO DB HIT)
-            Book book = staffBookRepository.findById(r.getBookId()).get();
-            detail.setBook(book);
-
+            
+            detail.setBookId(r.getBookId());
             detail.setStatus(r.getStatus());
             detail.setTotalCopies(r.getCopies());
+            detail.setFinePaid(0);
 
             if ("Rent".equalsIgnoreCase(r.getStatus())) {
                 detail.setDueDate(LocalDate.now().plusDays(14));
