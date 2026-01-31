@@ -100,6 +100,7 @@ CREATE TABLE IF NOT EXISTS `bookstack`.`staff_table` (
   `user_id` INT,
   `salary` FLOAT NULL,
   `date_hired` DATE NULL,
+  `status` VARCHAR(10),
   PRIMARY KEY (`user_id`)
   -- ,
   -- CONSTRAINT `staff_user`
@@ -146,7 +147,7 @@ CREATE TABLE IF NOT EXISTS bookstack.record_detail_table (
   status CHAR(10),
   total_copies INT,
   due_date DATE,
-  fine_paid BOOLEAN,
+  returned INT,
 
   INDEX idx_record_id (record_id),
   INDEX idx_book_id (book_id),
@@ -254,11 +255,11 @@ INSERT INTO member_table (user_id, membership_type, member_start, member_end) VA
 (7, 'Premium', '2022-03-01', '2023-02-28'),
 (8, 'Premium', '2022-02-01', '2023-02-21');
 
-INSERT INTO staff_table (user_id, salary, `date_hired`) VALUES
-(4, 35000, '2020/06/15'),
-(5, 40000, '2019/04/10'),
-(9, 42000, '2021/09/01'),
-(14,39000,'2022-02-15');
+INSERT INTO staff_table (user_id, salary, `date_hired`, status) VALUES
+(4, 35000, '2020/06/15', 'active'),
+(5, 40000, '2019/04/10', 'inactive'),
+(9, 42000, '2021/09/01', 'inactive'),
+(14,39000,'2022-02-15', 'active');
 
 
 -- =========================
@@ -357,14 +358,14 @@ INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
 (01, 09, 06, '2025-05-20'),
 (02, 04, 07, '2025-06-10');
 
-INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date, fine_paid) VALUES
-(01, 01, 'Rent', 01, 1, '2025-01-20', true),
-(02, 02, 'Rent', 02, 1, '2025-02-15', true),
-(03, 03, 'Returned', 03, 1, '2025-03-22', false),
-(04, 04, 'Rent', 04, 1, '2025-04-15', true),
-(05, 05, 'Rent', 05, 2, '2025-05-20', false),
-(06, 06, 'Returned', 06, 1, '2025-05-28', true),
-(07, 07, 'Rent', 07, 1, '2025-06-18', true);
+INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date, returned) VALUES
+(01, 01, 'Rent', 01, 1, '2025-01-20', 1),
+(02, 02, 'Rent', 02, 1, '2025-02-15', 1),
+(03, 03, 'Returned', 03, 1, '2025-03-22', 0),
+(04, 04, 'Rent', 04, 1, '2025-04-15', 1),
+(05, 05, 'Rent', 05, 2, '2025-05-20', 0),
+(06, 06, 'Returned', 06, 1, '2025-05-28', 1),
+(07, 07, 'Rent', 07, 1, '2025-06-18', 1);
 
 INSERT INTO member_table (user_id,membership_type,member_start,member_end)
 VALUES

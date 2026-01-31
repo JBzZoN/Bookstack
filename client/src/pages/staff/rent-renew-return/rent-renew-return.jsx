@@ -130,11 +130,22 @@ function RentRenewReturn() {
         return;
       }else {
         if(a.recordType=="Rent") {
-          
+
+          // check if that number of books are available in book_table
+
+          // reduce number of books remaining (- copies) in book_table
+
+
         }else if(a.recordType == "Renew") {
 
+          // do sth with date
+
         }else if(a.recordType == "Return") {
-          
+
+          // increase number of books available (+ copies)
+
+          // do sth with fine
+
         }
       }
     }
