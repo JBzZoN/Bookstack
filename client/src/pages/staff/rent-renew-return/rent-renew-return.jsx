@@ -318,14 +318,6 @@ function RentRenewReturn() {
 
         }else if(a.recordType == "Returned") {
 
-          // check if return count is valid >= 0
-
-          // increase number of books available (+ copies)
-          // reduce in member book table
-          // set returned to 1
-
-          // reduce return count by number of copies returned
-
         }
       }
     }
