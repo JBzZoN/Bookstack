@@ -20,7 +20,7 @@ public interface StaffRecordDetailRepository extends JpaRepository<RecordDetail,
 
     List<RecordDetail> findByStatus(String status);
 
-    @Query("select new com.project.bookstack.dto.DueBookDto(r.dueDate, r.totalCopies) from RecordDetail r where r.record.member.userId=:memberId"
+    @Query("select new com.project.bookstack.dto.DueBookDto(r.dueDate, r.totalCopies, r.bookId) from RecordDetail r where r.record.member.userId=:memberId"
     		+ " and r.dueDate < :now and r.returned=0 and r.status='Rent'")
 	List<DueBookDto> getFineDetails(@Param("memberId") Integer memberId,@Param("now") LocalDate now);
 }

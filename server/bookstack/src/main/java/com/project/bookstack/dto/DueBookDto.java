@@ -12,4 +12,5 @@ import lombok.NoArgsConstructor;
 public class DueBookDto {
 	LocalDate dueDate;
 	Integer numberOfCopies;
+	Integer bookId;
 }

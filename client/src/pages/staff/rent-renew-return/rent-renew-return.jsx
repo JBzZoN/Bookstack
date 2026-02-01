@@ -118,6 +118,58 @@ function RentRenewReturn() {
       return;
     }
 
+    // check if that member is on fine if its on fine then display the fine and open a payment gateway staff will ask member to pay fine
+    const response = await axios.post("http://localhost:7070/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+    const FINE_PER_DAY = 5;
+    const today = new Date();
+
+    let fineVar = 0;
+
+    for (let a of response.data) {
+      const dueDate = new Date(a.dueDate);
+
+      // calculate difference in days
+      const diffTime = today - dueDate;
+      const daysOverdue = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      if (daysOverdue > 0) {
+        fineVar += daysOverdue * FINE_PER_DAY * a.numberOfCopies;
+      }
+    }
+
+    console.log(fineVar)
+    console.log(response.data)
+
+    if(fineVar > 0) {
+        let fineRows = [];
+
+        for(let a of response.data) {
+
+          const response = await axios.post("http://localhost:7070/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          console.log(response.data)
+          fineRows.push({
+          recordType: "Return",
+          onBookSearch: false,
+          searchBookResults: [],
+          searchBookBarOn: false,
+          searchBookString: "",
+          searchResultBook: response.data[0],
+          numberOfCopies: a.numberOfCopies
+          })
+        }
+
+        setRows(fineRows)
+      }
+
+    setFine(fineVar)
+    if(fineVar > 0 && finePaid == false) {
+      setFinePaid(false)
+      toast.warning("Fine unpaid")
+      return;
+    }
+
+
     for(let a of rows) {
       if(a.searchResultBook == null) {
         toast.error("No book selected")
@@ -169,8 +221,49 @@ function RentRenewReturn() {
     // check if that member is on fine if its on fine then display the fine and open a payment gateway staff will ask member to pay fine
     const response = await axios.post("http://localhost:7070/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-    setFine(response.data)
-    if(response.data > 0 && finePaid == false) {
+    const FINE_PER_DAY = 5;
+    const today = new Date();
+
+    let fineVar = 0;
+
+    for (let a of response.data) {
+      const dueDate = new Date(a.dueDate);
+
+      // calculate difference in days
+      const diffTime = today - dueDate;
+      const daysOverdue = Math.floor(diffTime / (1000 * 60 * 60 * 24));
+
+      if (daysOverdue > 0) {
+        fineVar += daysOverdue * FINE_PER_DAY * a.numberOfCopies;
+      }
+    }
+
+    console.log(fineVar)
+    console.log(response.data)
+
+    if(fineVar > 0) {
+        let fineRows = [];
+
+        for(let a of response.data) {
+
+          const response = await axios.post("http://localhost:7070/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          console.log(response.data)
+          fineRows.push({
+          recordType: "Return",
+          onBookSearch: false,
+          searchBookResults: [],
+          searchBookBarOn: false,
+          searchBookString: "",
+          searchResultBook: response.data[0],
+          numberOfCopies: a.numberOfCopies
+          })
+        }
+
+        setRows(fineRows)
+      }
+
+    setFine(fineVar)
+    if(fineVar > 0 && finePaid == false) {
       setFinePaid(false)
       toast.warning("Fine unpaid")
       return;
@@ -207,8 +300,10 @@ function RentRenewReturn() {
           // reduce number of books remaining (- copies) in book_table
           // by default returned is 0
 
-          // UNCOMMENT
+          // UNCOMMENT 1
           // const response3 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+          const response4 = await axios.post("http://localhost:7070/book/whole-rent-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           // find if record already present in member book table
             // if already present then update the count and remove it from "output"
@@ -217,8 +312,6 @@ function RentRenewReturn() {
           // reduce rent_count by one(member_table)
 
           // reduce rent count by number of copies rented
-
-          // do all these with
 
         }else if(a.recordType == "Renew") {
 
@@ -386,11 +479,16 @@ function RentRenewReturn() {
 
         </td>
         <td>
-          <div className="form-floating mb-3">
-            <input type="number" className="form-control" id="floatingInput" placeholder="name@example.com" 
-            onChange={e=>setNumberOfCopies(e.target.value, i)}/>
-            <label htmlFor="floatingInput">Count</label>
-          </div>
+          <div className="mb-3">
+          <input
+            type="number"
+            className="form-control"
+            placeholder="Count"
+            value={rows[i].numberOfCopies === 0 ? "" : rows[i].numberOfCopies}
+            onChange={e => setNumberOfCopies(e.target.value, i)}
+          />
+        </div>
+
         </td>
       </tr>)
     } 
@@ -520,7 +618,7 @@ return (
         className="btn btn-outline-success px-4"
         onClick={onVerify}
       >
-        Verify Renew and Return
+        Verify Fine, Renew, and Return
       </button>
 
       <button

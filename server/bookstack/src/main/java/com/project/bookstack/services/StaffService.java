@@ -240,15 +240,10 @@ public class StaffService {
 		return false;
 	}
 
-	public Integer getFineDetails(MemberIdDto memberIdDto) {
+	public List<DueBookDto> getFineDetails(MemberIdDto memberIdDto) {
 		
-		int fine =  0;
-		
-		for(DueBookDto a : staffRecordDetailRepository.getFineDetails(memberIdDto.getMemberId(), LocalDate.now())) {
-			fine += a.getNumberOfCopies()*5*(ChronoUnit.DAYS.between(a.getDueDate(), LocalDate.now()));
-		}
-		
-		return fine;
+	
+		return staffRecordDetailRepository.getFineDetails(memberIdDto.getMemberId(), LocalDate.now());
 	}
 
 	

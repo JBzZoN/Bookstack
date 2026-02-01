@@ -54,7 +54,7 @@ public class StaffController {
 	}
 	
 	@PostMapping("/fine")
-	public ResponseEntity<Integer> getFineDetails(@RequestBody MemberIdDto memberIdDto) {
+	public ResponseEntity<?> getFineDetails(@RequestBody MemberIdDto memberIdDto) {
 		
 		
 		return ResponseEntity.ok(staffService.getFineDetails(memberIdDto));

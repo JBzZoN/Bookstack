@@ -19,6 +19,54 @@ const staffPool = mysql2.createPool({
 
 const router = express.Router();
 
+router.post("/bookFromId", (request, res) => {
+
+  const {bookId} = request.body;
+
+  const sql = `
+    SELECT
+      book_id,
+      isbn,
+      title,
+      author,
+      description,
+      book_image,
+      publisher,
+      number_of_copies,
+      number_of_copies_remaining
+    FROM book_table
+    WHERE
+      book_id=?
+    LIMIT 5
+  `;
+
+  const values = [
+    bookId
+  ];
+
+  staffPool.query(sql, values, (error, rows) => {
+    if (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
+
+    // camelCase mapping (important for frontend)
+    const mapped = rows.map(b => ({
+      bookId: b.book_id,
+      isbn: b.isbn,
+      title: b.title,
+      author: b.author,
+      description: b.description,
+      bookImage: b.book_image,
+      publisher: b.publisher,
+      numberOfCopies: b.number_of_copies,
+      numberOfCopiesRemaining: b.number_of_copies_remaining
+    }));
+
+    res.status(200).send(mapped);
+  });
+});
+
 router.post("/id", (req, res) => {
   const {bookId} = req.body;
   const sql = "select number_of_copies_remaining from book_table where book_id = ?"
