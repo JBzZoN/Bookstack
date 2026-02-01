@@ -32,10 +32,9 @@
 
 /* Book image */
 .book-image-lol {
-    height: 170px;
-    width: 130px;
+    height: 220px;
+    width: 200px;
     border-radius: 12px;
-    object-fit: cover;
     border: 5px solid #ffffff;
     outline: 3px solid #4f0bc5;
     background: #f4f4f4;

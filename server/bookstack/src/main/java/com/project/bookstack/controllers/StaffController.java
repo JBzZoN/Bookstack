@@ -13,8 +13,12 @@ import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookGenreRequestDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
+import com.project.bookstack.dto.DueBookDto;
 import com.project.bookstack.dto.EmailDTO;
+import com.project.bookstack.dto.MemberIdDto;
+import com.project.bookstack.dto.RenewRequestDTO;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
+import com.project.bookstack.dto.RentRequestDTO;
 import com.project.bookstack.dto.Search;
 import com.project.bookstack.dto.UserDTO;
 import com.project.bookstack.entities.Member;
@@ -34,11 +38,26 @@ public class StaffController {
 	
 	public final AuthorizationClient authorizationClient;
 	
-	// BOOKS RELATED
+	@PostMapping("/rent-count/valid")
+	public ResponseEntity<?> rentValidation(@RequestBody RentRequestDTO rentRequestDTO) {
+		return ResponseEntity.ok(staffService.rentValidation(rentRequestDTO));
+	}
+	
+	@PostMapping("/renew-count/valid")
+	public ResponseEntity<?> renewValidation(@RequestBody RenewRequestDTO renewRequestDTO) {
+		return ResponseEntity.ok(staffService.renewValidation(renewRequestDTO));
+	}
 	
 	@GetMapping("/books")
 	public List<BookDto> getAllBooks() {
 		return staffService.getAllBooks();
+	}
+	
+	@PostMapping("/fine")
+	public ResponseEntity<Integer> getFineDetails(@RequestBody MemberIdDto memberIdDto) {
+		
+		
+		return ResponseEntity.ok(staffService.getFineDetails(memberIdDto));
 	}
 	
 	@GetMapping("/members")

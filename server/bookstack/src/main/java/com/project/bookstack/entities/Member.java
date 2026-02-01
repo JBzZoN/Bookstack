@@ -31,4 +31,11 @@ public class Member {
 
     @Column(name = "member_end")
     private LocalDate memberEnd;
+    
+    @Column(name = "rent_count")
+    private Integer rentCount;
+    
+    @Column(name = "renew_count")
+    private Integer renewCount;
+    
 }

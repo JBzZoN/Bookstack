@@ -59,11 +59,9 @@ USE `bookstack` ;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `bookstack`.`membership_data_table` (
   `membership_type` CHAR(8) NOT NULL,
-  `borrow_limit` INT NULL,
+  `rent_limit` INT NULL,
   `borrow_period` INT NULL,
   `renewal_limit` INT NULL,
-  `reservation_limit` INT NULL,
-  `access_to_new` TINYINT NULL,
   monthly_cost int,
   yearly_cost int,
   PRIMARY KEY (`membership_type`))
@@ -78,6 +76,8 @@ CREATE TABLE IF NOT EXISTS `bookstack`.`member_table` (
   `membership_type` CHAR(8) NULL,
   `member_start` DATE NULL,
   `member_end` DATE NULL,
+  `renew_count` INT NOT NULL DEFAULT 0,
+  `rent_count` INT NOT NULL DEFAULT 0,
   PRIMARY KEY (`user_id`),
   INDEX `membership_type_idx` (`membership_type` ASC) VISIBLE,
   -- CONSTRAINT `member_user`
@@ -226,11 +226,11 @@ SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS;
 -- MySQL Workbench Forward Engineering
 
 INSERT INTO membership_data_table 
-(membership_type, borrow_limit, borrow_period, `renewal_limit`, `reservation_limit`, `access_to_new`, monthly_cost, yearly_cost)
+(membership_type, rent_limit, borrow_period, `renewal_limit`, monthly_cost, yearly_cost)
 VALUES
-('Basic', 3, 7, 1, 0, 0, 50, 500),
-('Premium', 7, 14, 5, 3, 1, 300, 3000),
-('Standard', 5, 10, 2, 2, 0, 150, 1500);
+('Basic', 3, 7, 1, 50, 500),
+('Premium', 7, 14, 5, 300, 3000),
+('Standard', 5, 10, 2, 150, 1500);
 
 -- INSERT INTO user_table (name, email, phone, address, dob, username, password, role_type, user_id) VALUES
 -- ('Alice Johnson', 'alice.johnson@example.com', '9876543210', '12 Green St, Trivandrum', '1998-04-15', 'alicej', 'alice123', 'Member', 1),

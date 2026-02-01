@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,17 +27,23 @@ import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookGenreRequestDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
+import com.project.bookstack.dto.DueBookDto;
 import com.project.bookstack.dto.EmailDTO;
+import com.project.bookstack.dto.MemberIdDto;
+import com.project.bookstack.dto.RenewRequestDTO;
 import com.project.bookstack.dto.RentRenewReturnRecordDTO;
 import com.project.bookstack.dto.RentRenewReturnRequestDTO;
+import com.project.bookstack.dto.RentRequestDTO;
 import com.project.bookstack.dto.UserDTO;
 import com.project.bookstack.entities.Book;
 import com.project.bookstack.entities.Member;
+import com.project.bookstack.entities.MembershipData;
 import com.project.bookstack.entities.Record;
 import com.project.bookstack.entities.RecordDetail;
 import com.project.bookstack.entities.Staff;
 import com.project.bookstack.repositories.StaffBookRepository;
 import com.project.bookstack.repositories.StaffDetailsRepository;
+import com.project.bookstack.repositories.StaffMemberDataRepository;
 import com.project.bookstack.repositories.StaffMemberRepository;
 import com.project.bookstack.repositories.StaffRecordDetailRepository;
 import com.project.bookstack.repositories.StaffRecordRepository;
@@ -60,6 +67,8 @@ public class StaffService {
 	private final StaffRecordDetailRepository staffRecordDetailRepository;
 	
 	private final AuthorizationClient authorizationClient;
+	
+	private final StaffMemberDataRepository staffMemberDataRepository;
 	
 	private final KafkaTemplate<String, EmailDTO> kafkaTemplate;
 	
@@ -188,6 +197,58 @@ public class StaffService {
 
 	public void sendEmail(String email) {
 		kafkaTemplate.send("email-topic", new EmailDTO(email, null));
+	}
+
+	public Boolean rentValidation(RentRequestDTO rentRequestDTO) {
+		// TODO Auto-generated method stub
+		// use member id to get the member details(rent count + membershipType)
+		Member b = staffMemberRepository.findById(rentRequestDTO.getMemberId()).get();
+		// use find to find the membership rent limit
+		MembershipData c = staffMemberDataRepository.findById(b.getMembershipData().getMembershipType()).get();
+		
+
+		System.out.println(rentRequestDTO);
+		System.out.println(b);
+		System.out.println(c);
+		
+		// rentSelected + rentCount <= rent limit, return true
+		
+		if(rentRequestDTO.getRentSelected() + b.getRentCount() <= c.getBorrowLimit()) {
+			return true;
+		}
+		
+		// else return false
+		
+		return false;
+	}
+
+	public Boolean renewValidation(RenewRequestDTO renewRequestDTO) {
+		// TODO Auto-generated method stub
+		// use member id to get the member details(rent count + membershipType)
+		Member b = staffMemberRepository.findById(renewRequestDTO.getMemberId()).get();
+		// use find to find the membership rent limit
+		MembershipData c = staffMemberDataRepository.findById(b.getMembershipData().getMembershipType()).get();
+	
+		// rentSelected + rentCount <= rent limit, return true
+		
+		if(renewRequestDTO.getRenewSelected() + b.getRenewCount() <= c.getRenewalLimit()) {
+			return true;
+		}
+		
+		// else return false
+		
+		return false;
+	}
+
+	public Integer getFineDetails(MemberIdDto memberIdDto) {
+		
+		int fine =  0;
+		
+		for(DueBookDto a : staffRecordDetailRepository.getFineDetails(memberIdDto.getMemberId(), LocalDate.now())) {
+			fine += a.getNumberOfCopies()*5*(ChronoUnit.DAYS.between(a.getDueDate(), LocalDate.now()));
+		}
+		
+		return fine;
 	}
 
 	

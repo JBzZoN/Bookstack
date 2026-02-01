@@ -11,6 +11,10 @@ function RentRenewReturn() {
   const STAFF_ID = 4;
   // ⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
+  // member fine
+  const [fine, setFine] = useState(0)
+  const [finePaid, setFinePaid] = useState(false)
+
   // member search
   const [onSearch, setOnSearch] = useState(false)
   const [searchResults, setSearchResults] = useState([])
@@ -21,6 +25,7 @@ function RentRenewReturn() {
   const [searchResultUser, setSearchResultUser] = useState(null)
 
   const onSearchMember = (e) => {
+    setFinePaid(false)
     setSearchString(e.target.value)
     const value = e.target.value
     if (value.length < 2 || onSearch == true) return;
@@ -113,12 +118,6 @@ function RentRenewReturn() {
       return;
     }
 
-    const output = {
-      staffId: STAFF_ID,
-      memberId: searchResultUser.userId,
-      records: []
-    } 
-
     for(let a of rows) {
       if(a.searchResultBook == null) {
         toast.error("No book selected")
@@ -166,6 +165,17 @@ function RentRenewReturn() {
       return;
     }
 
+    
+    // check if that member is on fine if its on fine then display the fine and open a payment gateway staff will ask member to pay fine
+    const response = await axios.post("http://localhost:7070/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+    setFine(response.data)
+    if(response.data > 0 && finePaid == false) {
+      setFinePaid(false)
+      toast.warning("Fine unpaid")
+      return;
+    }
+
     const output = {
       staffId: STAFF_ID,
       memberId: searchResultUser.userId,
@@ -186,10 +196,9 @@ function RentRenewReturn() {
         if(a.recordType=="Rent") {
           
           // check if that number of books are available in book_table
-          const response = await axios.post("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response2 = await axios.post("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-          const {noOfCopiesRemaining} = response.data
-
+          const {noOfCopiesRemaining} = response2.data
 
           if(a.numberOfCopies > noOfCopiesRemaining) {
             toast.warning("Only " + noOfCopiesRemaining + " copies are present for the book '" + a.searchResultBook.title + "'")
@@ -197,23 +206,45 @@ function RentRenewReturn() {
           }
           // reduce number of books remaining (- copies) in book_table
           // by default returned is 0
-          const response2 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
+          // UNCOMMENT
+          // const response3 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+          // find if record already present in member book table
+            // if already present then update the count and remove it from "output"
+            // if not present add it as a new record
+
+          // reduce rent_count by one(member_table)
+
+          // reduce rent count by number of copies rented
+
+          // do all these with
 
         }else if(a.recordType == "Renew") {
 
-          // on renew or return disable the copies entry bar and fetch and put the value there
-          // there is no status as renew
+          // on renew or return disable the copies entry bar and fetch and put the value there when staff clicks verify
+          // there is no status as renew in record_detail_table
+
           // just increment the due date
 
-        }else if(a.recordType == "Return") {
+          // reduce renew count by number of copies renewed
+
+        }else if(a.recordType == "Returned") {
+
+          // check if return count is valid >= 0
 
           // increase number of books available (+ copies)
+          // reduce in member book table
           // set returned to 1
+
+          // reduce return count by number of copies returned
 
         }
       }
     }
+
+    let renewSelected = 0;
+    let rentSelected=0;
 
     rows.forEach(e => {
       if(e.recordType == "Return") {
@@ -228,8 +259,27 @@ function RentRenewReturn() {
           bookId: e.searchResultBook.bookId,
           copies: e.numberOfCopies
         })
+        rentSelected+= Number.parseInt(e.numberOfCopies);
+      }else {
+        renewSelected+= Number.parseInt(e.numberOfCopies);
       }
     })
+
+    // check if rent count is valid rent count(member table) + num of copies rent in this record <= rent limit(membership data table)
+    const response1 = await axios.post("http://localhost:7070/staff/rent-count/valid", {memberId: searchResultUser.userId, rentSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+    if(response1.data == false) {
+      toast.error("Member cannot rent that many books")
+      return;
+    }
+
+    // check if renew count is valid renew count(member table) + num of copies renew in this record <= renew limit(membership data table)
+    const response2 = await axios.post("http://localhost:7070/staff/renew-count/valid", {memberId: searchResultUser.userId, renewSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+    if(response2.data == false) {
+      toast.error("Member cannot renew that many books")
+      return;
+    }
     console.log(output)
 
     // const response = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
@@ -338,9 +388,7 @@ function RentRenewReturn() {
         <td>
           <div className="form-floating mb-3">
             <input type="number" className="form-control" id="floatingInput" placeholder="name@example.com" 
-            disabled={rows[i].recordType !== "Rent"}
-            onChange={e=>setNumberOfCopies(e.target.value, i)}
-            value={rows[i].recordType !== "Rent"? "" : rows[i].numberOfCopies}/>
+            onChange={e=>setNumberOfCopies(e.target.value, i)}/>
             <label htmlFor="floatingInput">Count</label>
           </div>
         </td>
@@ -402,6 +450,35 @@ return (
         
     </div>
 
+    {fine > 0 && (
+  <div className="card soft-card mb-4 border-warning">
+    <div className="card-body d-flex justify-content-between align-items-center">
+      
+      <div>
+        <h5 className="mb-1 text-warning">⚠ Fine Pending</h5>
+        <p className="mb-0">
+          Amount to be paid: <strong>₹{fine}</strong>
+        </p>
+      </div>
+
+      <div className="form-check">
+        <input
+          className="form-check-input"
+          type="checkbox"
+          id="finePaidCheck"
+          checked={finePaid}
+          onChange={(e) => setFinePaid(e.target.checked)}
+        />
+        <label className="form-check-label fw-semibold" htmlFor="finePaidCheck">
+          Fine Paid
+        </label>
+      </div>
+
+    </div>
+  </div>
+)}
+
+
     {/* ACTION BUTTONS */}
     <div className="d-flex justify-content-between mb-3">
       <button
@@ -443,7 +520,7 @@ return (
         className="btn btn-outline-success px-4"
         onClick={onVerify}
       >
-        Verify
+        Verify Renew and Return
       </button>
 
       <button
