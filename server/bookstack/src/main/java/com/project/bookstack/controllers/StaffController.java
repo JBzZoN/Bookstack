@@ -106,8 +106,8 @@ public class StaffController {
 	}
 	
 	@PostMapping("/record")
-	public void uploadRecord(@RequestBody RentRenewReturnRequestDTO rentRenewReturnRequestDTO) {
-		staffService.uploadRecord(rentRenewReturnRequestDTO);
+	public void uploadRecord(@RequestBody RentRenewReturnRequestDTO rentRenewReturnRequestDTO, @RequestHeader("X-User-Id") Integer userId) {
+		staffService.uploadRecord(rentRenewReturnRequestDTO, userId);
 	}
 
 	@PostMapping("/email")

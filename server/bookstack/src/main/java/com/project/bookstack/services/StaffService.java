@@ -167,7 +167,7 @@ public class StaffService {
 		return  dtoList;
 	}
 
-	public void uploadRecord(RentRenewReturnRequestDTO rentRenewReturnRequestDTO) {
+	public void uploadRecord(RentRenewReturnRequestDTO rentRenewReturnRequestDTO, Integer userId) {
 		
 		Record record = new Record();
 		if(rentRenewReturnRequestDTO.getRecords().size() == 0) {
@@ -180,7 +180,7 @@ public class StaffService {
         record.setMember(member);
 
         // Staff reference (NO DB HIT)
-        Staff staff = staffDetailsRepository.findById(rentRenewReturnRequestDTO.getStaffId()).get();
+        Staff staff = staffDetailsRepository.findById(userId).get();
         record.setStaff(staff);
         
         System.out.println(rentRenewReturnRequestDTO);
