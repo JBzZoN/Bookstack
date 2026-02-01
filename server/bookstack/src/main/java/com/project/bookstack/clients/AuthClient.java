@@ -12,7 +12,7 @@ import java.util.Map;
 )
 public interface AuthClient {
 
-    @PostMapping("/auth/register")  
+    @PostMapping("auth/register")  
     Integer createUser(@RequestBody Map<String, Object> registerData);
     
 }

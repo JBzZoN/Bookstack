@@ -33,12 +33,6 @@ public class PaymentController {
         );
     }
     
-//    @Override
-//    public void verifySignature(PaymentSuccessRequestDTO req) {
-//        // TEMP BYPASS FOR POSTMAN TEST
-//        System.out.println("Signature verification bypassed for testing");
-//    }
-    
     /* --------------------------------
        2️⃣ PREVIEW AMOUNT
        -------------------------------- */

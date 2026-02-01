@@ -4,9 +4,9 @@ const API_BASE_URL = "http://localhost:7070";
 
 const api = axios.create({
   baseURL: API_BASE_URL,
-  // headers: {
-  //   Authorization: `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
-  // }
+  headers: {
+    Authorization: `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+  }
 });
 
 export const allBooksCardData = () => {

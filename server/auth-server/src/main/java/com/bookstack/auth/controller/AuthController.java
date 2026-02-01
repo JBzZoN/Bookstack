@@ -92,41 +92,31 @@ public class AuthController {
 		authService.migratePasswordsToBCrypt();
 	}
 	
-	@RestController
-	@RequestMapping("/auth/")
-	@RequiredArgsConstructor
-	public class InternalAuthController {
+	@PostMapping("/register")
+    public Integer registerAfterPayment(
+            @RequestBody UserCreateRequestDTO request) {
 
-	    private final AuthService authService;
-	    private final PasswordEncoder passwordEncoder;
+        if (authService.existsByUsername(request.username())) {
+            throw new RuntimeException("Username already exists");
+        }
 
-	    @PostMapping("/register")
-	    public Integer registerAfterPayment(
-	            @RequestBody UserCreateRequestDTO request) {
+        if (authService.existsByEmail(request.email())) {
+            throw new RuntimeException("Email already exists");
+        }
 
-	        if (authService.existsByUsername(request.username())) {
-	            throw new RuntimeException("Username already exists");
-	        }
+        User user = new User();
+        user.setName(request.name());
+        user.setEmail(request.email());
+        user.setPhone(request.phone());
+        user.setAddress(request.address());
+        user.setDob(request.dob());
+        user.setUsername(request.username());
+        user.setPassword(passwordEncoder.encode(request.password()));
+        user.setRoleType("Member");
 
-	        if (authService.existsByEmail(request.email())) {
-	            throw new RuntimeException("Email already exists");
-	        }
+        User savedUser = authService.save(user);
 
-	        User user = new User();
-	        user.setName(request.name());
-	        user.setEmail(request.email());
-	        user.setPhone(request.phone());
-	        user.setAddress(request.address());
-	        user.setDob(request.dob());
-	        user.setUsername(request.username());
-	        user.setPassword(passwordEncoder.encode(request.password()));
-	        user.setRoleType("Member");
-
-	        User savedUser = authService.save(user);
-
-	        return savedUser.getUserId();
-	    }
-
-	}
+        return savedUser.getUserId();
+    }
 	
 }

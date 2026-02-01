@@ -26,17 +26,13 @@ public class SecurityConfiguration {
 	// Real filtering occurs in the api gateway security filter
 	@Bean
 	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-
 	    http
-	        .csrf(csrf -> csrf.disable())
+	        .csrf(csrf -> csrf.disable()) // disable csrf for api calls
+	        .cors(cors -> cors.configure(http)) // ensure cors is handled
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/auth/**").permitAll()
+	            .requestMatchers("/auth/**").permitAll() // allow all auth endpoints
 	            .anyRequest().authenticated()
-	        )
-	        .sessionManagement(session ->
-	            session.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 	        );
-
 	    return http.build();
 	}
 	

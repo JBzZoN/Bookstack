@@ -29,6 +29,7 @@ public class SecurityConfiguration {
 		// URL authorization
 		.authorizeHttpRequests(requests -> requests
 			.requestMatchers("/auth/**", "/staff/image/**","/payment/**").permitAll()
+			.requestMatchers("/auth/register").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
 			.requestMatchers("/staff/**").hasAuthority("Librarian")

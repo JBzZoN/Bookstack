@@ -2,26 +2,36 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../../components/Member/Footer/Footer";
 import logo from "../../../assets/logo.png";
-import api from "../../../api/member.js";
+import api from "../../../api/member"; // plain axios instance
 
 function OrderSummary() {
   const navigate = useNavigate();
 
+  /* =======================
+     STATE
+     ======================= */
   const [amount, setAmount] = useState(null);
   const [rzpConfig, setRzpConfig] = useState(null);
   const [error, setError] = useState("");
 
+  /* =======================
+     READ LOCAL STORAGE
+     ======================= */
   const selectedPlan = JSON.parse(localStorage.getItem("selectedPlan"));
   const registerData = JSON.parse(localStorage.getItem("registerData"));
+
+  // 🔑 SINGLE SOURCE OF TRUTH
+  const membershipType =
+    selectedPlan?.membershipType || selectedPlan?.type;
 
   /* =======================
      SAFETY CHECK
      ======================= */
   useEffect(() => {
-    if (!selectedPlan || !registerData) {
+    if (!selectedPlan || !registerData || !membershipType) {
       navigate("/membership");
     }
-  }, [navigate, selectedPlan, registerData]);
+  }, [navigate, selectedPlan, registerData, membershipType]);
 
   /* =======================
      FETCH RAZORPAY CONFIG
@@ -39,19 +49,19 @@ function OrderSummary() {
      FETCH FINAL AMOUNT
      ======================= */
   useEffect(() => {
-    if (!selectedPlan) return;
+    if (!membershipType) return;
 
     api
       .post("/payment/preview", {
         purpose: "BUY_MEMBERSHIP",
-        membershipType: selectedPlan.membershipType,
+        membershipType: membershipType,
         billing: selectedPlan.billing
       })
       .then(res => setAmount(res.data.amount))
       .catch(() =>
-        setError("Unable to fetch payment details.")
+        setError("Unable to fetch payment amount.")
       );
-  }, [selectedPlan]);
+  }, [membershipType, selectedPlan]);
 
   /* =======================
      START PAYMENT
@@ -62,7 +72,7 @@ function OrderSummary() {
     try {
       const res = await api.post("/payment/create-order", {
         purpose: "BUY_MEMBERSHIP",
-        membershipType: selectedPlan.membershipType,
+        membershipType: membershipType,
         billing: selectedPlan.billing
       });
 
@@ -76,10 +86,7 @@ function OrderSummary() {
      RAZORPAY CHECKOUT
      ======================= */
   const openRazorpay = (orderId, amount) => {
-    if (!rzpConfig) {
-      setError("Payment configuration missing.");
-      return;
-    }
+    if (!rzpConfig) return;
 
     const options = {
       key: rzpConfig.keyId,
@@ -89,14 +96,11 @@ function OrderSummary() {
       description: "BookStack Membership",
       order_id: orderId,
 
-      handler: function (response) {
-        handlePaymentSuccess(response);
-      },
+      handler: handlePaymentSuccess,
 
       modal: {
-        ondismiss: function () {
-          setError("Payment cancelled by user.");
-        }
+        ondismiss: () =>
+          setError("Payment cancelled by user.")
       },
 
       prefill: {
@@ -110,7 +114,7 @@ function OrderSummary() {
 
     const rzp = new window.Razorpay(options);
 
-    rzp.on("payment.failed", function () {
+    rzp.on("payment.failed", () => {
       setError("Payment failed. Please try again.");
     });
 
@@ -121,31 +125,43 @@ function OrderSummary() {
      PAYMENT SUCCESS
      ======================= */
   const handlePaymentSuccess = async (response) => {
-    try {
-      await api.post("/payment/success", {
-        razorpayPaymentId: response.razorpay_payment_id,
-        razorpayOrderId: response.razorpay_order_id,
-        razorpaySignature: response.razorpay_signature,
-        purpose: "BUY_MEMBERSHIP",
-        membershipType: selectedPlan.membershipType,
-        billing: selectedPlan.billing,
-        registerData
-      });
+  const membershipType =
+    selectedPlan.membershipType ||
+    selectedPlan.planType ||
+    selectedPlan.type;
 
-      localStorage.removeItem("selectedPlan");
-      localStorage.removeItem("registerData");
+  const payload = {
+    razorpayPaymentId: response.razorpay_payment_id,
+    razorpayOrderId: response.razorpay_order_id,
+    razorpaySignature: response.razorpay_signature,
+    membershipType,             
+    billing: selectedPlan.billing,
+    registerData
+  };
 
-      navigate("/payment-success");
-    } catch {
+  console.log("✅ PAYMENT SUCCESS PAYLOAD", payload);
+
+  try {
+      await api.post("/payment/success", payload);
+      localStorage.clear();
+      navigate("/login");
+    } catch (err) {
+      console.error("❌ PAYMENT SUCCESS ERROR", err.response?.data || err);
       setError("Payment successful but membership activation failed.");
     }
   };
 
+
+  /* =======================
+     UI
+     ======================= */
   return (
     <div className="body1 d-flex flex-column min-vh-100">
+
       <main className="flex-grow-1 d-flex align-items-center justify-content-center">
         <div className="container">
 
+          {/* LOGO */}
           <div className="d-flex justify-content-center align-items-center gap-2 mb-4">
             <img className="logo-img" src={logo} alt="logo" />
             <div className="logo-title">
@@ -154,16 +170,21 @@ function OrderSummary() {
             </div>
           </div>
 
+          {/* CARD */}
           <div className="row justify-content-center">
             <div className="col-lg-5 col-md-7 col-sm-10">
               <div className="content-card text-center">
 
                 <h3>Order Summary</h3>
-                <p>{selectedPlan.membershipType} Plan</p>
-                <p>₹{amount}</p>
-                <p className="text-secondary">Billed {selectedPlan.billing}</p>
+                <p>{membershipType} Plan</p>
+                <p className="fw-bold fs-4">₹{amount}</p>
+                <p className="text-secondary">
+                  Billed {selectedPlan.billing}
+                </p>
 
-                {error && <p className="text-danger mt-2">{error}</p>}
+                {error && (
+                  <p className="text-danger mt-2">{error}</p>
+                )}
 
                 <button
                   className="btn-outline w-100 mt-3"
