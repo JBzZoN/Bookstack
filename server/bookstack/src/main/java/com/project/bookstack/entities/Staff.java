@@ -3,10 +3,15 @@ package com.project.bookstack.entities;
 
 
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "staff_table", schema = "Bookstack")
+@Getter
+@Setter
 public class Staff {
 
     @Id

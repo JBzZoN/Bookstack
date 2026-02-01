@@ -1,6 +1,7 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -37,4 +38,7 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
+    
+    @Column(name="returned")
+    private Integer returned;
 }

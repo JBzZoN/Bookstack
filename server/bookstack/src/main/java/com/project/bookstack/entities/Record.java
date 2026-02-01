@@ -1,6 +1,7 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 
 @Entity
@@ -24,7 +25,7 @@ public class Record {
     )
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "staff_id",
         referencedColumnName = "user_id",

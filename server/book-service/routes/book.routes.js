@@ -1,5 +1,6 @@
 const express = require("express");
 const bookService = require("../services/book.service");
+const pool=require("../db/pool")
 
 const router = express.Router();
 
@@ -110,5 +111,27 @@ router.post("/might-liked-books/:bookId", async (req, res) => {
     res.status(500).json({ message: "Error fetching books" });
   }
 });
+
+
+router.get('/allbooks', (req, res) => {
+  try{
+    const sql = `SELECT * FROM book_table`
+    pool.query(sql, (error, data) => {
+        if(data){
+          console.log(data)
+          res.json(data)
+        }
+        else{
+          res.send(error)
+        }
+      
+      })
+    }catch(Error){
+      res.send(Error)
+    } 
+})
+
+
+
 
 module.exports = router;

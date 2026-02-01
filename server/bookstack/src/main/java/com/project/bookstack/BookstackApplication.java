@@ -7,6 +7,7 @@ import org.springframework.cloud.openfeign.EnableFeignClients;
 
 @SpringBootApplication
 @EnableFeignClients
+
 public class BookstackApplication {
 
 	public static void main(String[] args) {
