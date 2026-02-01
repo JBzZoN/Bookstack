@@ -34,9 +34,10 @@ function Membership() {
       monthly: 50,
       yearly: 500,
       features: [
-        "3 Book borrow limit",
-        "7 Day borrow period",
-        "No new book access",
+        "3 Book Rent Limit",
+        "7 Day Borrow Period",
+        "1 Book Renewal Limit",
+        "No New Book Access",
       ],
     },
     {
@@ -46,10 +47,10 @@ function Membership() {
       monthly: 300,
       yearly: 3000,
       features: [
-        "7 Book borrow limit",
-        "14 Day borrow period",
-        "3 Book reservations",
-        "Full access to new books",
+        "7 Book Rent Limit",
+        "14 Day Borrow Period",
+        "2 Book Renewal Limit",
+        "Full Access To New Books",
       ],
     },
     {
@@ -59,9 +60,10 @@ function Membership() {
       monthly: 150,
       yearly: 1500,
       features: [
-        "5 Book borrow limit",
-        "10 Day borrow period",
-        "2 Book reservations",
+        "5 Book Rent Limit",
+        "10 Day Borrow Period",
+        "2 Book Renewal Limit",
+        "No New Book Access"
       ],
     },
   ];
@@ -168,7 +170,6 @@ function Membership() {
                         localStorage.setItem("selectedPlan", JSON.stringify({
                           type: plan.title,          // Basic / Premium / Standard
                           billing: billing,          // monthly / yearly
-                          amount: billing === "monthly" ? plan.monthly : plan.yearly
                         }));
                         window.location.href = "/register";
                       }}

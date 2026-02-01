@@ -49,5 +49,15 @@ export const mightLikedBooksData = (id) => {
   return api.get(`/member/might-liked-books/${id}`);
 };
 
+export const currentlyBorrowedBooksData = () => {
+  return api.get("/member/currently-borrowed-books");
+};
+
+export const historyBorrowedBooksData = () => {
+  return api.get("/member/history-borrowed-books");
+};
+
+
+
 
 

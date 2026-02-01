@@ -5,6 +5,7 @@ import java.util.List;
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookDTO;
 import com.project.bookstack.dto.member.BookNameReturnDateDTO;
+import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
 
 public interface MemberService {
 
@@ -28,6 +29,8 @@ public interface MemberService {
 
 	List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId);
 
-	List<BookNameReturnDateDTO> getBookNameReturnDate();
+	List<BookNameReturnDateDTO> getBorrrowedBooksHistory();
+
+	List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks();
     
 }

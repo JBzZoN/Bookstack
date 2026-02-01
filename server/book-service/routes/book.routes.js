@@ -111,4 +111,15 @@ router.post("/might-liked-books/:bookId", async (req, res) => {
   }
 });
 
+router.post("/names-by-id", async (req, res) => {
+  try {
+    const bookIds = req.body;
+    const books = await bookService.getBookNamesByIds(bookIds);
+    res.json(books);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching books" });
+  }
+});
+
 module.exports = router;

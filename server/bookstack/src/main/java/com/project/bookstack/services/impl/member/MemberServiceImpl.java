@@ -1,8 +1,8 @@
 package com.project.bookstack.services.impl.member;
 
+import java.time.LocalDate;
+
 import java.util.List;
-
-
 import java.util.Map;
 import java.util.stream.Collectors;
 
@@ -12,7 +12,11 @@ import com.project.bookstack.clients.BookClientService;
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookCoreDTO;
 import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.dto.member.BookIdReturnDateDTO;
+import com.project.bookstack.dto.member.BookIdStartDueDatesDTO;
+import com.project.bookstack.dto.member.BookIdTitleDTO;
 import com.project.bookstack.dto.member.BookNameReturnDateDTO;
+import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
 import com.project.bookstack.dto.member.ReviewDTO;
 import com.project.bookstack.repositories.member.MemberRepository;
 import com.project.bookstack.services.member.MemberService;
@@ -371,19 +375,62 @@ public class MemberServiceImpl implements MemberService {
     }
     
     @Override
-    public List<BookNameReturnDateDTO> getBookNameReturnDate() {
-        Integer userId = 1; 
+    public List<BookNameReturnDateDTO> getBorrrowedBooksHistory() {
 
-        List<Integer> Ids = memberRepository.getBookIdsByUserId(userId);
+        Integer userId = 1;
 
-        Map<Integer, String> bookNamesMap = bookClientService.getBookNamesByIds(Ids);
+        List<BookIdReturnDateDTO> records =
+                memberRepository.getBookIdAndReturnDates(userId);
 
-        // 4. combine them into your DTO list
-        return memberBooks.stream().map(mb -> {
-            String name = bookNamesMap.get(mb.getBookId());
-            return new BookNameReturnDateDTO(name, mb.getReturnDate());
-        }).toList();
+        List<Integer> bookIds = records.stream()
+                .map(BookIdReturnDateDTO::bookId)
+                .toList();
+
+        Map<Integer, String> bookIdToTitle =
+                bookClientService.getBookNamesByIds(bookIds)
+                        .stream()
+                        .collect(Collectors.toMap(
+                                BookIdTitleDTO::bookId,
+                                BookIdTitleDTO::title
+                        ));
+
+        return records.stream()
+                .map(r -> new BookNameReturnDateDTO(
+                        bookIdToTitle.get(r.bookId()),
+                        r.returnDate()
+                ))
+                .toList();
     }
+    
+    @Override
+    public List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks() {
+
+        Integer userId = 1;
+
+        List<BookIdStartDueDatesDTO> records =
+                memberRepository.getBookIdBorrowAndReturnDates(userId);
+
+        List<Integer> bookIds = records.stream()
+                .map(BookIdStartDueDatesDTO::bookId)
+                .toList();
+
+        Map<Integer, String> bookIdToTitle =
+                bookClientService.getBookNamesByIds(bookIds)
+                        .stream()
+                        .collect(Collectors.toMap(
+                                BookIdTitleDTO::bookId,
+                                BookIdTitleDTO::title
+                        ));
+
+        return records.stream()
+                .map(r -> new CurrentlyBorrowedBooksDTO(
+                        bookIdToTitle.get(r.bookId()),
+                        r.startDate(),
+                        r.endDate()
+                ))
+                .toList();
+    }
+
     
 }
 

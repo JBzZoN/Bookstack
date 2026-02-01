@@ -11,7 +11,7 @@ import lombok.EqualsAndHashCode;
 import java.io.Serializable;
 
 @Entity
-@Table(name = "genre_table")
+@Table(name = "book_genre")
 @Data
 public class BookGenreMapping {
 

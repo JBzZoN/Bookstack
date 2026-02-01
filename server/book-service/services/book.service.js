@@ -216,5 +216,25 @@ async function getMightAlsoLikedBooks(mightLikeBookIds, bookId) {
   return rows;
 }
 
+async function getBookNamesByIds(bookIds) {
+  if (!Array.isArray(bookIds) || bookIds.length === 0) {
+    return [];
+  }
+
+  const placeholders1 = bookIds.map(() => "?").join(",");
+
+  const query = `
+    SELECT 
+      book_id AS bookId,
+      title 
+    FROM book_table
+    WHERE book_id IN (${placeholders1}) 
+  `;
+
+  const [rows] = await db.query(query, bookIds);
+
+  return rows;
+}
+
 module.exports = { getAllBooks,getAllLikedBooks,getRecommendedBooks,getTrendingBooks,getNewArrivedBooks,
-                    getAllRecommendedBooks,getAllTrendingBooks,getAllNewArrivedBooks,getBookDetails,getMightAlsoLikedBooks };
+                    getAllRecommendedBooks,getAllTrendingBooks,getAllNewArrivedBooks,getBookDetails,getMightAlsoLikedBooks,getBookNamesByIds };

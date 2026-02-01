@@ -25,7 +25,7 @@ public class RecordDetail {
     private Record record;
 
     @Column(name = "book_id", nullable = false)
-    private Integer book;
+    private Integer bookId;
 
     /* ------------------ Other Columns ------------------ */
 
@@ -37,4 +37,5 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
+    
 }

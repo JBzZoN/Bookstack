@@ -64,6 +64,10 @@ function BookDetails () {
     (state) => state.likes.byBookId[id] ?? likedByUser
     );
 
+    const handleNotify = () => {
+        
+    }
+
     return (
         <div className='p-2'>
             <div className="container py-5 mt-5">
@@ -108,9 +112,9 @@ function BookDetails () {
                             </div>
 
                             <div className="d-grid gap-2 d-md-flex mt-4">
-                                <button className="btn btn-outline">
+                                <button className="btn btn-outline" onClick={handleReserve}>
                                     <i className="bi bi-book-fill me-2"></i>
-                                    Borrow Now
+                                    Reserve
                                 </button>
 
                                 <button

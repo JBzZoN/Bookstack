@@ -1,14 +1,22 @@
 package com.project.bookstack.repositories.member;
 
+import java.time.LocalDate;
 import java.util.List;
 
+
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.project.bookstack.dto.member.BookIdReturnDateDTO;
+import com.project.bookstack.dto.member.BookIdStartDueDatesDTO;
+import com.project.bookstack.dto.member.BookNameReturnDateDTO;
 import com.project.bookstack.dto.member.ReviewDTO;
 import com.project.bookstack.entities.Member;
+
+import jakarta.transaction.Transactional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
@@ -46,7 +54,49 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	    """)
 	List<ReviewDTO> findReviewsByBookId(@Param("bookId") Integer bookId);
 	
-	@Query("SELECT mb.id.bookId FROM MemberBook WHERE mb.id.userId = :userId")
-	List<Integer> getBookIdsByUserId(Integer userId);
+	
+	@Query("""
+			SELECT new com.project.bookstack.dto.member.BookIdReturnDateDTO(
+			    rd.bookId,
+			    r.date
+			)
+			FROM RecordDetail rd
+			JOIN rd.record r
+			WHERE rd.status = 'Returned'
+			  	AND r.member.userId = :userId
+			""")
+	List<BookIdReturnDateDTO> getBookIdAndReturnDates(@Param("userId") Integer userId);
+
+	@Query("""
+			SELECT new com.project.bookstack.dto.member.BookIdStartDueDatesDTO(
+				rd.bookId,
+				r.date,
+				rd.dueDate
+			)
+			FROM RecordDetail rd 
+			JOIN rd.record r
+			WHERE rd.status = 'Rent'
+				AND r.member.userId = :userId
+			""")
+	List<BookIdStartDueDatesDTO> getBookIdBorrowAndReturnDates(Integer userId);
+
+	@Modifying
+    @Transactional
+    @Query(
+        value = """
+            INSERT INTO member_table
+            (user_id, membership_type, member_start, member_end,
+             renew_count, reserve_count, rent_count)
+            VALUES (?1, ?2, ?3, ?4, 0, 0, 0)
+        """,
+        nativeQuery = true
+    )
+    void insertMembership(
+        Integer userId,
+        String membershipType,
+        LocalDate start,
+        LocalDate end
+    );
+
 	
 }

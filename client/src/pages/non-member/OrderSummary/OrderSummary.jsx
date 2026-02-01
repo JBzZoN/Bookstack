@@ -1,83 +1,161 @@
-import React from "react";
-import "./OrderSummary.css";
-import logo from "../../../assets/logo.png";
+import React, { useEffect, useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import Footer from "../../../components/Member/Footer/Footer";
 
 function OrderSummary() {
+  const navigate = useNavigate();
 
-  const plan = JSON.parse(localStorage.getItem("selectedPlan"));
+  /* =======================
+     STATE (LOGIC ONLY)
+     ======================= */
+  const [amount, setAmount] = useState(null);
+  const [rzpConfig, setRzpConfig] = useState(null);
+  const [error, setError] = useState("");
+
+  /* =======================
+     READ EXISTING DATA
+     ======================= */
+  const selectedPlan = JSON.parse(localStorage.getItem("selectedPlan"));
   const registerData = JSON.parse(localStorage.getItem("registerData"));
 
-  // 🔒 Safety check
-  if (!plan || !registerData) {
-    alert("Invalid flow. Please choose plan and register again.");
-    window.location.href = "/membership";
-    return null;
-  }
+  /* =======================
+     SAFETY CHECK
+     ======================= */
+  useEffect(() => {
+    if (!selectedPlan || !registerData) {
+      navigate("/membership");
+    }
+  }, [navigate, selectedPlan, registerData]);
 
+  /* =======================
+     FETCH RAZORPAY CONFIG
+     (key from application.properties)
+     ======================= */
+  useEffect(() => {
+    axios
+      .get("/payment/config")
+      .then(res => setRzpConfig(res.data))
+      .catch(() =>
+        setError("Unable to load payment configuration.")
+      );
+  }, []);
+
+  /* =======================
+     FETCH FINAL AMOUNT
+     (backend decides)
+     ======================= */
+  useEffect(() => {
+    if (!selectedPlan) return;
+
+    axios
+      .post("/payment/preview", {
+        purpose: "BUY_MEMBERSHIP",
+        membershipType: selectedPlan.membershipType,
+        billing: selectedPlan.billing
+      })
+      .then(res => setAmount(res.data.amount))
+      .catch(() =>
+        setError("Unable to fetch payment details.")
+      );
+  }, [selectedPlan]);
+
+  /* =======================
+     START PAYMENT
+     ======================= */
   const startPayment = async () => {
+    setError("");
 
-    // 1️⃣ CREATE ORDER (PUBLIC API – NO TOKEN)
-    const res = await fetch(
-      `http://localhost:7070/member/membership/start-payment?membershipType=${plan.type}`,
-      { method: "POST" }
-    );
+    try {
+      const res = await axios.post("/payment/create-order", {
+        purpose: "BUY_MEMBERSHIP",
+        membershipType: selectedPlan.membershipType,
+        billing: selectedPlan.billing
+      });
 
-    if (!res.ok) {
-      const text = await res.text();
-      alert(text);
+      openRazorpay(res.data.orderId, res.data.amount);
+    } catch {
+      setError("Unable to initiate payment.");
+    }
+  };
+
+  /* =======================
+     RAZORPAY CHECKOUT
+     ======================= */
+  const openRazorpay = (orderId, amount) => {
+    if (!rzpConfig) {
+      setError("Payment configuration missing.");
       return;
     }
 
-    const data = await res.json();
-
-    // 2️⃣ OPEN RAZORPAY
     const options = {
-      key: data.key,
-      amount: data.amount * 100,
-      currency: "INR",
-      name: "BookStack",
-      description: `${plan.type} Membership`,
-      order_id: data.orderId,
+      key: rzpConfig.keyId,
+      amount: amount * 100,
+      currency: rzpConfig.currency,
+      name: rzpConfig.company,
+      description: "BookStack Membership",
+      order_id: orderId,
 
-      handler: async function (response) {
+      handler: function (response) {
+        handlePaymentSuccess(response);
+      },
 
-        // 3️⃣ PAYMENT SUCCESS → SEND ALL DATA TO BACKEND
-        const successRes = await fetch(
-          "http://localhost:7070/member/membership/payment-success",
-          {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              ...registerData,            // fullName, email, phone, address, dob, username, password
-              membershipType: plan.type,
-              billing: plan.billing,
-              amount: plan.amount,
-              razorpay_order_id: response.razorpay_order_id,
-              razorpay_payment_id: response.razorpay_payment_id,
-              razorpay_signature: response.razorpay_signature
-            })
-          }
-        );
-
-        if (!successRes.ok) {
-          const text = await successRes.text();
-          alert(text);
-          return;
+      modal: {
+        ondismiss: function () {
+          setError("Payment cancelled by user.");
         }
+      },
 
-        // 4️⃣ CLEAN TEMP DATA
-        localStorage.removeItem("selectedPlan");
-        localStorage.removeItem("registerData");
+      prefill: {
+        name: registerData.fullName,
+        email: registerData.email,
+        contact: registerData.phone
+      },
 
-        alert("Payment successful! Please login.");
-        window.location.href = "/login";
+      theme: {
+        color: "#004A55"
       }
     };
 
     const rzp = new window.Razorpay(options);
+
+    rzp.on("payment.failed", function () {
+      setError("Payment failed. Please try again.");
+    });
+
     rzp.open();
   };
 
+  /* =======================
+     PAYMENT SUCCESS
+     ======================= */
+  const handlePaymentSuccess = async (response) => {
+    try {
+      await axios.post("/payment/success", {
+        razorpayPaymentId: response.razorpay_payment_id,
+        razorpayOrderId: response.razorpay_order_id,
+        razorpaySignature: response.razorpay_signature,
+
+        purpose: "BUY_MEMBERSHIP",
+        membershipType: selectedPlan.membershipType,
+        billing: selectedPlan.billing,
+        registerData: registerData
+      });
+
+      localStorage.removeItem("selectedPlan");
+      localStorage.removeItem("registerData");
+
+      navigate("/payment-success");
+    } catch {
+      setError(
+        "Payment successful but membership activation failed."
+      );
+    }
+  };
+
+  /* =======================
+     UI (UNCHANGED)
+     ======================= */
   return (
     <div className="body1">
       <main className="order-page container d-flex flex-column align-items-center justify-content-center">

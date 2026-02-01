@@ -1,6 +1,8 @@
 package com.project.bookstack.clients;
 
+import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.stereotype.Service;
@@ -9,8 +11,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
+import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookCoreDTO;
 import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.dto.member.BookIdTitleDTO;
 
 @Service
 @FeignClient(name = "book-service", url = "http://localhost:4000")
@@ -46,7 +50,7 @@ public interface BookClientService {
 	@PostMapping("book/might-liked-books/{bookId}")
 	List<BookCoreDTO> getMightAlsoLikedBooks(@PathVariable("bookId") Integer bookId , @RequestBody List<Integer> mightLikeBookIds);
 	
-	@GetMapping("book/book-name-return-date")
-	List<BookCoreDTO> getBookNameReturnDate();
-	
+	@PostMapping("book/names-by-id")
+	List<BookIdTitleDTO> getBookNamesByIds(@RequestBody List<Integer> bookIds);
+
 }
