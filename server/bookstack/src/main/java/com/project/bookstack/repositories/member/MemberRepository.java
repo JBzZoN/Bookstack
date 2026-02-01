@@ -80,23 +80,4 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 			""")
 	List<BookIdStartDueDatesDTO> getBookIdBorrowAndReturnDates(Integer userId);
 
-	@Modifying
-    @Transactional
-    @Query(
-        value = """
-            INSERT INTO member_table
-            (user_id, membership_type, member_start, member_end,
-             renew_count, reserve_count, rent_count)
-            VALUES (?1, ?2, ?3, ?4, 0, 0, 0)
-        """,
-        nativeQuery = true
-    )
-    void insertMembership(
-        Integer userId,
-        String membershipType,
-        LocalDate start,
-        LocalDate end
-    );
-
-	
 }

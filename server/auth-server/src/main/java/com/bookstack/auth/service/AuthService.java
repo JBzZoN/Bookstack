@@ -42,10 +42,12 @@ public class AuthService {
 		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
+	
 	public List<User> getSearchedUsers(String search) {
 		// TODO Auto-generated method stub
 		return userRepository.searchUsers(search, PageRequest.of(0, 5));
 	}
+	
 	public List<String> getEmails() {
 		// TODO Auto-generated method stub
 		List<String> emails = userRepository.findAll()
@@ -63,13 +65,8 @@ public class AuthService {
 		return userRepository.existsByEmail(email);
 	}
 
-	public void save(User user) {
-	    
-	    if (!userRepository.existsById(user.getUserId())) {
-	        userRepository.save(user);
-	    } else {
-	        System.out.println("user already exists, skipping save.");
-	    }
+	public User save(User user) {
+	    return userRepository.save(user);
 	}
 	
 }

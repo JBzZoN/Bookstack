@@ -28,8 +28,7 @@ public class SecurityConfiguration {
 		.cors(Customizer.withDefaults()) // Or use withDefaults()
 		// URL authorization
 		.authorizeHttpRequests(requests -> requests
-			.requestMatchers("/auth/**", "/staff/image/**").permitAll()
-			.requestMatchers("/member/membership/**").permitAll()
+			.requestMatchers("/auth/**", "/staff/image/**","/payment/**").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
 			.requestMatchers("/staff/**").hasAuthority("Librarian")

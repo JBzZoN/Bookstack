@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.bookstack.clients.AuthClient;
 import com.project.bookstack.dto.PaymentSuccessRequestDTO;
+import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;
 import com.project.bookstack.repositories.MembershipRepository;
 import com.project.bookstack.repositories.member.MemberRepository;
@@ -74,22 +75,21 @@ public class PaymentServiceImpl implements PaymentService {
        -------------------------------------------------- */
     @Override
     public void verifySignature(PaymentSuccessRequestDTO req) {
-    	 System.out.println("Signature verification bypassed for testing");
-//        try {
-//            JSONObject options = new JSONObject();
-//            options.put("razorpay_payment_id", req.getRazorpayPaymentId());
-//            options.put("razorpay_order_id", req.getRazorpayOrderId());
-//            options.put("razorpay_signature", req.getRazorpaySignature());
-//
-//            // ✅ CORRECT METHOD (works in all SDK versions)
-//            Utils.verifyPaymentSignature(
-//                    options,
-//                    env.getProperty("razorpay.key.secret")
-//            );
-//
-//        } catch (Exception e) {
-//            throw new RuntimeException("Invalid Razorpay payment signature");
-//        }
+        try {
+            JSONObject options = new JSONObject();
+            options.put("razorpay_payment_id", req.getRazorpayPaymentId());
+            options.put("razorpay_order_id", req.getRazorpayOrderId());
+            options.put("razorpay_signature", req.getRazorpaySignature());
+
+            // ✅ CORRECT METHOD (works in all SDK versions)
+            Utils.verifyPaymentSignature(
+                    options,
+                    env.getProperty("razorpay.key.secret")
+            );
+
+        } catch (Exception e) {
+            throw new RuntimeException("Invalid Razorpay payment signature");
+        }
     }
 
     /* --------------------------------------------------
@@ -111,11 +111,16 @@ public class PaymentServiceImpl implements PaymentService {
                 ? start.plusMonths(1)
                 : start.plusYears(1);
 
-        memberRepository.insertMembership(
-                userId,
-                membershipType,
-                start,
-                end
-        );
+        Member member = new Member();
+        member.setUserId(userId);
+        member.setMembershipType(membershipType);
+        member.setMemberStart(start);
+        member.setMemberEnd(end);
+        member.setRenewCount(0);
+        member.setRentCount(0);
+
+        memberRepository.save(member); 
+
+
     }
 }

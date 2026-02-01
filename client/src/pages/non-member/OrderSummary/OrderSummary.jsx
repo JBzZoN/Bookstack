@@ -1,21 +1,16 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../../components/Member/Footer/Footer";
+import logo from "../../../assets/logo.png";
+import api from "../../../api/member.js";
 
 function OrderSummary() {
   const navigate = useNavigate();
 
-  /* =======================
-     STATE (LOGIC ONLY)
-     ======================= */
   const [amount, setAmount] = useState(null);
   const [rzpConfig, setRzpConfig] = useState(null);
   const [error, setError] = useState("");
 
-  /* =======================
-     READ EXISTING DATA
-     ======================= */
   const selectedPlan = JSON.parse(localStorage.getItem("selectedPlan"));
   const registerData = JSON.parse(localStorage.getItem("registerData"));
 
@@ -30,10 +25,9 @@ function OrderSummary() {
 
   /* =======================
      FETCH RAZORPAY CONFIG
-     (key from application.properties)
      ======================= */
   useEffect(() => {
-    axios
+    api
       .get("/payment/config")
       .then(res => setRzpConfig(res.data))
       .catch(() =>
@@ -43,12 +37,11 @@ function OrderSummary() {
 
   /* =======================
      FETCH FINAL AMOUNT
-     (backend decides)
      ======================= */
   useEffect(() => {
     if (!selectedPlan) return;
 
-    axios
+    api
       .post("/payment/preview", {
         purpose: "BUY_MEMBERSHIP",
         membershipType: selectedPlan.membershipType,
@@ -67,7 +60,7 @@ function OrderSummary() {
     setError("");
 
     try {
-      const res = await axios.post("/payment/create-order", {
+      const res = await api.post("/payment/create-order", {
         purpose: "BUY_MEMBERSHIP",
         membershipType: selectedPlan.membershipType,
         billing: selectedPlan.billing
@@ -112,9 +105,7 @@ function OrderSummary() {
         contact: registerData.phone
       },
 
-      theme: {
-        color: "#004A55"
-      }
+      theme: { color: "#004A55" }
     };
 
     const rzp = new window.Razorpay(options);
@@ -131,15 +122,14 @@ function OrderSummary() {
      ======================= */
   const handlePaymentSuccess = async (response) => {
     try {
-      await axios.post("/payment/success", {
+      await api.post("/payment/success", {
         razorpayPaymentId: response.razorpay_payment_id,
         razorpayOrderId: response.razorpay_order_id,
         razorpaySignature: response.razorpay_signature,
-
         purpose: "BUY_MEMBERSHIP",
         membershipType: selectedPlan.membershipType,
         billing: selectedPlan.billing,
-        registerData: registerData
+        registerData
       });
 
       localStorage.removeItem("selectedPlan");
@@ -147,46 +137,50 @@ function OrderSummary() {
 
       navigate("/payment-success");
     } catch {
-      setError(
-        "Payment successful but membership activation failed."
-      );
+      setError("Payment successful but membership activation failed.");
     }
   };
 
-  /* =======================
-     UI (UNCHANGED)
-     ======================= */
   return (
-    <div className="body1">
-      <main className="order-page container d-flex flex-column align-items-center justify-content-center">
+    <div className="body1 d-flex flex-column min-vh-100">
+      <main className="flex-grow-1 d-flex align-items-center justify-content-center">
+        <div className="container">
 
-        <div className="d-flex align-items-center gap-2">
-          <img className="logo-img" src={logo} alt="logo" />
-          <div className="logo-title">
-            <span style={{ color: "#0a0d9f" }}>Book</span>
-            <span style={{ color: "#111827" }}>Stack</span>
-          </div>
-        </div>
-
-        <div className="row w-100 justify-content-center padding">
-          <div className="col-lg-6 col-md-8">
-            <div className="content-card text-center">
-              <h3>Order Summary</h3>
-              <p>{plan.type} Plan</p>
-              <p>₹{plan.amount}</p>
-              <p className="text-secondary">Billed {plan.billing}</p>
-
-              <button
-                className="btn-outline w-100"
-                onClick={startPayment}
-              >
-                Pay & Continue
-              </button>
+          <div className="d-flex justify-content-center align-items-center gap-2 mb-4">
+            <img className="logo-img" src={logo} alt="logo" />
+            <div className="logo-title">
+              <span style={{ color: "#0a0d9f" }}>Book</span>
+              <span style={{ color: "#111827" }}>Stack</span>
             </div>
           </div>
-        </div>
 
+          <div className="row justify-content-center">
+            <div className="col-lg-5 col-md-7 col-sm-10">
+              <div className="content-card text-center">
+
+                <h3>Order Summary</h3>
+                <p>{selectedPlan.membershipType} Plan</p>
+                <p>₹{amount}</p>
+                <p className="text-secondary">Billed {selectedPlan.billing}</p>
+
+                {error && <p className="text-danger mt-2">{error}</p>}
+
+                <button
+                  className="btn-outline w-100 mt-3"
+                  onClick={startPayment}
+                  disabled={!amount || !rzpConfig}
+                >
+                  Pay & Continue
+                </button>
+
+              </div>
+            </div>
+          </div>
+
+        </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

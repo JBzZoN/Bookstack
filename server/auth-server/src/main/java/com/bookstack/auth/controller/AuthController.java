@@ -1,5 +1,4 @@
 package com.bookstack.auth.controller;
-
 import java.util.List;
 
 import org.springframework.http.ResponseEntity;
@@ -13,8 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstack.auth.dto.LoginRequest;
-import com.bookstack.auth.dto.UserCreateRequest;
-import com.bookstack.auth.dto.UserResponseDto;
+import com.bookstack.auth.dto.UserCreateRequestDTO;
+import com.bookstack.auth.dto.UserResponseDTO;
 import com.bookstack.auth.entities.User;
 import com.bookstack.auth.security.JwtUtil;
 import com.bookstack.auth.service.AuthService;
@@ -59,7 +58,7 @@ public class AuthController {
 			
 			// create a response dto
 			User user = (User) auth.getPrincipal();
-			UserResponseDto result = UserResponseDto.builder()
+			UserResponseDTO result = UserResponseDTO.builder()
 				.email(user.getEmail())
 				.name(user.getName())
 				.role(user.getRoleType())
@@ -93,32 +92,41 @@ public class AuthController {
 		authService.migratePasswordsToBCrypt();
 	}
 	
-	@PostMapping("/internal/register-after-payment")
-	public ResponseEntity<String> registerAfterPayment(
-	        @RequestBody UserCreateRequest request) {
+	@RestController
+	@RequestMapping("/auth/")
+	@RequiredArgsConstructor
+	public class InternalAuthController {
 
-	    if (authService.existsByUsername(request.getUsername())) {
-	        return ResponseEntity.badRequest().body("Username already exists");
+	    private final AuthService authService;
+	    private final PasswordEncoder passwordEncoder;
+
+	    @PostMapping("/register")
+	    public Integer registerAfterPayment(
+	            @RequestBody UserCreateRequestDTO request) {
+
+	        if (authService.existsByUsername(request.username())) {
+	            throw new RuntimeException("Username already exists");
+	        }
+
+	        if (authService.existsByEmail(request.email())) {
+	            throw new RuntimeException("Email already exists");
+	        }
+
+	        User user = new User();
+	        user.setName(request.name());
+	        user.setEmail(request.email());
+	        user.setPhone(request.phone());
+	        user.setAddress(request.address());
+	        user.setDob(request.dob());
+	        user.setUsername(request.username());
+	        user.setPassword(passwordEncoder.encode(request.password()));
+	        user.setRoleType("Member");
+
+	        User savedUser = authService.save(user);
+
+	        return savedUser.getUserId();
 	    }
 
-	    if (authService.existsByEmail(request.getEmail())) {
-	        return ResponseEntity.badRequest().body("Email already exists");
-	    }
-
-	    User user = new User();
-	    user.setName(request.getName());
-	    user.setEmail(request.getEmail());
-	    user.setPhone(request.getPhone());
-	    user.setAddress(request.getAddress());
-	    user.setDob(request.getDob());
-	    user.setUsername(request.getUsername());
-	    user.setPassword(passwordEncoder.encode(request.getPassword()));
-	    user.setRoleType("MEMBER");
-
-	    authService.save(user);
-
-	    return ResponseEntity.ok("User created");
 	}
-
 	
 }

@@ -8,7 +8,6 @@ import { use, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
 
-
 function BookDetails () {
     const [bookDetails, setBookDetails] = useState([]);
     const [mightLikedBooks,setMightLikedBooks] = useState([]);
@@ -61,7 +60,7 @@ function BookDetails () {
     const dispatch = useDispatch();
 
     const isLiked = useSelector(
-    (state) => state.likes.byBookId[id] ?? likedByUser
+        (state) => state.likes.byBookId[id] ?? likedByUser
     );
 
     const handleNotify = () => {
