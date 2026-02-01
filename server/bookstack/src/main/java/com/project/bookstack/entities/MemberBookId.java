@@ -1,9 +1,12 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.io.Serializable;
 import java.util.Objects;
 
+@Data
 @Embeddable
 public class MemberBookId implements Serializable {
 

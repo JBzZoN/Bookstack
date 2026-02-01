@@ -23,4 +23,8 @@ public interface StaffRecordDetailRepository extends JpaRepository<RecordDetail,
     @Query("select new com.project.bookstack.dto.DueBookDto(r.dueDate, r.totalCopies, r.bookId) from RecordDetail r where r.record.member.userId=:memberId"
     		+ " and r.dueDate < :now and r.returned=0 and r.status='Rent'")
 	List<DueBookDto> getFineDetails(@Param("memberId") Integer memberId,@Param("now") LocalDate now);
+    
+    @Query("select r from RecordDetail r where r.record.member.userId=:memberId"
+    		+ " and r.returned=0 and r.status='Rent' and r.bookId=:bookId")
+	List<RecordDetail> getReturnDataForRenew(@Param("memberId") Integer memberId,@Param("bookId") Integer bookId);
 }

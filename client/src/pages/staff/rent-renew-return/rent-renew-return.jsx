@@ -112,7 +112,6 @@ function RentRenewReturn() {
   const navigate = useNavigate()
 
   const onVerify = async () => {
-    console.log("Verify clicked")
     if(searchResultUser == null) {
       toast.error("No member selected")
       return;
@@ -138,16 +137,12 @@ function RentRenewReturn() {
       }
     }
 
-    console.log(fineVar)
-    console.log(response.data)
-
     if(fineVar > 0) {
         let fineRows = [];
 
         for(let a of response.data) {
 
           const response = await axios.post("http://localhost:7070/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-          console.log(response.data)
           fineRows.push({
           recordType: "Return",
           onBookSearch: false,
@@ -174,10 +169,10 @@ function RentRenewReturn() {
       if(a.searchResultBook == null) {
         toast.error("No book selected")
         return;
-      }else if(a.numberOfCopies == null) {
+      }else if(a.numberOfCopies == null && a.recordType == "Rent") {
         toast.error("Invalid number of copies")
         return;
-      }else if(a.numberOfCopies <= 0) {
+      }else if(a.numberOfCopies <= 0 && a.recordType == "Rent") {
         toast.error("Invalid number of copies")
         return;
       }else {
@@ -196,9 +191,27 @@ function RentRenewReturn() {
 
         }else if(a.recordType == "Renew") {
 
-          // on renew or return disable the copies entry bar and fetch and put the value there
-          // there is no status as renew
-          // just increment the due date
+          const response4 = await axios.post("http://localhost:7070/staff/renew-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+          if(response4.data.status == "Valid") {
+            let updatedRows = [...rows];
+
+            for (let i = 0; i < updatedRows.length; i++) {
+              if (
+                updatedRows[i].searchResultBook &&
+                updatedRows[i].searchResultBook.bookId === a.searchResultBook.bookId
+              ) {
+                updatedRows[i].numberOfCopies = response4.data.copyCount;
+              }
+            }
+
+            setRows(updatedRows);
+          }else {
+            toast.error("Invalid Renew")
+            return;
+          }
+
+          console.log(response4.data)
 
         }else if(a.recordType == "Return") {
 
@@ -238,16 +251,12 @@ function RentRenewReturn() {
       }
     }
 
-    console.log(fineVar)
-    console.log(response.data)
-
     if(fineVar > 0) {
         let fineRows = [];
 
         for(let a of response.data) {
 
           const response = await axios.post("http://localhost:7070/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-          console.log(response.data)
           fineRows.push({
           recordType: "Return",
           onBookSearch: false,
@@ -299,28 +308,13 @@ function RentRenewReturn() {
           }
           // reduce number of books remaining (- copies) in book_table
           // by default returned is 0
+          const response3 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-          // UNCOMMENT 1
-          // const response3 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-
-          const response4 = await axios.post("http://localhost:7070/book/whole-rent-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-
-          // find if record already present in member book table
-            // if already present then update the count and remove it from "output"
-            // if not present add it as a new record
-
-          // reduce rent_count by one(member_table)
-
-          // reduce rent count by number of copies rented
+          // update all minor tables assoicated with rent like member_book_table
+          const response4 = await axios.post("http://localhost:7070/staff/rent-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          console.log(response4.data)
 
         }else if(a.recordType == "Renew") {
-
-          // on renew or return disable the copies entry bar and fetch and put the value there when staff clicks verify
-          // there is no status as renew in record_detail_table
-
-          // just increment the due date
-
-          // reduce renew count by number of copies renewed
 
         }else if(a.recordType == "Returned") {
 
@@ -375,7 +369,8 @@ function RentRenewReturn() {
     }
     console.log(output)
 
-    // const response = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    // all records are directly put on here !
+    // const response3 = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     // navigate('/staff/books')
     toast.success("Added a record")
@@ -485,8 +480,10 @@ function RentRenewReturn() {
             className="form-control"
             placeholder="Count"
             value={rows[i].numberOfCopies === 0 ? "" : rows[i].numberOfCopies}
+            disabled={rows[i].recordType !== "Rent"}
             onChange={e => setNumberOfCopies(e.target.value, i)}
           />
+
         </div>
 
         </td>

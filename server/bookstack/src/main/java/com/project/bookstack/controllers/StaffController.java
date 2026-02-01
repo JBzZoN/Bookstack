@@ -11,6 +11,7 @@ import com.project.bookstack.client.AuthorizationClient;
 import com.project.bookstack.configuration.KafkaConfiguration;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookGenreRequestDto;
+import com.project.bookstack.dto.BookMemberDto;
 import com.project.bookstack.dto.BookSearchDTO;
 import com.project.bookstack.dto.BookWithImageDto;
 import com.project.bookstack.dto.DueBookDto;
@@ -46,6 +47,17 @@ public class StaffController {
 	@PostMapping("/renew-count/valid")
 	public ResponseEntity<?> renewValidation(@RequestBody RenewRequestDTO renewRequestDTO) {
 		return ResponseEntity.ok(staffService.renewValidation(renewRequestDTO));
+	}
+	
+	@PostMapping("/rent-logic")
+	public ResponseEntity<?> rentLogic(@RequestBody BookMemberDto bookMemberDto) {
+		staffService.rentLogic(bookMemberDto);
+		return ResponseEntity.ok(null);
+	}
+	
+	@PostMapping("/renew-logic")
+	public ResponseEntity<?> renewLogic(@RequestBody BookMemberDto bookMemberDto) {
+		return ResponseEntity.ok(staffService.renewLogic(bookMemberDto));
 	}
 	
 	@GetMapping("/books")
