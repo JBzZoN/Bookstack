@@ -99,7 +99,7 @@ public class AuthService {
 			u.setAddress(editStaffDto.getAddress());
 			u.setUsername(editStaffDto.getUsername());
 			System.out.println(editStaffDto.getPassword());
-			if(editStaffDto.getPassword()!=null) {
+			if(editStaffDto.getPassword()!=" ") {
 			String newpassword=passwordEncoder.encode(editStaffDto.getPassword());
 			u.setPassword(newpassword);
 			}else {
