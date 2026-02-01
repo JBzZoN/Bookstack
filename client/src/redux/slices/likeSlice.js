@@ -1,19 +1,20 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { fetchUserLikes, toggleLikeApi } from "../../api/likeApi";
+import api from "../../api/api";
 
 /* ---------- ASYNC ---------- */
 
 export const loadLikesFromBackend = createAsyncThunk(
   "likes/load",
   async () => {
-    return await fetchUserLikes();
+    const res = await api.get("/member/likes");
+    return res.data;
   }
 );
 
 export const syncLikeWithBackend = createAsyncThunk(
   "likes/sync",
   async (bookId) => {
-    await toggleLikeApi(bookId);
+    await api.post("/member/likes/toggle", { bookId });
     return bookId;
   }
 );
@@ -23,7 +24,7 @@ export const syncLikeWithBackend = createAsyncThunk(
 const likeSlice = createSlice({
   name: "likes",
   initialState: {
-    byBookId: {},     // 🔥 MUST ALWAYS BE OBJECT
+    byBookId: {},     
     loading: false
   },
   reducers: {

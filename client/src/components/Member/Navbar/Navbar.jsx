@@ -4,6 +4,7 @@ import { useState } from 'react';
 import logo from '../../../assets/logo.png'
 import logout from '../../../assets/images/member/logout.png'
 import likesList from '../../../assets/images/member/likes-cart.png'
+import api from "../../../api/api"
 
 function Navbar () {
     const [onSearch, setOnSearch] = useState(false)
@@ -12,29 +13,27 @@ function Navbar () {
     const [searchString, setSearchString] = useState("")
 
     const onSearchBook = (e) => {
-    const value = e.target.value
-    setSearchString(value)
+        const value = e.target.value
+        setSearchString(value)
 
-    // minimum characters
-    if (value.length < 2 || onSearch === true) return
+        // minimum characters
+        if (value.length < 2 || onSearch === true) return
 
-    setOnSearch(true)
+        setOnSearch(true)
 
-    setTimeout(async () => {
-        if (value.length < 2) return
+        setTimeout(async () => {
+            if (value.length < 2) return
 
-        const response = await axios.post(
-        "http://localhost:8080/books/search",
-        { search: value }
-        )
+            const response = await api.post("/books/search", { search: value })
 
-        setSearchResults(response.data)
-        setOnSearch(false)
-    }, 400)
+            setSearchResults(response.data)
+            setOnSearch(false)
+        }, 400)
     }
 
     const navigate=useNavigate();
     const handleLogout = () => {
+        localStorage.clear();
         navigate("/login")
     };
     const handleLikedBooks = () => {
@@ -80,7 +79,7 @@ function Navbar () {
                                     className="list-group-item list-group-item-action"
                                     onClick={() => {
                                     // navigate to book page
-                                    navigate(`/books/${book.id}`)
+                                    navigate(`member/books/${book.id}`)
                                     setSearchString("")
                                     setSearchResults([])
                                     }}

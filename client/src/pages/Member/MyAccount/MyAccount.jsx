@@ -1,5 +1,5 @@
 import '../MyAccount/MyAccount.css'
-import { historyBorrowedBooksData,currentlyBorrowedBooksData } from '../../../api/member.js';
+import api from '../../../api/api';
 import { format } from "date-fns";
 import { useState,useEffect } from 'react';
 
@@ -10,17 +10,17 @@ function MyAccount () {
     const [currentlyBorrowed, setCurrentlyBorrowed] = useState([]);
     const [history, setHistory] = useState([]);
 
-    useEffect(() => {
-        currentlyBorrowedBooksData()
-            .then(res => setCurrentlyBorrowed(res.data))
-            .catch(err => {
-                console.error("Failed to fetch book", err);
-                setCurrentlyBorrowed(null);
-            });
-    }, []);
+    // useEffect(() => {
+    //     currentlyBorrowedBooksData()
+    //         .then(res => setCurrentlyBorrowed(res.data))
+    //         .catch(err => {
+    //             console.error("Failed to fetch book", err);
+    //             setCurrentlyBorrowed(null);
+    //         });
+    // }, []);
 
     useEffect(() => {
-        historyBorrowedBooksData()
+        api.get("/member/history-borrowed-books")
             .then(res => setHistory(res.data))
             .catch(err => {
                 console.error("Failed to fetch book", err);

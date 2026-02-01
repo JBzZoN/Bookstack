@@ -12,7 +12,7 @@ import banner4 from '../../../assets/images/member/banner4.png';
 import banner5 from '../../../assets/images/member/banner5.png';
 import banner6 from '../../../assets/images/member/banner6.png';
 import banner7 from '../../../assets/images/member/banner7.png';
-import { recommendedBooksData,trendingBooksData,newArrivedBooksData } from '../../../api/member.js'
+import api from '../../../api/api'
 
 function MemberHome() {
   const dispatch = useDispatch();
@@ -27,7 +27,7 @@ function MemberHome() {
   const [newArrivedBooks, setNewArrivedBooks] = useState([]); 
   
   useEffect(() => {
-    recommendedBooksData()
+    api.get("/member/recommended-books")
       .then(res => {
         setRecommendedBooks(Array.isArray(res.data) ? res.data : []);
       })
@@ -36,7 +36,7 @@ function MemberHome() {
         setRecommendedBooks([]);
       });
 
-    trendingBooksData()
+    api.get("/member/trending-books")
       .then(res => {
         setTrendingBooks(Array.isArray(res.data) ? res.data : []);
       }) 
@@ -45,7 +45,7 @@ function MemberHome() {
         setTrendingBooks([]);
       });
 
-    newArrivedBooksData()
+    api.get("/member/new-arrived-books")
       .then(res => {
         setNewArrivedBooks(Array.isArray(res.data) ? res.data : []);
       }) 

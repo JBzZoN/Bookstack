@@ -3,7 +3,7 @@ import '../BookDetails/BookDetails.css'
 import { useParams } from 'react-router-dom';
 import ReviewsSection from '../../../components/Member/ReviewSection/ReviewSection';
 import star from '../../../assets/images/member/star.png'
-import { bookDetailsData,mightLikedBooksData } from '../../../api/member';
+import api from '../../../api/api';
 import { use, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
@@ -17,23 +17,23 @@ function BookDetails () {
     useEffect(() => {
         if (!id) return;
 
-        bookDetailsData(id)
-        .then(res => setBookDetails(res.data))
-        .catch(err => {
-            console.error("Failed to fetch book", err);
-            setBookDetails(null);
-        });
+        api.get(`/member/book/${id}`)
+            .then(res => setBookDetails(res.data))
+            .catch(err => {
+                console.error("Failed to fetch book", err);
+                setBookDetails(null);
+            });
     }, [id]);
 
     useEffect(() => {
         if (!id) return;
 
-        mightLikedBooksData(id)
-        .then(res => setMightLikedBooks(res.data))
-        .catch(err => {
-            console.error("Failed to fetch book", err);
-            setMightLikedBooks(null);
-        });
+        api.get(`/member/might-liked-books/${id}`)
+            .then(res => setMightLikedBooks(res.data))
+            .catch(err => {
+                console.error("Failed to fetch book", err);
+                setMightLikedBooks(null);
+            });
     }, [id]);
 
     if (!bookDetails) {
@@ -111,7 +111,7 @@ function BookDetails () {
                             </div>
 
                             <div className="d-grid gap-2 d-md-flex mt-4">
-                                <button className="btn btn-outline" onClick={handleReserve}>
+                                <button className="btn btn-outline" >
                                     <i className="bi bi-book-fill me-2"></i>
                                     Reserve
                                 </button>

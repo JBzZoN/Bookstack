@@ -1,13 +1,13 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
-import { allRecommendedBooksData } from '../../../api/member';
+import api from '../../../api/api';
 import { useState, useEffect } from 'react';
 
 function AllRecommendedBooks () {
     const [allRecommendedBooks, setAllRecommendedBooks] = useState([]);
 
     useEffect(() => {
-        allRecommendedBooksData()
+        api.get("/member/all-recommended-books")
             .then(res => {
                 setAllRecommendedBooks(Array.isArray(res.data) ? res.data : []);
             })

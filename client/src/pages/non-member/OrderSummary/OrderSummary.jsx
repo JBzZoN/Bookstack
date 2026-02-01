@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import Footer from "../../../components/Member/Footer/Footer";
 import logo from "../../../assets/logo.png";
-import api from "../../../api/member"; // plain axios instance
+import api from "../../../api/api"; // plain axios instance
 
 function OrderSummary() {
   const navigate = useNavigate();
