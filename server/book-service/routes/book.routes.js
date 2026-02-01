@@ -19,6 +19,30 @@ const staffPool = mysql2.createPool({
 
 const router = express.Router();
 
+router.get("/copy", (req, res) => {
+  const bookId = req.query.bookId;
+  const sql = `
+    SELECT
+      number_of_copies_remaining
+    FROM book_table
+    WHERE
+      book_id=?
+  `;
+
+  const values = [
+    bookId
+  ];
+
+  staffPool.query(sql, values, (error, rows) => {
+    if (error) {
+      console.error(error);
+      return res.sendStatus(500);
+    }
+    console.log(rows)
+    res.status(200).send(rows[0].number_of_copies_remaining);
+  });
+})
+
 router.post("/bookFromId", (request, res) => {
 
   const {bookId} = request.body;

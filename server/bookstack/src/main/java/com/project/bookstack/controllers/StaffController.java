@@ -55,9 +55,22 @@ public class StaffController {
 		return ResponseEntity.ok(null);
 	}
 	
-	@PostMapping("/renew-logic")
-	public ResponseEntity<?> renewLogic(@RequestBody BookMemberDto bookMemberDto) {
-		return ResponseEntity.ok(staffService.renewLogic(bookMemberDto));
+	@PostMapping("/renew-logic/submit")
+	public ResponseEntity<?> renewLogicSubmit(@RequestBody BookMemberDto bookMemberDto) {
+		return ResponseEntity.ok(staffService.renewLogicSubmit(bookMemberDto));
+	}
+	@PostMapping("/renew-logic/verify")
+	public ResponseEntity<?> renewLogicVerify(@RequestBody BookMemberDto bookMemberDto) {
+		return ResponseEntity.ok(staffService.renewLogicVerify(bookMemberDto));
+	}
+	
+	@PostMapping("/return-logic/submit")
+	public ResponseEntity<?> returnLogicSubmit(@RequestBody BookMemberDto bookMemberDto) {
+		return ResponseEntity.ok(staffService.returnLogicSubmit(bookMemberDto));
+	}
+	@PostMapping("/return-logic/verify")
+	public ResponseEntity<?> returnLogicVerify(@RequestBody BookMemberDto bookMemberDto) {
+		return ResponseEntity.ok(staffService.returnLogicVerify(bookMemberDto));
 	}
 	
 	@GetMapping("/books")

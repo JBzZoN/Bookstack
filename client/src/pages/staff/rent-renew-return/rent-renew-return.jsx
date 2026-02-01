@@ -191,7 +191,7 @@ function RentRenewReturn() {
 
         }else if(a.recordType == "Renew") {
 
-          const response4 = await axios.post("http://localhost:7070/staff/renew-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response4 = await axios.post("http://localhost:7070/staff/renew-logic/verify", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           if(response4.data.status == "Valid") {
             let updatedRows = [...rows];
@@ -214,11 +214,28 @@ function RentRenewReturn() {
           console.log(response4.data)
 
         }else if(a.recordType == "Return") {
+          const response4 = await axios.post("http://localhost:7070/staff/return-logic/verify", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-          // increase number of books available (+ copies)
-          // set returned to 1
+          if(response4.data.status == "Valid") {
+            let updatedRows = [...rows];
 
-        }
+            for (let i = 0; i < updatedRows.length; i++) {
+              if (
+                updatedRows[i].searchResultBook &&
+                updatedRows[i].searchResultBook.bookId === a.searchResultBook.bookId
+              ) {
+                updatedRows[i].numberOfCopies = response4.data.copyCount;
+              }
+            }
+
+            setRows(updatedRows);
+          }else {
+            toast.error("Invalid Renew")
+            return;
+          }
+
+          console.log(response4.data)
+          }
       }
     }
   }
@@ -316,9 +333,25 @@ function RentRenewReturn() {
 
         }else if(a.recordType == "Renew") {
 
-        }else if(a.recordType == "Returned") {
+          const response4 = await axios.post("http://localhost:7070/staff/renew-logic/submit", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-        }
+          if(response4.data.status == "Invalid") {
+            toast.error("Invalid Renew")
+            return;
+          }
+
+          console.log(response4.data)
+
+        }else if(a.recordType == "Return") {
+          const response4 = await axios.post("http://localhost:7070/staff/return-logic/submit", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+          if(response4.data.status == "Invalid"){
+            toast.error("Invalid Renew")
+            return;
+          }
+
+          console.log(response4.data)
+          }
       }
     }
 
@@ -362,9 +395,9 @@ function RentRenewReturn() {
     console.log(output)
 
     // all records are directly put on here !
-    // const response3 = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response3 = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
-    // navigate('/staff/books')
+    navigate('/staff/books')
     toast.success("Added a record")
   }
 

@@ -248,12 +248,12 @@ VALUES
 -- ('Suresh Rao','suresh@example.com','9833333333','Hyderabad','1995-11-02','suresh','pass','Member', 13),
 -- ('Kiran Patel','kiran@example.com','9844444444','Vadodara','1988-03-22','kiranl','pass','Librarian', 14);
 
-INSERT INTO member_table (user_id, membership_type, member_start, member_end) VALUES
-(1, 'Premium', '2025-05-01', '2026-04-30'),
-(2, 'Standard', '2024-01-01', '2024-12-31'),
-(3, 'Basic', '2023-02-01', '2024-01-31'),
-(7, 'Premium', '2022-03-01', '2023-02-28'),
-(8, 'Premium', '2022-02-01', '2023-02-21');
+INSERT INTO member_table (user_id, membership_type, member_start, member_end, rent_count) VALUES
+(1, 'Premium', '2025-05-01', '2026-04-30', 3),
+(2, 'Standard', '2024-01-01', '2024-12-31', 0),
+(3, 'Basic', '2023-02-01', '2024-01-31', 0),
+(7, 'Premium', '2022-03-01', '2023-02-28', 0),
+(8, 'Premium', '2022-02-01', '2023-02-21', 0);
 
 INSERT INTO staff_table (user_id, salary, `date_hired`, status) VALUES
 (4, 35000, '2020/06/15', 'active'),
@@ -277,16 +277,9 @@ VALUES
 
 
 INSERT INTO member_book_table (user_id, book_id, copy_count) VALUES
-(01, 01, 1),
-(02, 02, 1),
-(03, 03, 1),
-(07, 04, 1),
-(08, 05, 2),
-(01, 06, 1),
-(02, 07, 1),
-(03, 08, 1),
-(07, 09, 1),
-(08, 10, 1);
+(01, 01, 1), -- alice johnson - to kill a mocking bird
+(01, 02, 1), -- alice johnson - The great gatsby
+(01, 03, 1); -- alice johnson - the hobbit
 
 -- =========================
 -- BOOK COMMENTS
@@ -350,39 +343,20 @@ VALUES
 (14,4),(14,11);       -- AI: A Modern Approach
 
 INSERT INTO record_table (member_id, staff_id, record_id, date) VALUES
-(01, 04, 01, '2025-01-12'),
-(02, 05, 02, '2025-02-07'),
-(03, 09, 03, '2025-03-15'),
-(07, 04, 04, '2025-04-03'),
-(08, 05, 05, '2025-05-05'),
-(01, 09, 06, '2025-05-20'),
-(02, 04, 07, '2025-06-10');
+(01, 04, 01, '2026-01-12'),
+(01, 05, 02, '2026-01-07'),
+(01, 09, 03, '2026-01-15');
 
 INSERT INTO record_detail_table (record_detail_id, record_id, status, book_id, total_copies, due_Date, returned) VALUES
-(01, 01, 'Rent', 01, 1, '2025-01-20', 1),
-(02, 02, 'Rent', 02, 1, '2025-02-15', 1),
-(03, 03, 'Returned', 03, 1, '2025-03-22', 0),
-(04, 04, 'Rent', 04, 1, '2025-04-15', 1),
-(05, 05, 'Rent', 05, 2, '2025-05-20', 0),
-(06, 06, 'Returned', 06, 1, '2025-05-28', 1),
-(07, 07, 'Rent', 07, 1, '2025-06-18', 1);
+(01, 01, 'Rent', 01, 1, '2026-01-26', 0),
+(02, 02, 'Rent', 02, 1, '2026-01-21', 0),
+(03, 03, 'Rent', 03, 1, '2026-01-29', 0);
 
 INSERT INTO member_table (user_id,membership_type,member_start,member_end)
 VALUES
 (11,'Standard','2025-01-01','2025-12-31'),
 (12,'Premium','2025-02-01','2026-01-31'),
 (13,'Basic','2024-06-01','2025-05-31');
-
--- =========================
--- MEMBER ↔ BOOK
--- =========================
-INSERT INTO member_book_table (user_id, book_id, copy_count)
-VALUES
-(11,1,1),    -- Manoj Kumar → To Kill a Mockingbird
-(13,4,1);    -- Suresh Rao → Atomic Habits
-
--- ANOTHER DATABASE
-
 
 CREATE TABLE IF NOT EXISTS bookstack.book_like (
     like_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -430,7 +404,7 @@ CREATE TABLE IF NOT EXISTS `authorization`.`user_table` (
   `name` CHAR(30) NULL,
   `email` VARCHAR(30) NULL,
   `phone` CHAR(10) NULL,
-  `address` VARCHAR(45) NULL,
+  `address` TEXT NULL,
   `dob` DATE NULL,
   `username` CHAR(15) NULL,
   `password` VARCHAR(100) NULL,
@@ -495,105 +469,105 @@ VALUES
  'https://covers.openlibrary.org/b/isbn/9780061120084-L.jpg',
  'HarperCollins',
  'CREATED', '2024-01-10',
- 10, 8),
+ 10, 9),
 
 ('9780743273565', 'The Great Gatsby', 'F. Scott Fitzgerald',
  'American classic novel.',
  'https://covers.openlibrary.org/b/isbn/9780743273565-L.jpg',
  'Scribner',
  'CREATED', '2024-01-12',
- 8, 6),
+ 8, 7),
 
 ('9780544003415', 'The Hobbit', 'J.R.R. Tolkien',
  'Fantasy adventure.',
  'https://covers.openlibrary.org/b/isbn/9780544003415-L.jpg',
  'HarperCollins',
  'CREATED', '2024-01-15',
- 12, 9),
+ 12, 11),
 
 ('9781455586691', 'Atomic Habits', 'James Clear',
  'Building good habits.',
  'https://covers.openlibrary.org/b/isbn/9781455586691-L.jpg',
  'Avery',
  'CREATED', '2024-01-18',
- 14, 11),
+ 14, 14),
 
 ('9780307387899', 'Sapiens', 'Yuval Noah Harari',
  'History of humankind.',
  'https://covers.openlibrary.org/b/isbn/9780307387899-L.jpg',
  'Harper',
  'CREATED', '2024-01-20',
- 11, 9),
+ 11, 11),
 
 ('9780140449136', 'Meditations', 'Marcus Aurelius',
  'Stoic philosophy.',
  'https://covers.openlibrary.org/b/isbn/9780140449136-L.jpg',
  'Penguin',
  'CREATED', '2024-01-22',
- 7, 5),
+ 7, 7),
 
 ('9780812981605', 'Rich Dad Poor Dad', 'Robert Kiyosaki',
  'Personal finance lessons.',
  'https://covers.openlibrary.org/b/isbn/9780812981605-L.jpg',
  'Plata',
  'CREATED', '2024-01-25',
- 9, 7),
+ 9, 9),
 
 ('9780307474278', 'The Lean Startup', 'Eric Ries',
  'Startup methodology.',
  'https://covers.openlibrary.org/b/isbn/9780307474278-L.jpg',
  'Crown',
  'CREATED', '2024-01-28',
- 8, 6),
+ 8, 8),
 
 ('9780062315007', 'The Alchemist', 'Paulo Coelho',
  'Spiritual journey.',
  'https://covers.openlibrary.org/b/isbn/9780062315007-L.jpg',
  'HarperOne',
  'CREATED', '2024-02-01',
- 10, 8),
+ 10, 10),
 
 ('9780140449266', 'The Republic', 'Plato',
  'Political philosophy.',
  'https://covers.openlibrary.org/b/isbn/9780140449266-L.jpg',
  'Penguin',
  'CREATED', '2024-02-03',
- 6, 4),
+ 6, 6),
 
 ('9780132350884', 'Clean Code', 'Robert C. Martin',
  'Software craftsmanship.',
  'https://covers.openlibrary.org/b/isbn/9780132350884-L.jpg',
  'Prentice Hall',
  'CREATED', '2024-02-06',
- 15, 12),
+ 15, 15),
 
 ('9780134685991', 'Effective Java', 'Joshua Bloch',
  'Java best practices.',
  'https://covers.openlibrary.org/b/isbn/9780134685991-L.jpg',
  'Addison-Wesley',
  'CREATED', '2024-02-08',
- 10, 7),
+ 10, 10),
 
 ('9780596517748', 'JavaScript: The Good Parts', 'Douglas Crockford',
  'JavaScript insights.',
  'https://covers.openlibrary.org/b/isbn/9780596517748-L.jpg',
  'OReilly',
  'CREATED', '2024-02-10',
- 9, 6),
+ 9, 9),
 
 ('9780262033848', 'AI: A Modern Approach', 'Stuart Russell',
  'AI fundamentals.',
  'https://covers.openlibrary.org/b/isbn/9780262033848-L.jpg',
  'Pearson',
  'CREATED', '2024-02-12',
- 8, 5),
+ 8, 8),
 
 ('9780131103627', 'The C Programming Language', 'Kernighan & Ritchie',
  'C language classic.',
  'https://covers.openlibrary.org/b/isbn/9780131103627-L.jpg',
  'Prentice Hall',
  'CREATED', '2024-02-15',
- 12, 9);
+ 12, 12);
 
 
 

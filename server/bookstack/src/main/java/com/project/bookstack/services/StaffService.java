@@ -3,6 +3,7 @@ package com.project.bookstack.services;
 import java.io.IOException;
 
 
+
 import java.nio.file.CopyOption;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -23,6 +24,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.project.bookstack.client.AuthorizationClient;
+import com.project.bookstack.client.BookClient;
+import com.project.bookstack.dto.BookCopyCountDto;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookGenreRequestDto;
 import com.project.bookstack.dto.BookMemberDto;
@@ -71,11 +74,13 @@ public class StaffService {
 	
 	private final StaffRecordDetailRepository staffRecordDetailRepository;
 	
-	private final AuthorizationClient authorizationClient;
-	
 	private final StaffMemberDataRepository staffMemberDataRepository;
 	
 	private final MemberBookRepository memberBookRepository;
+
+	private final BookClient bookClient;
+	
+	private final AuthorizationClient authorizationClient;
 	
 	private final KafkaTemplate<String, EmailDTO> kafkaTemplate;
 	
@@ -267,20 +272,19 @@ public class StaffService {
 		}
 		
 		// reduce rent_count by one(member_table)
-		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();
+		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();	
 		member.setRentCount(member.getRentCount() + bookMemberDto.getCopyCount());
-		
 		
 	}
 
-	public StatusCopyCountDto renewLogic(BookMemberDto bookMemberDto) {
-		
+	public StatusCopyCountDto renewLogicSubmit(BookMemberDto bookMemberDto) {
 		StatusCopyCountDto statusCopyCountDto;
 		int copies = 0;
 		
 		// on renew or return fetch and put the value there when staff clicks verify
         // there is no status as renew in record_detail_table
-		// add all the rented details copy counts(List of records)
+		// add all the rented details copy counts(List of records) lift all same book + member combined records and calculate total copies
+		// that needs to be renewed of that book
 		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
 		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();
 		
@@ -295,17 +299,94 @@ public class StaffService {
 			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
 		}
 		
-		System.out.println(statusCopyCountDto);
 		
         // just increment the due date
 		for(RecordDetail rd : recordDetail) {
 			rd.setDueDate(rd.getDueDate().plusDays(member.getMembershipData().getBorrowLimit()));
 		}
-        // reduce renew count by number of copies renewed
-		member.setRenewCount(member.getRenewCount() - 1);
+        // increase renew count by number of copies renewed
+		member.setRenewCount(member.getRenewCount() + copies);
 		// return the rented books(in record detail) which should be renewed
 		return statusCopyCountDto;
+	}
+
+	public StatusCopyCountDto renewLogicVerify(BookMemberDto bookMemberDto) {
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
+		StatusCopyCountDto statusCopyCountDto;
+		int copies = 0;
 		
+		if(recordDetail.isEmpty()) {
+			System.out.println("Its empty so invalid renew");
+			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
+		} else {
+			
+			for(RecordDetail a: recordDetail) {
+				copies += a.getTotalCopies();
+			}
+			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
+		}
+		
+		
+		return statusCopyCountDto;
+	}
+
+	public StatusCopyCountDto returnLogicSubmit(BookMemberDto bookMemberDto) {
+		// return status copy count dto for copy display in frontend
+		StatusCopyCountDto statusCopyCountDto;
+		int copies = 0;
+		
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
+		
+		if(recordDetail.isEmpty()) {
+			System.out.println("Its empty so invalid renew");
+			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
+		} else {
+			
+			for(RecordDetail a: recordDetail) {
+				copies += a.getTotalCopies();
+
+			    // set returned to 1(record detail table)
+				a.setReturned(1);
+			}
+			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
+		}
+		
+	    // increase number of books available (+ copies)
+		Integer currentCopies = bookClient.getCopies(bookMemberDto.getBookId());
+		bookClient.modifyCount(new BookCopyCountDto(bookMemberDto.getBookId(), currentCopies + copies));
+		
+		// reduce rent_count by one(member_table)
+		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();	
+		member.setRentCount(member.getRentCount() - bookMemberDto.getCopyCount());
+		
+	    // reduce in member book table
+		MemberBook a = memberBookRepository.findById(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId())).orElseGet(() -> null);
+		a.setCopyCount(a.getCopyCount() - bookMemberDto.getCopyCount());
+		memberBookRepository.save(a);
+		
+	    // return number of copies rented
+		return statusCopyCountDto;
+	}
+
+	public StatusCopyCountDto returnLogicVerify(BookMemberDto bookMemberDto) {
+		// return status copy count dto for copy display in frontend
+		StatusCopyCountDto statusCopyCountDto;
+		int copies = 0;
+		
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
+		
+		if(recordDetail.isEmpty()) {
+			System.out.println("Its empty so invalid renew");
+			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
+		} else {
+			
+			for(RecordDetail a: recordDetail) {
+				copies += a.getTotalCopies();
+			}
+			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
+		}
+		
+		return statusCopyCountDto;
 	}
 
 	
