@@ -35,4 +35,7 @@ public interface AdminRepository extends JpaRepository<Staff,Integer>{
 		            @Param("memberId") Integer memberId,
 		            @Param("date") LocalDate date
 		    );
+	 
+	 		@Query(value = "SELECT DISTINCT member_id FROM record_table", nativeQuery = true)
+	 		List<Integer> findDistinctMemberIdsNative();
 }

@@ -37,6 +37,8 @@ public interface AdminService {
 	public Integer calculatefine(UserId user_id);
 	
 	public String sendfine(EmailDTO emailDTO);
+	
+	public String sendfinetoall();
 	}
 
 

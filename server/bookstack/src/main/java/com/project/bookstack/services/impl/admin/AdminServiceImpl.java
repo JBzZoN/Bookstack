@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.query.NativeQuery.ReturnableResultNode;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.ResponseEntity;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.mail.javamail.MimeMessagePreparator;
@@ -191,15 +193,44 @@ public class AdminServiceImpl implements AdminService{
 				c.setFrom(fromEmailAddress);
 				//System.out.println(emailDTO.getEmailId());
 				c.setTo(emailDTO.getEmailId());
-				c.setSubject("News letter from Bookstack library");
+				c.setSubject("Fine from Bookstack library");
 				c.setText(email);
 			};
 			javaMailSender.send(a);
 		return "emailsent";
 	}
 
-	public void sendfinetoall() {
-		// TODO Auto-generated method stub
+	public String sendfinetoall() {
+		List<Integer>list=adminRepository.findDistinctMemberIdsNative();
+		System.out.println(list);
+		for(Integer u : list) {
+			UserId user_dto = new UserId();
+			user_dto.setUserId(u);
+			Integer fine=calculatefine(user_dto);
+			System.out.println(fine);
+			if(fine>0) {
+				EmailDTO emailDTO= adminClientService.getparticularmember(user_dto);
+				String message = String.format("""
+						Dear %s,
+
+						We hope you are doing well.
+
+						This is a gentle reminder that there is a pending fine on your library account. As of today, the remaining amount is ₹ %d.
+
+						We kindly request you to clear the due amount at your earliest convenience to avoid any further inconvenience and to continue enjoying uninterrupted library services.
+
+						If you have already made the payment, please ignore this message. For any questions or assistance, feel free to contact us.
+
+						Thank you for your cooperation.
+
+						Warm regards,
+						Team BOOKSTACK
+						""",emailDTO.getEmail(),fine);
+				emailDTO.setEmail(message);
+				sendfine(emailDTO);
+				}
+		}
+			return "email sent";
 		
 	}
 	

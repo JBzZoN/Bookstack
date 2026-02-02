@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstack.auth.config.IpChecking;
 import com.bookstack.auth.dto.AddAuthStaffDto;
+import com.bookstack.auth.dto.AllEmailDto;
 import com.bookstack.auth.dto.AllStaffDto;
 import com.bookstack.auth.dto.LogDto;
 import com.bookstack.auth.dto.LoginRequest;
@@ -146,5 +147,9 @@ public class AuthController {
 		return ResponseEntity.ok(authService.editstaff(editStaffDto));
 	}
 	
+	@PostMapping("/particularuser")
+	public ResponseEntity<AllEmailDto>senduserdetail(@RequestBody User user){
+		return ResponseEntity.ok(authService.senduserdetail(user));
+	}
 	
 }

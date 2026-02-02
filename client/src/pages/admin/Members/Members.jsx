@@ -3,11 +3,33 @@ import { useNavigate } from 'react-router-dom'
 import Title from '../../../components/admin/Title/Title'
 import axios from 'axios'
 import './Members.css'
+import { toast } from "react-toastify";
 
 function ViewMembers() {
 
   const navigate = useNavigate()
   const [members, setMembers] = useState([])
+
+  const handleSendToAllDefaulters = async () => {
+  try {
+    const token = JSON.parse(localStorage.getItem("currentUser")).token;
+
+    await axios.post(
+      "http://localhost:7070/admin/sendfinetoall",
+      {},
+      {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      }
+    );
+
+    toast.success("Emails sent to all defaulters!");
+  } catch (err) {
+    console.error(err);
+    toast.error("Failed to send emails to defaulters");
+  }
+};
 
   async function getAllMembers() {
     const response = await axios.get(
@@ -27,8 +49,19 @@ function ViewMembers() {
 
   return (
     <div className="container mt-3 mb-5">
+
+      <Title string={"Members"} />
       
-    <Title string={"Members"} />
+      <div className="d-flex justify-content-end mb-3">
+  <button
+    className="btn btn-success"
+    onClick={handleSendToAllDefaulters}
+  >
+    📧 Send Email to All Defaulters
+  </button>
+</div>
+      
+    
       <div className="members-card">
         <table className="table members-table">
           <thead>

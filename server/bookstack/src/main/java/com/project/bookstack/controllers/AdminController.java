@@ -76,7 +76,7 @@ public class AdminController {
 	
 	@PostMapping("/sendfinetoall")
 	public ResponseEntity<?>sendfinetoall(){
-		return ResponseEntity.ok(adminServiceImpl,sendfinetoall());
+		return ResponseEntity.ok(adminServiceImpl.sendfinetoall());
 	}
 }
 

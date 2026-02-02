@@ -13,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstack.auth.client.LoggeClient;
 import com.bookstack.auth.dto.AddAuthStaffDto;
+import com.bookstack.auth.dto.AllEmailDto;
 import com.bookstack.auth.dto.AllStaffDto;
 import com.bookstack.auth.dto.LogDto;
 import com.bookstack.auth.dto.editStaffDto;
@@ -119,6 +120,14 @@ public class AuthService {
 		public String savelog(LogDto logDto) {
 			//return loggeClient.sendlog(logDto);
 			return null;
+		}
+		
+		public AllEmailDto senduserdetail(User user) {
+			User userdetial=userRepository.findById(user.getUserId()).get();
+			AllEmailDto allEmailDto=new AllEmailDto();
+			allEmailDto.setEmail(userdetial.getName());
+			allEmailDto.setEmailId(userdetial.getEmail());
+			return allEmailDto;
 		}
 	
 
