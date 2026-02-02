@@ -63,7 +63,7 @@ public class AdminController {
 		
 	}
 	
-	@GetMapping("/calculatefine")
+	@PostMapping("/calculatefine")
 	public ResponseEntity<Integer>calculatefine(@RequestBody UserId user_id){
 		return ResponseEntity.ok(adminServiceImpl.calculatefine(user_id));
 	}

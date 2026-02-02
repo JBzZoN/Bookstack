@@ -189,6 +189,7 @@ public class AdminServiceImpl implements AdminService{
 		MimeMessagePreparator a = b -> {
 				MimeMessageHelper c = new MimeMessageHelper(b);
 				c.setFrom(fromEmailAddress);
+				//System.out.println(emailDTO.getEmailId());
 				c.setTo(emailDTO.getEmailId());
 				c.setSubject("News letter from Bookstack library");
 				c.setText(email);
