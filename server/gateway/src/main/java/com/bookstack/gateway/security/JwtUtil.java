@@ -44,10 +44,8 @@ public class JwtUtil {
 		// Parse and verify signature
 		Claims claims = Jwts.parser().verifyWith(signingKey).build()
 		.parseSignedClaims(token).getPayload();
-		
 		// Extract claims
 		String userId = claims.getSubject();
-		
 		String roles = claims.get("roles", String.class);
 		// Convert roles to authorities
 		List<GrantedAuthority> authorities=
@@ -59,8 +57,7 @@ public class JwtUtil {
 		return null;
 		}
 	}
-
-
+	
 	public String validateAndGetUserId(String token) {
 		try {
 			// Parse and verify signature

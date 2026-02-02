@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
 import './App.css'
-import Login from './pages/non-member/Login/Login';
-import NonMemberHome from './pages/non-member/home/home';
 
 /* Member pages */
 import Home from './pages/Member/Home/Home';
@@ -10,6 +8,10 @@ import BrowseBooks from './pages/Member/BrowseBooks/BrowseBooks';
 import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
 import ViewAllBooks from './pages/Member/ViewAllBooks/ViewAllBooks';
+import LikedBooks from './pages/Member/LikedBooks/LikedBooks';
+import AllRecommendedBooks from './pages/Member/RecommendedBooks/RecommendedBooks';
+import AllTrendingBooks from './pages/Member/TrendingBooks/TrendingBooks';
+import AllNewArrivedBooks from './pages/Member/NewArrivedBooks/NewArrivedBooks';
 
 /* Admin pages */
 import AdminHome from './pages/admin/home/home';
@@ -27,39 +29,43 @@ import AddBooks from './pages/staff/add-books/add-books';
 import RentRenewReturn from './pages/staff/rent-renew-return/rent-renew-return';
 import SendNewsletter from './pages/staff/send-newsletter/send-newsletter';
 import ViewMembers from './pages/staff/view-members/view-members';
-import MemberProfile from './pages/staff/member-profile/member-profile';
 import BookProfile from './pages/staff/book-profile/book-profile';
 
 /* Non member pages */
-import BooksData from './pages/non-member/Books/Books';
+import NonMemberHome from './pages/non-member/Home/Home';
+import BookStackIntro from './pages/non-member/BookStackIntro/BookStackIntro';
 import Membership from './pages/non-member/Membership/Membership';
-import AboutUs from './pages/non-member/AboutUs/AboutUs';
+import OrderSummary from './pages/non-member/OrderSummary/OrderSummary';
 import Register from './pages/non-member/Register/Register';
+import Login from './pages/non-member/Login/Login';
+import MemberProfile from './pages/admin/Members/MemberProfile';
+import SendLetter from './pages/admin/Members/SendLetter';
 
 function App() {
-  return <Routes>
-    
+  return <Routes>    
     {/* NON MEMBER ROUTES */}
-    <Route path="/" element={<NonMemberHome/>}>
-        <Route index element={<Navigate to="aboutus" replace />} />
-        <Route path='Login' element={<Login/>}></Route>
-        <Route path="books" element={<BooksData/>}></Route>
-        <Route path="membership" element={<Membership/>}></Route>
-        <Route path="aboutus" element={<AboutUs/>}></Route>
-        <Route path="register" element={<Register/>}></Route>
-
+    <Route path="/" element={<NonMemberHome />}>
+      <Route index element={<Navigate to="intro" replace />} />
+      <Route path='intro' element={<BookStackIntro />} />
+      <Route path="login" element={<Login />} />
+      <Route path="membership" element={<Membership />} />
+      <Route path="order-summary" element={<OrderSummary />} />
+      <Route path="register" element={<Register/>}/>
     </Route>
     
     {/* MEMBER ROUTES */}
       <Route path="member" element={<Home />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<MemberHome />} />
+        <Route path="recommended-books" element={<AllRecommendedBooks />} />
+        <Route path="trending-books" element={<AllTrendingBooks />} />
+        <Route path="new-arrivals" element={<AllNewArrivedBooks />} />
         <Route path="browse" element={<BrowseBooks />} />
         <Route path="account" element={<MyAccount />} />
         <Route path="book/:id" element={<BookDetails />} />
         <Route path="view" element={<ViewAllBooks />} />
+        <Route path="liked-books" element={<LikedBooks />} />
       </Route>
-
 
       {/* ADMIN ROUTES */}
       <Route path="admin" element={<AdminHome />}>
@@ -68,6 +74,8 @@ function App() {
         <Route path="editstaff" element={<EditStaff />} />
         <Route path="books" element={<Books />} />
         <Route path="members" element={<Members />} />
+        <Route path="memberprofile" element={<MemberProfile/>} />
+        <Route path='emailsending' element={<SendLetter/>}/>
       </Route>
 
     {/* STAFF ROUTES */}

@@ -8,10 +8,10 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
-@Table(name = "membership_data_table", schema = "Bookstack")
-@Data
 @NoArgsConstructor
 @AllArgsConstructor
+@Table(name = "membership_data_table")
+@Data
 public class MembershipData {
 
     @Id

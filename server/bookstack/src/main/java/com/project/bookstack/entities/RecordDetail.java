@@ -31,6 +31,7 @@ public class RecordDetail {
 
     private Integer bookId;
 
+
     /* ------------------ Other Columns ------------------ */
 
     @Column(name = "status", length = 10)
@@ -41,7 +42,7 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
-    
+
     @Column(name = "returned")
     private Integer returned;
 }

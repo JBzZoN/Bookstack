@@ -29,7 +29,7 @@ public class Record {
     )
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "staff_id",
         referencedColumnName = "user_id",

@@ -12,5 +12,39 @@
   color: black;
 }
 
+.rating {
+  display: flex;     
+  align-items: center;
+  gap: 4px;
+}
 
+.rating-value {
+  padding: auto;
+  padding-top: 11.25px;
+  font-size: 22.5px;
+  font-weight: 600;
+  margin-left: 5px;
+  padding-bottom: 1.99px;
+}
+
+#star {
+  padding: auto;
+  width: 30px;
+  height: 30px;
+  padding-bottom: 2px;
+  margin-left: 2.5px;
+}
+
+.availability {
+  background-color: rgba(var(--brand-teal-rgb), 0.1);
+  color: var(--brand-teal);
+}
+
+.member-h4 {
+  margin-top: 9px;
+}
+
+.member-button.active {
+  
+}
 

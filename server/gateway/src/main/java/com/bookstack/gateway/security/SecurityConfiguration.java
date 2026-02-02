@@ -50,5 +50,4 @@ public class SecurityConfiguration {
 	// BCrypt automatically generates and uses salt
 	return new BCryptPasswordEncoder();
 	}
-	
 }

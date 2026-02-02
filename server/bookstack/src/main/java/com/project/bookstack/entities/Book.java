@@ -1,7 +1,5 @@
 package com.project.bookstack.entities;
 
-
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

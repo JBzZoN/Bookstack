@@ -572,6 +572,3 @@ VALUES
  'Prentice Hall',
  'CREATED', '2024-02-15',
  12, 12);
-
-
-

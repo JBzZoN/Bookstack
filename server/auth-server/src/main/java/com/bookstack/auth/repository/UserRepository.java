@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import com.bookstack.auth.dto.AllStaffDto;
 import com.bookstack.auth.entities.User;
 import java.util.List;
 
@@ -23,5 +24,8 @@ public interface UserRepository extends JpaRepository<User, Integer>{
            OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
     """)
     List<User> searchUsers(@Param("keyword") String keyword, Pageable pageable);
+    
+    
+    List<User> findByRoleType(String roleType);
 	
 }

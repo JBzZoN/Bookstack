@@ -16,7 +16,7 @@ import com.bookstack.gateway.security.JwtUtil;
 
 @Configuration
 public class RouteConfiguration {
-
+	
 	@Autowired
 	JwtUtil jwtUtil;
 	
@@ -36,10 +36,8 @@ public class RouteConfiguration {
 
 	                String token = authHeader.substring(7);
 
-	                // ✅ validate JWT
 	                String userId = jwtUtil.validateAndGetUserId(token);
 
-	                // ✅ add header for downstream service
 	                return ServerRequest.from(request)
 	                        .header("X-User-Id", userId)
 	                        .build();
@@ -47,16 +45,16 @@ public class RouteConfiguration {
 
 	            return request;
 	        })
-	        .before(
-	            BeforeFilterFunctions.uri("http://localhost:9090")
-	        )
+			.before(
+		            BeforeFilterFunctions.uri("http://localhost:9090")
+	    	        )
 	        .build();
 	}
 	
 	@Bean
-	public RouterFunction<ServerResponse> bookExpressRoute() {
+	public RouterFunction<ServerResponse> bookServerExpressRoute() {
 
-	    return GatewayRouterFunctions.route("book-route")
+	    return GatewayRouterFunctions.route("login-server-express-route")
 	        .route(
 	            RequestPredicates.path("/book/**"),
 	            HandlerFunctions.http()
@@ -69,10 +67,8 @@ public class RouteConfiguration {
 
 	                String token = authHeader.substring(7);
 
-	                // ✅ validate JWT
 	                String userId = jwtUtil.validateAndGetUserId(token);
 
-	                // ✅ add header for downstream service
 	                return ServerRequest.from(request)
 	                        .header("X-User-Id", userId)
 	                        .build();
@@ -80,16 +76,16 @@ public class RouteConfiguration {
 
 	            return request;
 	        })
-	        .before(
-	            BeforeFilterFunctions.uri("http://localhost:4000")
-	        )
+			.before(
+		            BeforeFilterFunctions.uri("http://localhost:4000")
+	    	        )
 	        .build();
 	}
 	
 	@Bean
 	public RouterFunction<ServerResponse> bookstackServerRoute() {
 
-	    return GatewayRouterFunctions.route("login-route")
+	    return GatewayRouterFunctions.route("bookstack-server-route")
 	        .route(
 	            RequestPredicates.path("/staff/**"),
 	            HandlerFunctions.http()
@@ -110,10 +106,8 @@ public class RouteConfiguration {
 
 	                String token = authHeader.substring(7);
 
-	                // ✅ validate JWT
 	                String userId = jwtUtil.validateAndGetUserId(token);
 
-	                // ✅ add header for downstream service
 	                return ServerRequest.from(request)
 	                        .header("X-User-Id", userId)
 	                        .build();
@@ -121,9 +115,9 @@ public class RouteConfiguration {
 
 	            return request;
 	        })
-	        .before(
-	            BeforeFilterFunctions.uri("http://localhost:8080")
-	        )
+			.before(
+		            BeforeFilterFunctions.uri("http://localhost:8080")
+	    	        )
 	        .build();
 	}
 

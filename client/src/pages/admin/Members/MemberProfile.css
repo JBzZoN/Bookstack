@@ -1,0 +1,64 @@
+.profile-container {
+    max-width: 900px;
+}
+
+/* Card */
+.profile-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+}
+
+/* Gradient header */
+.profile-header {
+    height: 120px;
+    background: linear-gradient(
+        90deg,
+        #4f0bc5,
+        rgb(236, 94, 117)
+    );
+}
+
+/* Profile image */
+.profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 6px solid #ffffff;
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f4f4f4;
+}
+
+/* Body spacing */
+.profile-body {
+    margin-top: 80px;
+    padding: 1.5rem 2rem 2rem;
+}
+
+/* Table */
+.profile-table {
+    margin-bottom: 1.5rem;
+}
+
+.profile-table td {
+    font-size: 14px;
+    padding: 0.6rem;
+}
+
+.profile-table td:first-child {
+    font-weight: 600;
+    color: #555;
+    width: 40%;
+}
+
+/* Button */
+.go-back {
+    border-radius: 10px;
+    padding: 0.45rem 1.2rem;
+}

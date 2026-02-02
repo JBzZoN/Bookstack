@@ -1,12 +1,45 @@
-.carousel-item img {
-  height: 400px;         
-  object-fit: cover;    
-}
-
 .carousel-indicators {
   display: flex !important;
   justify-content: center;
   gap: 10px;
+}
+
+#view-all {
+  background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Arrows */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(30%) sepia(80%) saturate(600%)
+          hue-rotate(260deg);
+}
+
+/* Indicators */
+.carousel-indicators [data-bs-target] {
+  background-color: white
+}
+
+.carousel-indicators .active {
+  background-color: white;
+}
+
+.carousel-item {
+  height: 500px;
+  background: rgba(255, 255, 255, 0.6);
+
+}
+
+.carousel-item img {
+  height: 100%;
+  object-fit: contain;
 }
 
 /* Navbar */

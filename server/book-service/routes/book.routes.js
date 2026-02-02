@@ -268,6 +268,8 @@ router.get("/all", (request, response) => {
     });
 });
 
+const pool=require("../db/pool")
+
 router.get("/books", async (req, res) => {
   try {
     const books = await bookService.getAllBooks();
@@ -376,4 +378,21 @@ router.post("/might-liked-books/:bookId", async (req, res) => {
   }
 });
 
+router.get('/allbooks', (req, res) => {
+  try{
+    const sql = `SELECT * FROM book_table`
+    pool.query(sql, (error, data) => {
+        if(data){
+          console.log(data)
+          res.json(data)
+        }
+        else{
+          res.send(error)
+        }
+      
+      })
+    }catch(Error){
+      res.send(Error)
+    } 
+})
 module.exports = router;
