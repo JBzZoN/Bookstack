@@ -1,68 +1,76 @@
-import React, { useState } from "react";
-import { members as membersData } from "../../../dummy-data/member-data";
-import "./Members.css";
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import Title from '../../../components/admin/Title/Title'
+import axios from 'axios'
+import './Members.css'
 
-export default function Members() {
-  const [members, setMembers] = useState(membersData);
+function ViewMembers() {
 
-  const handleRemove = (email) => {
-    if (window.confirm("Are you sure you want to remove this member?")) {
-      setMembers(members.filter((m) => m.email !== email));
-    }
-  };
+  const navigate = useNavigate()
+  const [members, setMembers] = useState([])
 
-  const handleFineManagement = (member) => {
-    alert(`Fine management for ${member.name} (${member.username})`);
-  };
+  async function getAllMembers() {
+    const response = await axios.get(
+      "http://localhost:7070/admin/allmember",
+      {
+        headers: {
+          "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`
+        }
+      }
+    )
+    
+    setMembers(response.data)
+  }
+  useEffect(() => {
+    getAllMembers()
+  }, [])
 
   return (
-    <div className="members-container">
-      <h2>Library Members</h2>
-      <table className="members-table">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Email</th>
-            <th>Phone</th>
-            <th>Address</th>
-            <th>DOB</th>
-            <th>Membership Type</th>
-            <th>Username</th>
-            <th>Membership Start</th>
-            <th>Membership End</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          {members.map((m) => (
-            <tr key={m.email}>
-              <td>{m.name}</td>
-              <td>{m.email}</td>
-              <td>{m.phone}</td>
-              <td>{m.address}</td>
-              <td>{m.date_of_birth}</td>
-              <td>{m.membership_type}</td>
-              <td>{m.username}</td>
-              <td>{m.membership_start}</td>
-              <td>{m.membership_end}</td>
-              <td>
-                <button
-                  className="fine-btn"
-                  onClick={() => handleFineManagement(m)}
-                >
-                  Fine Management
-                </button>
-                <button
-                  className="remove-btn"
-                  onClick={() => handleRemove(m.email)}
-                >
-                  Remove
-                </button>
-              </td>
+    <div className="container mt-3 mb-5">
+      
+    <Title string={"Members"} />
+      <div className="members-card">
+        <table className="table members-table">
+          <thead>
+            <tr>
+              <th>Name</th>
+              <th className="d-none d-md-table-cell">Email</th>
+              <th>Phone</th>
+              <th className="d-none d-md-table-cell">Address</th>
+              <th>DOB</th>
+              <th>Action</th>
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+
+          <tbody>
+            {members.map((e) => (
+              <tr key={e.userId}>
+                <td className="fw-semibold">{e.name}</td>
+                <td className="d-none d-md-table-cell">{e.email}</td>
+                <td>{e.phone}</td>
+                <td className="d-none d-md-table-cell text-truncate" style={{ maxWidth: "220px" }}>
+                  {e.address}
+                </td>
+                <td>{e.dob}</td>
+                <td>
+                  <button
+                    className="btn btn-sm btn-outline-primary"
+                    onClick={() => {
+                      console.log(e)
+                      navigate('/admin/memberprofile', { state: { member: e } })
+                    }}
+                  >
+                    View more
+                  </button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+
+        </table>
+      </div>
     </div>
-  );
+  )
 }
+
+export default ViewMembers

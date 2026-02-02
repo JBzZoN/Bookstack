@@ -1,10 +1,15 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
 @Table(name = "record_Detail_table", schema = "Bookstack")
+@Data
+@NoArgsConstructor
 public class RecordDetail {
 
     /* ------------------ Primary Key ------------------ */
@@ -24,8 +29,13 @@ public class RecordDetail {
     )
     private Record record;
 
+<<<<<<< HEAD
     @Column(name = "book_id", nullable = false)
     private Integer bookId;
+=======
+    private Integer bookId;
+
+>>>>>>> origin/josh
 
     /* ------------------ Other Columns ------------------ */
 
@@ -37,5 +47,11 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
+<<<<<<< HEAD
     
+=======
+
+    @Column(name = "returned")
+    private Integer returned;
+>>>>>>> origin/josh
 }

@@ -10,7 +10,7 @@ function Login() {
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
-    e.preventDefault(); 
+    e.preventDefault(); // ⛔ VERY IMPORTANT
 
     const normalizedUsername = email.trim();
     let response;
@@ -25,7 +25,6 @@ function Login() {
 
     localStorage.setItem("token", data.token);
     localStorage.setItem("currentUser", JSON.stringify(data))
-    console.log(localStorage.getItem("currentUser"))
 
     if (data.role === "Member") {
        navigate("/member/home");
