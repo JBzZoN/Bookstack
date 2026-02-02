@@ -1,4 +1,3 @@
-
 CREATE DATABASE IF NOT EXISTS book_db;
 USE book_db;
 
