@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.bookstack.dto.BookCopyCountDto;
 
-@FeignClient(name = "book-service-staff", url = "http://localhost:4000")
+@FeignClient(name = "book-service-staff", url = "http://localhost:4040")
 public interface BookClient {
 
 	@GetMapping("/book/copy")

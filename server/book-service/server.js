@@ -7,6 +7,6 @@ app.use(express.json());
 
 app.use('/book', bookRoutes);
 
-app.listen(4000, () => {
+app.listen(4040, () => {
   console.log('Book service running on 4000 port.');
 });
