@@ -23,9 +23,6 @@ drop database book_db;
 drop database bookstack;
 drop database authorization;
 
-CREATE USER bookstack@localhost IDENTIFIED BY 'bookstack';
-GRANT ALL PRIVILEGES ON *.* TO bookstack@localhost;
-Flush privileges;
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0;
