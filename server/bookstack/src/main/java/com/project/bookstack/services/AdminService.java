@@ -7,6 +7,7 @@ import java.util.List
 
 import org.springframework.stereotype.Service;
 
+import com.project.bookstack.dto.EmailDTO;
 import com.project.bookstack.dto.admin.AddStaffDto;
 import com.project.bookstack.dto.admin.AdminDetailDto;
 import com.project.bookstack.dto.admin.AllBookDto;
@@ -34,6 +35,8 @@ public interface AdminService {
 	public String editstaff(EditStaffDto editStaffDto);
 	
 	public Integer calculatefine(UserId user_id);
+	
+	public String sendfine(EmailDTO emailDTO);
 	}
 
 

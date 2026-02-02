@@ -197,6 +197,11 @@ public class AdminServiceImpl implements AdminService{
 			javaMailSender.send(a);
 		return "emailsent";
 	}
+
+	public void sendfinetoall() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	
