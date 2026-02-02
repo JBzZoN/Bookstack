@@ -24,7 +24,7 @@ function Navbar () {
         setTimeout(async () => {
             if (value.length < 2) return
 
-            const response = await api.post("/books/search", { search: value })
+            const response = await api.post("/book/search", { search: value })
 
             setSearchResults(response.data)
             setOnSearch(false)
@@ -79,7 +79,7 @@ function Navbar () {
                                     className="list-group-item list-group-item-action"
                                     onClick={() => {
                                     // navigate to book page
-                                    navigate(`member/books/${book.id}`)
+                                    navigate(`/member/book/${book.bookId}`)
                                     setSearchString("")
                                     setSearchResults([])
                                     }}

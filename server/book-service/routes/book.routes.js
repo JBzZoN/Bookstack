@@ -122,4 +122,21 @@ router.post("/names-by-id", async (req, res) => {
   }
 });
 
+router.post("/search", async(req, res) => {
+  try {
+    const { search } = req.body;
+    const books = await bookService.searchBooks(search);
+
+    const mapped = books.map(b => ({
+    bookId: b.book_id,
+    title: b.title,
+    author: b.author
+  }));
+  
+  res.status(200).send(mapped);
+  } catch (err) {
+    console.error
+  }
+});
+
 module.exports = router;

@@ -10,14 +10,14 @@ function MyAccount () {
     const [currentlyBorrowed, setCurrentlyBorrowed] = useState([]);
     const [history, setHistory] = useState([]);
 
-    // useEffect(() => {
-    //     currentlyBorrowedBooksData()
-    //         .then(res => setCurrentlyBorrowed(res.data))
-    //         .catch(err => {
-    //             console.error("Failed to fetch book", err);
-    //             setCurrentlyBorrowed(null);
-    //         });
-    // }, []);
+    useEffect(() => {
+        api.get("/member/currently-borrowed-books")
+            .then(res => setCurrentlyBorrowed(res.data))
+            .catch(err => {
+                console.error("Failed to fetch book", err);
+                setCurrentlyBorrowed(null);
+            });
+    }, []);
 
     useEffect(() => {
         api.get("/member/history-borrowed-books")
@@ -69,41 +69,21 @@ function MyAccount () {
 
                         <div className="tab-pane fade show active" id="borrowed">
                             <ul className="list-group list-group-flush">
-
-                                {/* <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <div>
-                                        <h5 className="mb-1">The Midnight Library</h5>
-                                        <p className="mb-1 text-secondary">Borrowed on: 15 Sep 2025</p>
-                                        <p className="mb-0"><strong>Due on: 22 Sep 2025</strong></p>
-                                    </div>
-                                    <button className="btn btn-outline btn-success" >Renew</button>
-                                </li>
-
-                                <li className="list-group-item d-flex justify-content-between align-items-center p-3">
-                                    <div>
-                                        <h5 className="mb-1">Atomic Habits</h5>
-                                        <p className="mb-1 text-secondary">Borrowed on: 10 Sep 2025</p>
-                                        <p className="mb-0 overdue" style={{color: 'goldenrod'}}>
-                                            <i className="bi bi-exclamation-triangle-fill me-1"></i>
-                                            Due on: 17 Sep 2025 (4 days overdue)
-                                        </p>
-                                    </div>
-                                    <span className="text-secondary">Cannot Renew</span>
-                                </li> */}
-
-                                <ul className="list-group">
+                                <ul className="list-group list-group-flush">
                                     {currentlyBorrowed.map((book, index) => (
                                         <div>
-                                            <li key={index} className="list-group-item p-3">
-                                                <h5 className="mb-1">{book.bookName}</h5>
-                                                <p className="mb-0 text-secondary">
-                                                    Borrowed on: {formatDate(book.returnDate)}
-                                                </p>
-                                                <p className="mb-0">
-                                                    <strong>Due on: {formatDate(book.dueDate)}</strong>
-                                                </p>
+                                            <li key={index} className="list-group-item d-flex justify-content-between align-items-center p-3">
+                                                <div>
+                                                    <h5 className="mb-1">{book.title}</h5>
+                                                    <p className="mb-0 text-secondary">
+                                                        Borrowed on: {formatDate(book.startDate)}
+                                                    </p>
+                                                    <p className="mb-0">
+                                                        <strong>Due on: {formatDate(book.endDate)}</strong>
+                                                    </p>
+                                                </div>
+                                                <button className="btn btn-outline btn-success">Renew</button>
                                             </li>
-                                            <button className="btn btn-outline btn-success">Renew</button>
                                         </div>
                                     ))}
                                 </ul>

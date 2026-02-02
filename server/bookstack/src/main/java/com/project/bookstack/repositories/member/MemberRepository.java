@@ -13,6 +13,7 @@ import org.springframework.stereotype.Repository;
 import com.project.bookstack.dto.member.BookIdReturnDateDTO;
 import com.project.bookstack.dto.member.BookIdStartDueDatesDTO;
 import com.project.bookstack.dto.member.BookNameReturnDateDTO;
+import com.project.bookstack.dto.member.BookSearchDTO;
 import com.project.bookstack.dto.member.ReviewDTO;
 import com.project.bookstack.entities.Member;
 

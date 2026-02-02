@@ -24,7 +24,6 @@ function ReviewsSection({ bookId }) {
         }
       );
       setReviews(res.data);
-      console.log(review);
     } catch (err) {
       console.error("Failed to load reviews", err);
     }
