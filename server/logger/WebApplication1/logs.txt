@@ -1,0 +1,5 @@
+2026-02-01 11.44.07 | User: naman | Action: LOGIN | IP: 127.0.0.1 | Details: Testing logger API
+2026-02-01 11.46.34 | User: naman | Action: LOGIN | IP: 127.0.0.1 | Details: Testing logger API
+2026-02-01 11.49.00 | User: naman | Action: LOGIN | IP: 127.0.0.1 | Details: Testing logger API
+2026-02-01 11.50.15 | User: naman | Action: LOGIN | IP: 127.0.0.1 | Details: Testing logger API
+2026-02-02 20.40.05 | User: naman | action : Logging |Action: admin | IP: 127.0.0.1 | Details: namn gova
