@@ -2,6 +2,7 @@ package com.project.bookstack.services.impl.member;
 
 import lombok.RequiredArgsConstructor;
 
+
 import org.json.JSONObject;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -10,7 +11,8 @@ import com.project.bookstack.clients.AuthClient;
 import com.project.bookstack.dto.PaymentSuccessRequestDTO;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;
-import com.project.bookstack.repositories.MembershipRepository;
+import com.project.bookstack.repositories.StaffMemberDataRepository;
+import com.project.bookstack.repositories.admin.MembershipRepository;
 import com.project.bookstack.repositories.member.MemberRepository;
 import com.project.bookstack.services.PaymentService;
 
@@ -101,6 +103,8 @@ public class PaymentServiceImpl implements PaymentService {
             String billing,
             Map<String, Object> registerData
     ) {
+    	
+    	StaffMemberDataRepository staffMemberDataRepository = null;
 
         // 1️⃣ Create user in AUTH-SERVER
         Integer userId = authClient.createUser(registerData);
@@ -113,7 +117,7 @@ public class PaymentServiceImpl implements PaymentService {
 
         Member member = new Member();
         member.setUserId(userId);
-        member.setMembershipType(membershipType);
+        member.setMembershipData(staffMemberDataRepository.findById(membershipType).get());
         member.setMemberStart(start);
         member.setMemberEnd(end);
         member.setRenewCount(0);

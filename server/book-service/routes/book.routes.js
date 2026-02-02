@@ -378,7 +378,6 @@ router.post("/might-liked-books/:bookId", async (req, res) => {
   }
 });
 
-<<<<<<< HEAD
 router.post("/names-by-id", async (req, res) => {
   try {
     const bookIds = req.body;
@@ -407,7 +406,6 @@ router.post("/search", async(req, res) => {
   }
 });
 
-=======
 router.get('/allbooks', (req, res) => {
   try{
     const sql = `SELECT * FROM book_table`
@@ -425,5 +423,5 @@ router.get('/allbooks', (req, res) => {
       res.send(Error)
     } 
 })
->>>>>>> origin/josh
+
 module.exports = router;

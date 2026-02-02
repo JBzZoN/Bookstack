@@ -1,77 +1,3 @@
-<<<<<<< HEAD
-package com.bookstack.auth.service;
-
-import java.util.List;
-
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
-import com.bookstack.auth.entities.User;
-import com.bookstack.auth.repository.UserRepository;
-
-@Service
-@Transactional
-public class AuthService {
-
-	public String onLogin() {
-		// TODO Auto-generated method stub
-		return "Hi josh welcome to bookstack";
-	}
-
-	@Autowired
-	PasswordEncoder passwordEncoder;
-	
-	@Autowired
-	UserRepository userRepository;
-	
-	public void migratePasswordsToBCrypt() {
-	    List<User> users = userRepository.findAll();
-
-	    for (User user : users) {
-	        String rawPassword = user.getPassword(); // plaintext
-	        user.setPassword(passwordEncoder.encode(rawPassword));
-	    }
-
-	    userRepository.saveAll(users);
-	}
-	
-	public List<User> findAll() {
-		// TODO Auto-generated method stub
-		return userRepository.findAll();
-	}
-	
-	public List<User> getSearchedUsers(String search) {
-		// TODO Auto-generated method stub
-		return userRepository.searchUsers(search, PageRequest.of(0, 5));
-	}
-	
-	public List<String> getEmails() {
-		// TODO Auto-generated method stub
-		List<String> emails = userRepository.findAll()
-									.stream()
-									.map(e -> e.getEmail())
-									.toList();
-		return emails;
-	}
-
-	public boolean existsByUsername(String username) {
-		return userRepository.existsByUsername(username);
-	}
-
-	public boolean existsByEmail(String email) {
-		return userRepository.existsByEmail(email);
-	}
-
-	public User save(User user) {
-	    return userRepository.save(user);
-	}
-	
-}
-=======
 package com.bookstack.auth.service;
 
 import java.util.List;
@@ -165,37 +91,34 @@ public class AuthService {
 	public String editstaff(editStaffDto editStaffDto) {
 		try {
 			
-			User u=userRepository.getById(editStaffDto.getUserId());
-			
-			u.setName(editStaffDto.getName());
-			u.setEmail(editStaffDto.getEmail());
-			u.setPhone(editStaffDto.getPhone());
-			u.setAddress(editStaffDto.getAddress());
-			u.setUsername(editStaffDto.getUsername());
-			System.out.println(editStaffDto.getPassword());
-			if(editStaffDto.getPassword()!=" ") {
-			String newpassword=passwordEncoder.encode(editStaffDto.getPassword());
-			u.setPassword(newpassword);
-			}else {
-				System.out.println("namanhia");
+				User u=userRepository.getById(editStaffDto.getUserId());
+				
+				u.setName(editStaffDto.getName());
+				u.setEmail(editStaffDto.getEmail());
+				u.setPhone(editStaffDto.getPhone());
+				u.setAddress(editStaffDto.getAddress());
+				u.setUsername(editStaffDto.getUsername());
+				System.out.println(editStaffDto.getPassword());
+				if(editStaffDto.getPassword()!=" ") {
+				String newpassword=passwordEncoder.encode(editStaffDto.getPassword());
+				u.setPassword(newpassword);
+				}else {
+					System.out.println("namanhia");
+				}
+				u.setDob(editStaffDto.getDob());
+				
+				userRepository.save(u);
+				return "saved";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "not saved";
 			}
-			u.setDob(editStaffDto.getDob());
-			
-			userRepository.save(u);
-			return "saved";
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "not saved";
 		}
+		
+	public String savelog(LogDto logDto) {
+		//return loggeClient.sendlog(logDto);
+		return null;
 	}
 		
-		public String savelog(LogDto logDto) {
-			//return loggeClient.sendlog(logDto);
-			return null;
-		}
-	
-
-	
 }
->>>>>>> origin/josh
