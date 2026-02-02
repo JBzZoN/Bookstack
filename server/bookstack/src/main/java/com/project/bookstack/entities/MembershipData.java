@@ -1,24 +1,19 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Entity
-@NoArgsConstructor
-@AllArgsConstructor
 @Table(name = "membership_data_table")
 @Data
 public class MembershipData {
 
     @Id
-    @Column(name = "membership_type", length = 8)
+    @Column(name = "membership_type")
     private String membershipType;
 
     @Column(name = "rent_limit")
+
     private Integer borrowLimit;
 
     @Column(name = "borrow_period")
@@ -26,7 +21,7 @@ public class MembershipData {
 
     @Column(name = "renewal_limit")
     private Integer renewalLimit;
-    
+
     @Column(name = "monthly_cost")
     private Integer monthlyCost;
 
@@ -34,3 +29,5 @@ public class MembershipData {
     private Integer yearlyCost;
    
 }
+
+

@@ -378,6 +378,34 @@ router.post("/might-liked-books/:bookId", async (req, res) => {
   }
 });
 
+router.post("/names-by-id", async (req, res) => {
+  try {
+    const bookIds = req.body;
+    const books = await bookService.getBookNamesByIds(bookIds);
+    res.json(books);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Error fetching books" });
+  }
+});
+
+router.post("/search", async(req, res) => {
+  try {
+    const { search } = req.body;
+    const books = await bookService.searchBooks(search);
+
+    const mapped = books.map(b => ({
+    bookId: b.book_id,
+    title: b.title,
+    author: b.author
+  }));
+  
+  res.status(200).send(mapped);
+  } catch (err) {
+    console.error
+  }
+});
+
 router.get('/allbooks', (req, res) => {
   try{
     const sql = `SELECT * FROM book_table`
@@ -395,4 +423,5 @@ router.get('/allbooks', (req, res) => {
       res.send(Error)
     } 
 })
+
 module.exports = router;

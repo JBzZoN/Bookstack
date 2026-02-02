@@ -1,6 +1,7 @@
 package com.bookstack.auth.repository;
 
 import org.springframework.data.domain.Pageable;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -19,13 +20,15 @@ public interface UserRepository extends JpaRepository<User, Integer>{
 
     @Query("""
         SELECT u FROM User u
-        WHERE (LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
+        WHERE LOWER(u.username) LIKE LOWER(CONCAT('%', :keyword, '%'))
            OR LOWER(u.email) LIKE LOWER(CONCAT(:keyword, '%'))
-           OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%')))
-    	   AND u.roleType='Member'
+           OR LOWER(u.name) LIKE LOWER(CONCAT('%', :keyword, '%'))
     """)
     List<User> searchUsers(@Param("keyword") String keyword, Pageable pageable);
-    
+
+	public boolean existsByUsername(String username);
+	
+	public boolean existsByEmail(String email);
     
     List<User> findByRoleType(String roleType);
 	

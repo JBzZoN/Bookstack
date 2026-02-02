@@ -98,6 +98,10 @@ public class RouteConfiguration {
 		            RequestPredicates.path("/member/**"),
 		            HandlerFunctions.http()
 		    )
+	        .route(
+		            RequestPredicates.path("/payment/**"),
+		            HandlerFunctions.http()
+		    )
 	        .before((request) -> {
 
 	            String authHeader = request.headers().firstHeader("Authorization");

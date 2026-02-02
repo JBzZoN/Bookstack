@@ -1,13 +1,14 @@
 package com.bookstack.auth.dto;
 
 import lombok.AllArgsConstructor;
+
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
 @AllArgsConstructor
-public class UserResponseDto {
+public class UserResponseDTO {
 
     private Integer userId;
     private String username;
@@ -17,3 +18,5 @@ public class UserResponseDto {
     private String token;
     
 }
+
+

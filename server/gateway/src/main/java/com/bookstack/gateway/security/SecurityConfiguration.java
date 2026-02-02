@@ -29,6 +29,7 @@ public class SecurityConfiguration {
 		// URL authorization
 		.authorizeHttpRequests(requests -> requests
 			.requestMatchers("/book/image/**").permitAll()
+			.requestMatchers("/payment/**").permitAll()
 			.requestMatchers("/auth/**").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
@@ -50,4 +51,5 @@ public class SecurityConfiguration {
 	// BCrypt automatically generates and uses salt
 	return new BCryptPasswordEncoder();
 	}
+	
 }

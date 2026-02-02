@@ -91,36 +91,34 @@ public class AuthService {
 	public String editstaff(editStaffDto editStaffDto) {
 		try {
 			
-			User u=userRepository.getById(editStaffDto.getUserId());
-			
-			u.setName(editStaffDto.getName());
-			u.setEmail(editStaffDto.getEmail());
-			u.setPhone(editStaffDto.getPhone());
-			u.setAddress(editStaffDto.getAddress());
-			u.setUsername(editStaffDto.getUsername());
-			System.out.println(editStaffDto.getPassword());
-			if(editStaffDto.getPassword()!=" ") {
-			String newpassword=passwordEncoder.encode(editStaffDto.getPassword());
-			u.setPassword(newpassword);
-			}else {
-				System.out.println("namanhia");
+				User u=userRepository.getById(editStaffDto.getUserId());
+				
+				u.setName(editStaffDto.getName());
+				u.setEmail(editStaffDto.getEmail());
+				u.setPhone(editStaffDto.getPhone());
+				u.setAddress(editStaffDto.getAddress());
+				u.setUsername(editStaffDto.getUsername());
+				System.out.println(editStaffDto.getPassword());
+				if(editStaffDto.getPassword()!=" ") {
+				String newpassword=passwordEncoder.encode(editStaffDto.getPassword());
+				u.setPassword(newpassword);
+				}else {
+					System.out.println("namanhia");
+				}
+				u.setDob(editStaffDto.getDob());
+				
+				userRepository.save(u);
+				return "saved";
+				
+			} catch (Exception e) {
+				e.printStackTrace();
+				return "not saved";
 			}
-			u.setDob(editStaffDto.getDob());
-			
-			userRepository.save(u);
-			return "saved";
-			
-		} catch (Exception e) {
-			e.printStackTrace();
-			return "not saved";
 		}
+		
+	public String savelog(LogDto logDto) {
+		//return loggeClient.sendlog(logDto);
+		return null;
 	}
 		
-		public String savelog(LogDto logDto) {
-			//return loggeClient.sendlog(logDto);
-			return null;
-		}
-	
-
-	
 }

@@ -2,8 +2,8 @@ import React from 'react'
 import '../MemberHome/MemberHome.css'
 import { Link, Outlet } from 'react-router-dom'; 
 import { useState,useEffect } from 'react'; 
-import { newArrivals } from '../../../dummy-data/new-arrivals.js';
-import { trendingBooks } from '../../../dummy-data/trending-books.js';
+import { useDispatch } from "react-redux";
+import { loadLikesFromBackend } from "../../../redux/slices/likeSlice.js";
 import BookCard from '../../../components/Member/BookCard/BookCard.jsx';
 import banner1 from '../../../assets/images/member/banner1.png';
 import banner2 from '../../../assets/images/member/banner2.png';
@@ -12,15 +12,22 @@ import banner4 from '../../../assets/images/member/banner4.png';
 import banner5 from '../../../assets/images/member/banner5.png';
 import banner6 from '../../../assets/images/member/banner6.png';
 import banner7 from '../../../assets/images/member/banner7.png';
-import { recommendedBooksData,trendingBooksData,newArrivedBooksData } from '../../../api/member.js'
+import api from '../../../api/api'
 
 function MemberHome() {
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    // 🔥 Load likes once when page opens
+    dispatch(loadLikesFromBackend());
+  }, [dispatch]);
+
   const [recommendedBooks, setRecommendedBooks] = useState([]);
   const [trendingBooks, setTrendingBooks] = useState([]);
   const [newArrivedBooks, setNewArrivedBooks] = useState([]); 
   
   useEffect(() => {
-    recommendedBooksData()
+    api.get("/member/recommended-books")
       .then(res => {
         setRecommendedBooks(Array.isArray(res.data) ? res.data : []);
       })
@@ -29,7 +36,7 @@ function MemberHome() {
         setRecommendedBooks([]);
       });
 
-    trendingBooksData()
+    api.get("/member/trending-books")
       .then(res => {
         setTrendingBooks(Array.isArray(res.data) ? res.data : []);
       }) 
@@ -38,7 +45,7 @@ function MemberHome() {
         setTrendingBooks([]);
       });
 
-    newArrivedBooksData()
+    api.get("/member/new-arrived-books")
       .then(res => {
         setNewArrivedBooks(Array.isArray(res.data) ? res.data : []);
       }) 
@@ -112,6 +119,7 @@ function MemberHome() {
               recommendedBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
+                  bookId={book.bookId}
                   title={book.title}
                   author={book.author}
                   image={book.bookImage}
@@ -136,6 +144,7 @@ function MemberHome() {
               trendingBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
+                  bookId={book.bookId}
                   title={book.title}
                   author={book.author}
                   image={book.bookImage}
@@ -175,6 +184,7 @@ function MemberHome() {
               newArrivedBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
+                  bookId={book.bookId}
                   title={book.title}
                   author={book.author}
                   image={book.bookImage}

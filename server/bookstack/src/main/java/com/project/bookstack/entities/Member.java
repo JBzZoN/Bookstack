@@ -1,19 +1,19 @@
 package com.project.bookstack.entities;
+
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Member_table")
+@Table(name = "member_table")
 @Data
 public class Member {
-
-    /* ------------------ Shared Primary Key ------------------ */
 
     @Id
     @Column(name = "user_id")
     private Integer userId;
+
     /* ------------------ Membership Type ------------------ */
 
     @ManyToOne(fetch = FetchType.EAGER)
@@ -23,8 +23,6 @@ public class Member {
         foreignKey = @ForeignKey(name = "membership_type")
     )
     private MembershipData membershipData;
-
-    /* ------------------ Dates ------------------ */
 
     @Column(name = "member_start")
     private LocalDate memberStart;

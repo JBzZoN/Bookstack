@@ -1,120 +1,207 @@
-import React from "react";
-import "./OrderSummary.css";
+import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Footer from "../../../components/Member/Footer/Footer";
 import logo from "../../../assets/logo.png";
-import { Link } from "react-router-dom";
+import api from "../../../api/api"; // plain axios instance
 
-/*
-  OrderSummary Component
-  ----------------------
-  Displays selected plan details before registration.
-  Acts as a confirmation step in the membership flow.
-*/
 function OrderSummary() {
-  const plan = JSON.parse(localStorage.getItem("selectedPlan"));
+  const navigate = useNavigate();
 
-  const startPayment = async (plan) => {
+  /* =======================
+     STATE
+     ======================= */
+  const [amount, setAmount] = useState(null);
+  const [rzpConfig, setRzpConfig] = useState(null);
+  const [error, setError] = useState("");
 
-    const token = localStorage.getItem("token"); // JWT after login/register
+  /* =======================
+     READ LOCAL STORAGE
+     ======================= */
+  const selectedPlan = JSON.parse(localStorage.getItem("selectedPlan"));
+  const registerData = JSON.parse(localStorage.getItem("registerData"));
 
-    // 1️⃣ Call backend to create order
-    const res = await fetch(
-      `/membership/start-payment?membershipType=${plan.type}`,
-      {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${token}`
-        }
-      }
-    );
+  // 🔑 SINGLE SOURCE OF TRUTH
+  const membershipType =
+    selectedPlan?.membershipType || selectedPlan?.type;
 
-    const data = await res.json();
+  /* =======================
+     SAFETY CHECK
+     ======================= */
+  useEffect(() => {
+    if (!selectedPlan || !registerData || !membershipType) {
+      navigate("/membership");
+    }
+  }, [navigate, selectedPlan, registerData, membershipType]);
 
-    // 2️⃣ Razorpay checkout
+  /* =======================
+     FETCH RAZORPAY CONFIG
+     ======================= */
+  useEffect(() => {
+    api
+      .get("/payment/config")
+      .then(res => setRzpConfig(res.data))
+      .catch(() =>
+        setError("Unable to load payment configuration.")
+      );
+  }, []);
+
+  /* =======================
+     FETCH FINAL AMOUNT
+     ======================= */
+  useEffect(() => {
+    if (!membershipType) return;
+
+    api
+      .post("/payment/preview", {
+        purpose: "BUY_MEMBERSHIP",
+        membershipType: membershipType,
+        billing: selectedPlan.billing
+      })
+      .then(res => setAmount(res.data.amount))
+      .catch(() =>
+        setError("Unable to fetch payment amount.")
+      );
+  }, [membershipType, selectedPlan]);
+
+  /* =======================
+     START PAYMENT
+     ======================= */
+  const startPayment = async () => {
+    setError("");
+
+    try {
+      const res = await api.post("/payment/create-order", {
+        purpose: "BUY_MEMBERSHIP",
+        membershipType: membershipType,
+        billing: selectedPlan.billing
+      });
+
+      openRazorpay(res.data.orderId, res.data.amount);
+    } catch {
+      setError("Unable to initiate payment.");
+    }
+  };
+
+  /* =======================
+     RAZORPAY CHECKOUT
+     ======================= */
+  const openRazorpay = (orderId, amount) => {
+    if (!rzpConfig) return;
+
     const options = {
-      key: data.key,
-      amount: data.amount * 100,
-      currency: "INR",
-      name: "BookStack",
-      description: `${plan.type} Membership`,
-      order_id: data.orderId,
+      key: rzpConfig.keyId,
+      amount: amount * 100,
+      currency: rzpConfig.currency,
+      name: rzpConfig.company,
+      description: "BookStack Membership",
+      order_id: orderId,
 
-      handler: async function (response) {
+      handler: handlePaymentSuccess,
 
-        // 3️⃣ Notify backend on success
-        await fetch("/membership/payment-success", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`
-          },
-          body: JSON.stringify({
-            razorpay_order_id: response.razorpay_order_id,
-            razorpay_payment_id: response.razorpay_payment_id,
-            razorpay_signature: response.razorpay_signature,
-            membershipType: plan.type
-          })
-        });
+      modal: {
+        ondismiss: () =>
+          setError("Payment cancelled by user.")
+      },
 
-        alert("Membership Activated!");
-        window.location.href = "/login"; // or dashboard
-      }
+      prefill: {
+        name: registerData.fullName,
+        email: registerData.email,
+        contact: registerData.phone
+      },
+
+      theme: { color: "#004A55" }
     };
 
     const rzp = new window.Razorpay(options);
+
+    rzp.on("payment.failed", () => {
+      setError("Payment failed. Please try again.");
+    });
+
     rzp.open();
   };
 
+  /* =======================
+     PAYMENT SUCCESS
+     ======================= */
+  const handlePaymentSuccess = async (response) => {
+  const membershipType =
+    selectedPlan.membershipType ||
+    selectedPlan.planType ||
+    selectedPlan.type;
+
+  const payload = {
+    razorpayPaymentId: response.razorpay_payment_id,
+    razorpayOrderId: response.razorpay_order_id,
+    razorpaySignature: response.razorpay_signature,
+    membershipType,             
+    billing: selectedPlan.billing,
+    registerData
+  };
+
+  console.log("✅ PAYMENT SUCCESS PAYLOAD", payload);
+
+  try {
+      await api.post("/payment/success", payload);
+      localStorage.clear();
+      navigate("/login");
+    } catch (err) {
+      console.error("❌ PAYMENT SUCCESS ERROR", err.response?.data || err);
+      setError("Payment successful but membership activation failed.");
+    }
+  };
+
+
+  /* =======================
+     UI
+     ======================= */
   return (
-    <div className="body1">
+    <div className="body1 d-flex flex-column min-vh-100">
 
-      {/* MAIN CONTENT */}
-      <main className="order-page container d-flex flex-column align-items-center justify-content-center">
+      <main className="flex-grow-1 d-flex align-items-center justify-content-center">
+        <div className="container">
 
-        {/* Brand header */}
-        <div className="d-flex align-items-center gap-2 text-decoration-none">
-          <img className="logo-img" src={logo} alt="logo" />
-
-          <div className="logo-title">
-            <span style={{ color: "#0a0d9f" }}>Book</span>
-            <span style={{ color: "#111827" }}>Stack</span>
+          {/* LOGO */}
+          <div className="d-flex justify-content-center align-items-center gap-2 mb-4">
+            <img className="logo-img" src={logo} alt="logo" />
+            <div className="logo-title">
+              <span style={{ color: "#0a0d9f" }}>Book</span>
+              <span style={{ color: "#111827" }}>Stack</span>
+            </div>
           </div>
-        </div>
 
-        {/* Card layout */}
-        <div className="row w-100 justify-content-center padding">
-          <div className="col-lg-6 col-md-8">
+          {/* CARD */}
+          <div className="row justify-content-center">
+            <div className="col-lg-5 col-md-7 col-sm-10">
+              <div className="content-card text-center">
 
-            <div className="content-card text-center">
-              <h3 className="font-montserrat mb-4">
-                Order Summary
-              </h3>
+                <h3>Order Summary</h3>
+                <p>{membershipType} Plan</p>
+                <p className="fw-bold fs-4">₹{amount}</p>
+                <p className="text-secondary">
+                  Billed {selectedPlan.billing}
+                </p>
 
-              <p className="h5">{plan.type} Plan</p>
-              <p className="h5 fw-bold">₹{plan.amount}</p>
+                {error && (
+                  <p className="text-danger mt-2">{error}</p>
+                )}
 
-              <p className="text-secondary small">
-                Billed {plan.billing}. Membership benefits apply.
-              </p>
-
-              <p className="text-secondary small">
-                Billed annually. Full access, 7 book borrow limit, no late fees.
-              </p>
-
-              <hr />
-
-              <div className="d-grid mt-4">
                 <button
-                  className="btn-outline w-100"
-                  onClick={() => startPayment(plan)}
+                  className="btn-outline w-100 mt-3"
+                  onClick={startPayment}
+                  disabled={!amount || !rzpConfig}
                 >
                   Pay & Continue
                 </button>
+
               </div>
             </div>
-
           </div>
+
         </div>
       </main>
+
+      <Footer />
     </div>
   );
 }

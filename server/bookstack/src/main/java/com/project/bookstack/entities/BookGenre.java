@@ -7,7 +7,7 @@ import java.util.Set;
 
 @Entity
 @Table(
-    name = "book_genre",
+    name = "genre_table",
     uniqueConstraints = @UniqueConstraint(columnNames = "genre_name")
 )
 @Data
