@@ -105,7 +105,7 @@ public class AdminServiceImpl implements AdminService{
 			rs.setAddress(list.getAddress());
 			rs.setDob(list.getDob());
 			rs.setUsername(list.getUsername());
-			rs.setMembershipType(member.getMembershipType());
+			rs.setMembershipType(member.getMembershipData().getMembershipType());
 			rs.setMemberStart(member.getMemberStart());
 			rs.setMemberEnd(member.getMemberEnd());
 			

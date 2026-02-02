@@ -1,8 +1,5 @@
 import React from 'react'
-<<<<<<< HEAD
 import './title.css'
-=======
->>>>>>> origin/naman
 
 function Title({ string }) {
   return (

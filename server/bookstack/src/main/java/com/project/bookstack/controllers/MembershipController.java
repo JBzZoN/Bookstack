@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;
+import com.project.bookstack.repositories.StaffMemberDataRepository;
 import com.project.bookstack.repositories.admin.MembershipRepository;
 import com.project.bookstack.repositories.member.MemberRepository;
 import com.project.bookstack.services.RazorpayService;
@@ -27,6 +28,7 @@ public class MembershipController {
     private final RazorpayService razorpayService;
     private final MemberRepository memberRepository;
     private final MembershipRepository membershipRepository;
+    private final StaffMemberDataRepository staffMemberDataRepository;
 
     @Value("${razorpay.key.secret}")
     private String razorpayKeySecret;
@@ -85,7 +87,7 @@ public class MembershipController {
                 .orElse(new Member());
 
         member.setUserId(userId);
-        member.setMembershipType(membershipType);
+        member.setMembershipData(staffMemberDataRepository.findById(membershipType).get());
         member.setMemberStart(LocalDate.now());
         member.setMemberEnd(LocalDate.now().plusDays(365));
 

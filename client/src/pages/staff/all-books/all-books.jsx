@@ -5,7 +5,7 @@ import axios from "axios"
 import { toast } from 'react-toastify'
 import Title from '../../../components/staff/title/title'
 
-function AllBooks() {
+function AllStaffBooks() {
 
     const genreColorMap = {
         "Fantasy": "text-bg-primary",
@@ -118,4 +118,4 @@ function AllBooks() {
     )
 }
 
-export default AllBooks
+export default AllStaffBooks

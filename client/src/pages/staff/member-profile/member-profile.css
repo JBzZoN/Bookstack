@@ -1,9 +1,9 @@
-.profile-container {
+.s-profile-container {
     max-width: 900px;
 }
 
 /* Card */
-.profile-card {
+.s-profile-card {
     border: none;
     border-radius: 18px;
     overflow: hidden;
@@ -12,7 +12,7 @@
 }
 
 /* Gradient header */
-.profile-header {
+.s-profile-header {
     height: 120px;
     background: linear-gradient(
         90deg,
@@ -21,8 +21,8 @@
     );
 }
 
-/* Profile image */
-.profile-image {
+/* s-Profile image */
+.s-profile-image {
     width: 120px;
     height: 120px;
     object-fit: cover;
@@ -36,29 +36,29 @@
 }
 
 /* Body spacing */
-.profile-body {
+.s-profile-body {
     margin-top: 80px;
     padding: 1.5rem 2rem 2rem;
 }
 
 /* Table */
-.profile-table {
+.s-profile-table {
     margin-bottom: 1.5rem;
 }
 
-.profile-table td {
+.s-profile-table td {
     font-size: 14px;
     padding: 0.6rem;
 }
 
-.profile-table td:first-child {
+.s-profile-table td:first-child {
     font-weight: 600;
     color: #555;
     width: 40%;
 }
 
 /* Button */
-.go-back {
+.s-go-back {
     border-radius: 10px;
     padding: 0.45rem 1.2rem;
 }

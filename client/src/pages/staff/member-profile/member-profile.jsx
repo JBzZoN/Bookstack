@@ -3,30 +3,30 @@ import { useLocation, Link } from 'react-router-dom'
 import "./member-profile.css"
 import profileImage from "../../../assets/staff/default_profile_image.png"
 
-function MemberProfile() {
+function MemberStaffProfile() {
 
   const location = useLocation()
   const member = location.state.member
   console.log(member)
 
   return (
-    <div className="container profile-container mb-5">
+    <div className="container s-profile-container mb-5">
 
-      <div className="card profile-card position-relative">
+      <div className="card s-profile-card position-relative">
 
         {/* Gradient header */}
-        <div className="profile-header"></div>
+        <div className="s-profile-header"></div>
 
         {/* Profile image */}
         <img
           src={profileImage}
-          className="profile-image"
+          className="s-profile-image"
           alt="profile"
         />
 
-        <div className="card-body profile-body">
+        <div className="card-body s-profile-body">
 
-          <table className="table profile-table">
+          <table className="table s-profile-table">
             <tbody>
               <tr><td>Name</td><td>{member.name}</td></tr>
               <tr><td>Email</td><td>{member.email}</td></tr>
@@ -40,7 +40,7 @@ function MemberProfile() {
             </tbody>
           </table>
 
-          <Link to="/staff/members" className="btn btn-primary go-back">
+          <Link to="/staff/members" className="btn btn-primary s-go-back">
             ← Go Back
           </Link>
 
@@ -51,4 +51,4 @@ function MemberProfile() {
   )
 }
 
-export default MemberProfile
+export default MemberStaffProfile

@@ -1,11 +1,11 @@
 /* Container (bigger) */
-.book-container-lol {
+.s-book-container-lol {
     margin-top: 80px;
     max-width: 950px;
 }
 
 /* Card */
-.book-card-lol {
+.s-book-card-lol {
     border-radius: 18px;
     border: none;
     background: #ffffff;
@@ -14,7 +14,7 @@
 }
 
 /* Gradient header */
-.book-header {
+.s-book-header {
     height: 140px;
     background: linear-gradient(
         90deg,
@@ -24,14 +24,14 @@
 }
 
 /* Image wrapper INSIDE card */
-.book-image-wrapper {
+.s-book-image-wrapper {
     display: flex;
     justify-content: center;
     margin-top: -75px; /* overlap header like member profile */
 }
 
 /* Book image */
-.book-image-lol {
+.s-book-image-lol {
     height: 220px;
     width: 200px;
     border-radius: 12px;
@@ -41,31 +41,31 @@
 }
 
 /* Body */
-.book-body {
+.s-book-body {
     padding: 2rem 2.5rem 2.5rem;
 }
 
 /* Table */
-.book-table td {
+.s-book-table td {
     font-size: 14px;
     padding: 0.7rem;
     vertical-align: top;
 }
 
-.book-table td:first-child {
+.s-book-table td:first-child {
     font-weight: 600;
     color: #555;
     width: 28%;
 }
 
 /* Summary */
-.book-summary {
+.s-book-summary {
     line-height: 1.7;
     color: #444;
 }
 
 /* Button */
-.go-back {
+.s-go-back {
     width: 100%;
     border-radius: 10px;
     padding: 0.5rem 1.2rem;

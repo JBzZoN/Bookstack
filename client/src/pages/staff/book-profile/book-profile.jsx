@@ -24,26 +24,26 @@ function BookProfile() {
   const book = location.state.book
 
   return (
-    <div className="container book-container-lol mb-5">
+    <div className="container s-book-container-lol mb-5">
 
-      <div className="card book-card-lol">
+      <div className="card s-book-card-lol">
 
         {/* Gradient header */}
-        <div className="book-header"></div>
+        <div className="s-book-header"></div>
 
         {/* Image INSIDE the card */}
-        <div className="book-image-wrapper">
+        <div className="s-book-image-wrapper">
           <img
             src={book.bookImage.startsWith("http")
               ? book.bookImage
               : `http://localhost:7070/book/image/${book.bookImage}`}
-            className="book-image-lol"
+            className="s-book-image-lol"
             alt="book"
           />
         </div>
 
-        <div className="card-body book-body">
-          <table className="table book-table">
+        <div className="card-body s-book-body">
+          <table className="table s-book-table">
             <tbody>
               <tr>
                 <td>Title</td>
@@ -71,12 +71,12 @@ function BookProfile() {
 
               <tr>
                 <td>Summary</td>
-                <td className="book-summary">{book.description}</td>
+                <td className="s-book-summary">{book.description}</td>
               </tr>
             </tbody>
           </table>
 
-          <Link to="/staff/books" className="btn btn-primary go-back">
+          <Link to="/staff/books" className="btn btn-primary s-go-back">
             ← Go Back
           </Link>
         </div>
