@@ -29,7 +29,6 @@ import AddBooks from './pages/staff/add-books/add-books';
 import RentRenewReturn from './pages/staff/rent-renew-return/rent-renew-return';
 import SendNewsletter from './pages/staff/send-newsletter/send-newsletter';
 import ViewMembers from './pages/staff/view-members/view-members';
-import MemberProfile from './pages/staff/member-profile/member-profile';
 import BookProfile from './pages/staff/book-profile/book-profile';
 
 /* Non member pages */
@@ -39,6 +38,10 @@ import Membership from './pages/non-member/Membership/Membership';
 import OrderSummary from './pages/non-member/OrderSummary/OrderSummary';
 import Register from './pages/non-member/Register/Register';
 import Login from './pages/non-member/Login/Login';
+import MemberProfile from './pages/admin/Members/MemberProfile';
+import SendLetter from './pages/admin/Members/SendLetter';
+import AllStaffBooks from './pages/staff/all-books/all-books';
+import MemberStaffProfile from './pages/staff/member-profile/member-profile';
 
 function App() {
   return <Routes>    
@@ -73,17 +76,19 @@ function App() {
         <Route path="editstaff" element={<EditStaff />} />
         <Route path="books" element={<Books />} />
         <Route path="members" element={<Members />} />
+        <Route path="memberprofile" element={<MemberProfile/>} />
+        <Route path='emailsending' element={<SendLetter/>}/>
       </Route>
 
     {/* STAFF ROUTES */}
     <Route path="/staff" element={<StaffHome/>}>
-      <Route path="books" element={<AllBooks/>}/>
+      <Route path="books" element={<AllStaffBooks/>}/>
       <Route path="books/add" element={<AddBooks/>}/>
       <Route path="books/profile" element={<BookProfile/>}/>
       <Route path="transaction" element={<RentRenewReturn/>}/>
       <Route path="newsletter" element={<SendNewsletter/>}/>
       <Route path="members" element={<ViewMembers/>}/>
-      <Route path="members/profile" element={<MemberProfile/>}/>
+      <Route path="members/profile" element={<MemberStaffProfile/>}/>
     </Route>
   </Routes>
 }

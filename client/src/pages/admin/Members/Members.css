@@ -1,50 +1,44 @@
-.members-container {
-  max-width: 1200px;
-  margin: 40px auto;
-  padding: 20px;
-  font-family: Arial, sans-serif;
+/* Card wrapper */
+.members-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
 }
 
+/* Table */
 .members-table {
-  width: 100%;
-  border-collapse: collapse;
+    margin-bottom: 0;
+    vertical-align: middle;
 }
 
-.members-table th,
+/* Header */
+.members-table thead th {
+    border-bottom: 2px solid #eee;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* Rows */
+.members-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.members-table tbody tr:hover {
+    background-color: #f7f8fc;
+}
+
+/* Cells */
 .members-table td {
-  border: 1px solid #ccc;
-  padding: 8px;
-  text-align: left;
-  font-size: 14px;
+    font-size: 14px;
+    color: #333;
 }
 
-.members-table th {
-  background-color: #f4f4f4;
-}
-
-.fine-btn,
-.remove-btn {
-  padding: 5px 10px;
-  margin: 2px;
-  border: none;
-  border-radius: 4px;
-  color: #fff;
-  cursor: pointer;
-  font-size: 13px;
-}
-
-.fine-btn {
-  background-color: #2196f3;
-}
-
-.fine-btn:hover {
-  background-color: #1976d2;
-}
-
-.remove-btn {
-  background-color: #f44336;
-}
-
-.remove-btn:hover {
-  background-color: #d32f2f;
+/* Button */
+.members-table .btn {
+    border-radius: 8px;
+    padding: 0.35rem 0.7rem;
 }

@@ -17,10 +17,8 @@ public class BookGenre {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "genre_id")
     private Integer genreId;
-
+    
     @Column(name = "genre_name", nullable = false, length = 50)
     private String genreName;
 
-    @ManyToMany(mappedBy = "genres")
-    private Set<Book> books;
 }

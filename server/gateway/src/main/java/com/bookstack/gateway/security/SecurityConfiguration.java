@@ -28,10 +28,13 @@ public class SecurityConfiguration {
 		.cors(Customizer.withDefaults()) // Or use withDefaults()
 		// URL authorization
 		.authorizeHttpRequests(requests -> requests
-			.requestMatchers("/auth/**", "/staff/image/**").permitAll()
+			.requestMatchers("/book/image/**").permitAll()
+			.requestMatchers("/payment/**").permitAll()
+			.requestMatchers("/auth/**").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
 			.requestMatchers("/staff/**").hasAuthority("Librarian")
+			.requestMatchers("/book/**").hasAnyAuthority("Member", "Admin", "Librarian")
 			.anyRequest().authenticated()
 		)
 		// Session management - STATELESS for JWT

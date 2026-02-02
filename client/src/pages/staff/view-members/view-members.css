@@ -1,0 +1,44 @@
+/* Card wrapper */
+.members-card {
+    background: #ffffff;
+    border-radius: 14px;
+    padding: 1rem 1.2rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+}
+
+/* Table */
+.members-table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+/* Header */
+.members-table thead th {
+    border-bottom: 2px solid #eee;
+    font-size: 14px;
+    font-weight: 600;
+    color: #555;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* Rows */
+.members-table tbody tr {
+    transition: background-color 0.15s ease;
+}
+
+.members-table tbody tr:hover {
+    background-color: #f7f8fc;
+}
+
+/* Cells */
+.members-table td {
+    font-size: 14px;
+    color: #333;
+}
+
+/* Button */
+.members-table .btn {
+    border-radius: 8px;
+    padding: 0.35rem 0.7rem;
+}

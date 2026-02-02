@@ -15,17 +15,16 @@ public class BookComment {
     @Column(name = "comment_id")
     private Integer commentId;
 
-    @ManyToOne
-    @JoinColumn(name = "book_id", nullable = false)
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private Integer bookId;
 
-    @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
-    private User user;
+    @Column(name = "user_id", nullable = false)
+    private Integer userId;
 
     @Column(name = "comment", nullable = false, columnDefinition = "TEXT")
     private String comment;
 
     @Column(name = "comment_date")
-    private LocalDateTime commentDate;
+    private LocalDateTime createdAt;
+    
 }

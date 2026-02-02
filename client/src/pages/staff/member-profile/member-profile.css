@@ -1,25 +1,64 @@
-.profile {
-    height: 100%;
+.s-profile-container {
+    max-width: 900px;
 }
 
-.profile-image {
-    height: 100px;
+/* Card */
+.s-profile-card {
+    border: none;
+    border-radius: 18px;
+    overflow: hidden;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    background: #ffffff;
+}
+
+/* Gradient header */
+.s-profile-header {
+    height: 120px;
+    background: linear-gradient(
+        90deg,
+        #4f0bc5,
+        rgb(236, 94, 117)
+    );
+}
+
+/* s-Profile image */
+.s-profile-image {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
     border-radius: 50%;
-    width: 100px;
+    border: 6px solid #ffffff;
+    position: absolute;
+    top: 60px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #f4f4f4;
 }
 
-.go-back {
-    width: 100%;
+/* Body spacing */
+.s-profile-body {
+    margin-top: 80px;
+    padding: 1.5rem 2rem 2rem;
 }
 
-.whitener{
-    height: 100px;
-    width: 100px;
-    background-color: white;
+/* Table */
+.s-profile-table {
+    margin-bottom: 1.5rem;
 }
 
-.profile-container {
-    margin-top: 100px;
-    height: 500px;
-    width: 500px !important;
+.s-profile-table td {
+    font-size: 14px;
+    padding: 0.6rem;
+}
+
+.s-profile-table td:first-child {
+    font-weight: 600;
+    color: #555;
+    width: 40%;
+}
+
+/* Button */
+.s-go-back {
+    border-radius: 10px;
+    padding: 0.45rem 1.2rem;
 }

@@ -1,15 +1,21 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Set;
 
 
 @Entity
-@Table(name = "book_table")
+@Table(name = "book_table", schema = "Bookstack")
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Book {
-
 
 	    @Id
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +24,14 @@ public class Book {
 
 	    @Column(name = "isbn")
 	    private String isbn;
+	    
+	    @Column(name = "book_image")
+	    private String image;
 
-	    @Column(name = "title", length = 50)
+	    @Column(name = "title", length = 25)
 	    private String title;
 
-	    @Column(name = "author", length = 50)
+	    @Column(name = "author", length = 25)
 	    private String author;
 
 	    @Column(name = "description", columnDefinition = "TEXT")
@@ -30,9 +39,6 @@ public class Book {
 
 	    @Column(name = "publisher", length = 45)
 	    private String publisher;
-
-	    @Column(name = "edition")
-	    private Integer edition;   // YEAR mapped as Integer
 
 	    @Column(name = "action", length = 15)
 	    private String action;
@@ -45,9 +51,6 @@ public class Book {
 
 	    @Column(name = "number_of_copies_remaining")
 	    private Integer numberOfCopiesRemaining;
-	    
-	    @Column(name = "book_image")
-	    private String bookImage;
 
 	    /* ------------------ Relationship ------------------ */
 
@@ -58,27 +61,6 @@ public class Book {
 	        foreignKey = @ForeignKey(name = "staff_id")
 	    )
 	    private Staff staff;
+
 	    
-	    @ManyToMany
-	    @JoinTable(
-	        name = "book_genre",
-	        joinColumns = @JoinColumn(name = "book_id"),
-	        inverseJoinColumns = @JoinColumn(name = "genre_id")
-	    )
-	    private Set<BookGenre> genres;
-
-	    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-	    private List<BookRating> ratings;
-
-	    @OneToMany(mappedBy = "book", cascade = CascadeType.ALL)
-	    private List<BookComment> comments;
-	    
-	    @ManyToMany
-	    @JoinTable(
-	        name = "book_like",
-	        joinColumns = @JoinColumn(name = "book_id"),
-	        inverseJoinColumns = @JoinColumn(name = "user_id")
-	    )
-	    private Set<User> likedByUsers;
-
 }

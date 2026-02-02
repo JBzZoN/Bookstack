@@ -1,9 +1,14 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
+@Data
+@NoArgsConstructor
 @Table(name = "Record_table", schema = "Bookstack")
 public class Record {
 
@@ -24,7 +29,7 @@ public class Record {
     )
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "staff_id",
         referencedColumnName = "user_id",

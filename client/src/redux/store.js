@@ -6,3 +6,5 @@ export const store = configureStore({
     likes: likeReducer
   }
 });
+
+export default store;

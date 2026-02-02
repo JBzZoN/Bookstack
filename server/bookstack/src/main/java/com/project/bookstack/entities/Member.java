@@ -1,29 +1,22 @@
 package com.project.bookstack.entities;
+
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "Member_table", schema = "Bookstack")
+@Table(name = "member_table")
+@Data
 public class Member {
-
-    /* ------------------ Shared Primary Key ------------------ */
 
     @Id
     @Column(name = "user_id")
     private Integer userId;
 
-    @MapsId
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "user_id",
-        referencedColumnName = "user_id",
-        foreignKey = @ForeignKey(name = "member_user")
-    )
-    private User user;
-
     /* ------------------ Membership Type ------------------ */
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(
         name = "membership_type",
         referencedColumnName = "membership_type",
@@ -31,11 +24,16 @@ public class Member {
     )
     private MembershipData membershipData;
 
-    /* ------------------ Dates ------------------ */
-
     @Column(name = "member_start")
     private LocalDate memberStart;
 
     @Column(name = "member_end")
     private LocalDate memberEnd;
+    
+    @Column(name = "rent_count")
+    private Integer rentCount;
+    
+    @Column(name = "renew_count")
+    private Integer renewCount;
+    
 }

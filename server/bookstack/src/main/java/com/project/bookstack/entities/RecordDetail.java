@@ -1,10 +1,15 @@
 package com.project.bookstack.entities;
 
 import jakarta.persistence.*;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "record_Detail_table", schema = "Bookstack")
+@Table(name = "record_detail_table", schema = "Bookstack")
+@Data
+@NoArgsConstructor
 public class RecordDetail {
 
     /* ------------------ Primary Key ------------------ */
@@ -24,13 +29,8 @@ public class RecordDetail {
     )
     private Record record;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "book_id",
-        referencedColumnName = "book_id",
-        foreignKey = @ForeignKey(name = "book_record")
-    )
-    private Book book;
+    @Column(name = "book_id", nullable = false)
+    private Integer bookId;
 
     /* ------------------ Other Columns ------------------ */
 
@@ -42,4 +42,8 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
+    
+    @Column(name = "returned")
+    private Integer returned;
+    
 }
