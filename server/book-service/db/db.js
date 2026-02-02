@@ -5,8 +5,8 @@ const pool = mysql.createPool({
   user: 'bookstack',
   password: 'bookstack',
   database: 'book_db',
-  //waitForConnections: true,
-  //connectionLimit: 10
+  waitForConnections: true,
+  connectionLimit: 10
 });
 
 module.exports = pool;

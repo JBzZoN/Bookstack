@@ -14,11 +14,15 @@ public class Member {
     @Id
     @Column(name = "user_id")
     private Integer userId;
-
     /* ------------------ Membership Type ------------------ */
 
-    @Column(name = "membership_type", length = 8)
-    private String membershipType;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(
+        name = "membership_type",
+        referencedColumnName = "membership_type",
+        foreignKey = @ForeignKey(name = "membership_type")
+    )
+    private MembershipData membershipData;
 
     /* ------------------ Dates ------------------ */
 
@@ -27,4 +31,11 @@ public class Member {
 
     @Column(name = "member_end")
     private LocalDate memberEnd;
+    
+    @Column(name = "rent_count")
+    private Integer rentCount;
+    
+    @Column(name = "renew_count")
+    private Integer renewCount;
+    
 }

@@ -40,6 +40,8 @@ import Register from './pages/non-member/Register/Register';
 import Login from './pages/non-member/Login/Login';
 import MemberProfile from './pages/admin/Members/MemberProfile';
 import SendLetter from './pages/admin/Members/SendLetter';
+import AllStaffBooks from './pages/staff/all-books/all-books';
+import MemberStaffProfile from './pages/staff/member-profile/member-profile';
 
 function App() {
   return <Routes>    
@@ -80,13 +82,13 @@ function App() {
 
     {/* STAFF ROUTES */}
     <Route path="/staff" element={<StaffHome/>}>
-      <Route path="books" element={<AllBooks/>}/>
+      <Route path="books" element={<AllStaffBooks/>}/>
       <Route path="books/add" element={<AddBooks/>}/>
       <Route path="books/profile" element={<BookProfile/>}/>
       <Route path="transaction" element={<RentRenewReturn/>}/>
       <Route path="newsletter" element={<SendNewsletter/>}/>
       <Route path="members" element={<ViewMembers/>}/>
-      <Route path="members/profile" element={<MemberProfile/>}/>
+      <Route path="members/profile" element={<MemberStaffProfile/>}/>
     </Route>
   </Routes>
 }

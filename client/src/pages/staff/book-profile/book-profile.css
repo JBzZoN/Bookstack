@@ -1,25 +1,72 @@
-.book {
-    height: 100%;
+/* Container (bigger) */
+.s-book-container-lol {
+    margin-top: 80px;
+    max-width: 950px;
 }
 
-.book-image {
-    height: 150px;
-    border-radius: 10px;
-    width: 150px;
+/* Card */
+.s-book-card-lol {
+    border-radius: 18px;
+    border: none;
+    background: #ffffff;
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+    overflow: hidden;
 }
 
-.go-back {
+/* Gradient header */
+.s-book-header {
+    height: 140px;
+    background: linear-gradient(
+        90deg,
+        #4f0bc5,
+        rgb(236, 94, 117)
+    );
+}
+
+/* Image wrapper INSIDE card */
+.s-book-image-wrapper {
+    display: flex;
+    justify-content: center;
+    margin-top: -75px; /* overlap header like member profile */
+}
+
+/* Book image */
+.s-book-image-lol {
+    height: 220px;
+    width: 200px;
+    border-radius: 12px;
+    border: 5px solid #ffffff;
+    outline: 3px solid #4f0bc5;
+    background: #f4f4f4;
+}
+
+/* Body */
+.s-book-body {
+    padding: 2rem 2.5rem 2.5rem;
+}
+
+/* Table */
+.s-book-table td {
+    font-size: 14px;
+    padding: 0.7rem;
+    vertical-align: top;
+}
+
+.s-book-table td:first-child {
+    font-weight: 600;
+    color: #555;
+    width: 28%;
+}
+
+/* Summary */
+.s-book-summary {
+    line-height: 1.7;
+    color: #444;
+}
+
+/* Button */
+.s-go-back {
     width: 100%;
-}
-
-.whitener{
-    height: 100px;
-    width: 100px;
-    background-color: white;
-}
-
-.book-container {
-    margin-top: 100px;
-    height: 100%;
-    width: 800px !important;
+    border-radius: 10px;
+    padding: 0.5rem 1.2rem;
 }
