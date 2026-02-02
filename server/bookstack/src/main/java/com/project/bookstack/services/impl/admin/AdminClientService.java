@@ -8,10 +8,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import com.project.bookstack.dto.EmailDTO;
 import com.project.bookstack.dto.admin.AddAuthStaffDto;
 import com.project.bookstack.dto.admin.AllBookDto;
 import com.project.bookstack.dto.admin.AllStaffDto;
 import com.project.bookstack.dto.admin.EditStaffSentDto;
+import com.project.bookstack.dto.admin.UserId;
 
 @Service
 @FeignClient(name="admin-auth-coonect",url="http://localhost:9090")
@@ -29,5 +31,8 @@ public interface AdminClientService {
 	
 	@PostMapping("/auth/editstaff")
 	 public String editstaff(EditStaffSentDto editStaffSentDto);
+	
+	@PostMapping("/auth/particularuser")
+	 public EmailDTO getparticularmember(UserId userId);
 }
 
