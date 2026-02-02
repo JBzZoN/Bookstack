@@ -64,7 +64,7 @@ function StaffNavbar() {
       </ul>
 
       <div className="sidebar-footer">
-        <Link to="/aboutus" className="sidebar-logout">
+        <Link to="/login" className="sidebar-logout">
           Log out
         </Link>
       </div>
