@@ -25,11 +25,14 @@ function Register() {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    // 🔐 Payment should be triggered here (Razorpay backend order)
-    console.log("Form data ready for payment & registration:", formData);
+    // store register data temporarily
+    localStorage.setItem(
+      "registerData",
+      JSON.stringify(formData)
+    );
 
-    // TEMP: simulate success
-    navigate("/payment-success");
+    // go to order summary
+    navigate("/order-summary");
   };
 
   return (
@@ -128,9 +131,9 @@ function Register() {
               </div>
 
               <div className="d-grid mt-4">
-                <Link to='/login' type="submit" className="btn btn-outline">
-                  Pay & Register
-                </Link>
+                              <button type="submit" className="btn btn-outline">
+                Continue to Payment
+              </button>
               </div>
 
             </form>

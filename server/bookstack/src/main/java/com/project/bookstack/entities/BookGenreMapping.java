@@ -6,6 +6,7 @@ import jakarta.persistence.EmbeddedId;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 
@@ -18,6 +19,8 @@ public class BookGenreMapping {
     private BookGenreMappingId id;
     
     @Embeddable
+    @Data
+    @EqualsAndHashCode
     public static class BookGenreMappingId implements Serializable {
 
         @Column(name = "book_id")

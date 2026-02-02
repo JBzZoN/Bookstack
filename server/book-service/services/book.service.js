@@ -24,7 +24,7 @@ async function getAllLikedBooks(likedBookIds) {
 
   const placeholders = likedBookIds.map(() => "?").join(",");
 
-  const query = `
+  const sql = `
     SELECT 
       book_id AS bookId,
       title,
@@ -34,7 +34,7 @@ async function getAllLikedBooks(likedBookIds) {
     WHERE book_id IN (${placeholders})
   `;
 
-  const [rows] = await db.query(query, likedBookIds);
+  const [rows] = await db.query(sql, likedBookIds);
 
   return rows;
 }
@@ -46,7 +46,7 @@ async function getRecommendedBooks(recommendedBookIds) {
 
   const placeholders1 = recommendedBookIds.map(() => "?").join(",");
 
-  const query = `
+  const sql = `
     SELECT 
       book_id AS bookId,
       title,
@@ -57,7 +57,7 @@ async function getRecommendedBooks(recommendedBookIds) {
     LIMIT 10
   `;
 
-  const [rows] = await db.query(query, recommendedBookIds);
+  const [rows] = await db.query(sql, recommendedBookIds);
 
   return rows;
 }
@@ -69,7 +69,7 @@ async function getTrendingBooks(trendingBooksIds) {
 
   const placeholders1 = trendingBooksIds.map(() => "?").join(",");
 
-  const query = `
+  const sql = `
     SELECT 
       book_id AS bookId,
       title,
@@ -80,7 +80,7 @@ async function getTrendingBooks(trendingBooksIds) {
     LIMIT 10
   `;
 
-  const [rows] = await db.query(query, trendingBooksIds);
+  const [rows] = await db.query(sql, trendingBooksIds);
 
   return rows;
 }
@@ -111,7 +111,7 @@ async function getAllRecommendedBooks(recommendedBookIds) {
 
   const placeholders1 = recommendedBookIds.map(() => "?").join(",");
 
-  const query = `
+  const sql = `
     SELECT 
       book_id AS bookId,
       title,
@@ -121,7 +121,7 @@ async function getAllRecommendedBooks(recommendedBookIds) {
     WHERE book_id IN (${placeholders1}) 
   `;
 
-  const [rows] = await db.query(query, recommendedBookIds);
+  const [rows] = await db.query(sql, recommendedBookIds);
 
   return rows;
 }
@@ -133,7 +133,7 @@ async function getAllTrendingBooks(trendingBooksIds) {
 
   const placeholders1 = trendingBooksIds.map(() => "?").join(",");
 
-  const query = `
+  const sql = `
     SELECT 
       book_id AS bookId,
       title,
@@ -143,7 +143,7 @@ async function getAllTrendingBooks(trendingBooksIds) {
     WHERE book_id IN (${placeholders1}) 
   `;
 
-  const [rows] = await db.query(query, trendingBooksIds);
+  const [rows] = await db.query(sql, trendingBooksIds);
 
   return rows;
 }
@@ -198,7 +198,7 @@ async function getMightAlsoLikedBooks(mightLikeBookIds, bookId) {
 
   const placeholders1 = mightLikeBookIds.map(() => "?").join(",");
 
-  const query = `
+  const sql = `
     SELECT 
       book_id AS bookId,
       title,
@@ -211,10 +211,70 @@ async function getMightAlsoLikedBooks(mightLikeBookIds, bookId) {
 
   const params = [...mightLikeBookIds, bookId];
 
-  const [rows] = await db.query(query, params);
+  const [rows] = await db.query(sql, params);
 
   return rows;
 }
 
+async function getBookNamesByIds(bookIds) {
+  if (!Array.isArray(bookIds) || bookIds.length === 0) {
+    return [];
+  }
+
+  const placeholders1 = bookIds.map(() => "?").join(",");
+
+  const sql = `
+    SELECT 
+      book_id AS bookId,
+      title 
+    FROM book_table
+    WHERE book_id IN (${placeholders1}) 
+  `;
+
+  const [rows] = await db.query(sql, bookIds);
+
+  return rows;
+}
+
+async function searchBooks(search) {  
+  
+  if (!search || search.trim().length < 2) {
+    return res.status(200).send([]);
+  }
+
+  const sql = `
+  SELECT
+    book_id,
+    isbn,
+    title,
+    author,
+    description,
+    book_image,
+    publisher,
+    number_of_copies,
+    number_of_copies_remaining
+  FROM book_table
+  WHERE
+    title LIKE ?
+    OR isbn LIKE ?
+    OR author LIKE ?
+    OR publisher LIKE ?
+  LIMIT 5
+  `  
+
+  const values = [
+    `%${search}%`,   // title contains
+    `${search}%`,    // isbn starts with
+    `%${search}%`,   // author contains
+    `%${search}%`    // publisher contains
+  ];
+
+  const [rows] = await db.query(sql, values);
+
+  return rows;
+    
+}
+
 module.exports = { getAllBooks,getAllLikedBooks,getRecommendedBooks,getTrendingBooks,getNewArrivedBooks,
-                    getAllRecommendedBooks,getAllTrendingBooks,getAllNewArrivedBooks,getBookDetails,getMightAlsoLikedBooks };
+                   getAllRecommendedBooks,getAllTrendingBooks,getAllNewArrivedBooks,getBookDetails,getMightAlsoLikedBooks,
+                   getBookNamesByIds,searchBooks };

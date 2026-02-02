@@ -1,13 +1,13 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
-import { allTrendingBooksData } from '../../../api/member';
+import api from '../../../api/api';
 import { useState, useEffect } from 'react';
 
 function AllTrendingBooks () {
     const [allTrendingBooks, setAllTrendingBooks] = useState([]);
 
     useEffect(() => {
-        allTrendingBooksData()
+        api.get("/member/all-trending-books")
             .then(res => {
                 setAllTrendingBooks(Array.isArray(res.data) ? res.data : []);
             })

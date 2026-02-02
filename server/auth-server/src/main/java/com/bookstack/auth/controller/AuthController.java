@@ -20,7 +20,7 @@ import com.bookstack.auth.dto.AllEmailDto;
 import com.bookstack.auth.dto.AllStaffDto;
 import com.bookstack.auth.dto.LogDto;
 import com.bookstack.auth.dto.LoginRequest;
-import com.bookstack.auth.dto.UserResponseDto;
+import com.bookstack.auth.dto.UserResponseDTO;
 import com.bookstack.auth.dto.editStaffDto;
 import com.bookstack.auth.entities.User;
 import com.bookstack.auth.security.JwtUtil;
@@ -88,7 +88,7 @@ public class AuthController {
 //				
 //				authService.savelog(logDto);
 //			}
-			UserResponseDto result = UserResponseDto.builder()
+			UserResponseDTO result = UserResponseDTO.builder()
 				.email(user.getEmail())
 				.name(user.getName())
 				.role(user.getRoleType())

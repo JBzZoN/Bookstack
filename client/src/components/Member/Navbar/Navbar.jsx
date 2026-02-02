@@ -1,12 +1,39 @@
 import '../../../components/Member/Navbar/Navbar.css'
 import { NavLink,Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import logo from '../../../assets/logo.png'
 import logout from '../../../assets/images/member/logout.png'
 import likesList from '../../../assets/images/member/likes-cart.png'
+import api from "../../../api/api"
 
 function Navbar () {
+    const [onSearch, setOnSearch] = useState(false)
+    const [searchResults, setSearchResults] = useState([])
+    const [searchBarOn, setSearchBarOn] = useState(false)
+    const [searchString, setSearchString] = useState("")
+
+    const onSearchBook = (e) => {
+        const value = e.target.value
+        setSearchString(value)
+
+        // minimum characters
+        if (value.length < 2 || onSearch === true) return
+
+        setOnSearch(true)
+
+        setTimeout(async () => {
+            if (value.length < 2) return
+
+            const response = await api.post("/book/search", { search: value })
+
+            setSearchResults(response.data)
+            setOnSearch(false)
+        }, 400)
+    }
+
     const navigate=useNavigate();
     const handleLogout = () => {
+        localStorage.clear();
         navigate("/login")
     };
     const handleLikedBooks = () => {
@@ -30,9 +57,42 @@ function Navbar () {
 
                 <div className="collapse navbar-collapse" id="navbarContent">
 
-                    <form className="d-flex ms-3 flex-grow-1 mt-2 mt-lg-0" role="search">
-                        <input className="form-control me-2" type="search" placeholder="Search by Book, Author, ISBN..." aria-label="Search"/>
-                    </form>
+                    <form className="d-flex ms-3 flex-grow-1 position-relative" role="search">
+                        <input
+                            className="form-control me-2"
+                            type="search"
+                            placeholder="Search by book, author or ISBN"
+                            value={searchString}
+                            onChange={onSearchBook}
+                            autoComplete="off"
+                            onFocus={() => setSearchBarOn(true)}
+                            onBlur={() => setTimeout(() => setSearchBarOn(false), 300)}
+                        />
+
+                        {searchResults.length > 0 &&
+                            searchBarOn &&
+                            searchString.length >= 2 && (
+                            <div className="list-group position-absolute w-100 mt-5">
+                                {searchResults.map((book) => (
+                                <div
+                                    key={book.id}
+                                    className="list-group-item list-group-item-action"
+                                    onClick={() => {
+                                    // navigate to book page
+                                    navigate(`/member/book/${book.bookId}`)
+                                    setSearchString("")
+                                    setSearchResults([])
+                                    }}
+                                >
+                                    <strong>{book.title}</strong><br />
+                                    <small className="text-muted">
+                                    {book.author} • {book.isbn}
+                                    </small>
+                                </div>
+                                ))}
+                            </div>
+                            )}
+                        </form>
 
                     <div className="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 navbar-nav ">
                         <NavLink to="/member/home" id="member-margin" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>

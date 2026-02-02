@@ -5,12 +5,17 @@ import java.util.List;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookDTO;
+import com.project.bookstack.dto.member.BookNameReturnDateDTO;
+import com.project.bookstack.dto.member.BookSearchDTO;
+import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
 import com.project.bookstack.services.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
@@ -71,6 +76,16 @@ public class MemberController {
     @GetMapping("/might-liked-books/{id}")
     public List<BookCardDTO> getMightAlsoLikedBooks(@PathVariable("id") Integer bookId) {
         return memberService.getMightAlsoLikedBooks(bookId);
+    }
+    
+    @GetMapping("/history-borrowed-books")
+    public List<BookNameReturnDateDTO> getBorrrowedBooksHistory() {
+    	return memberService.getBorrrowedBooksHistory();
+    }
+    
+    @GetMapping("/currently-borrowed-books")
+    public List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks() {
+    	return memberService.getCurrentlyBorrowedBooks();
     }
     
 }

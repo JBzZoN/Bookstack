@@ -3,8 +3,10 @@ import '../BookDetails/BookDetails.css'
 import { useParams } from 'react-router-dom';
 import ReviewsSection from '../../../components/Member/ReviewSection/ReviewSection';
 import star from '../../../assets/images/member/star.png'
-import { bookDetailsData,mightLikedBooksData } from '../../../api/member';
+import api from '../../../api/api';
 import { use, useEffect, useState } from 'react';
+import { useDispatch, useSelector } from "react-redux";
+import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
 
 function BookDetails () {
     const [bookDetails, setBookDetails] = useState([]);
@@ -15,23 +17,23 @@ function BookDetails () {
     useEffect(() => {
         if (!id) return;
 
-        bookDetailsData(id)
-        .then(res => setBookDetails(res.data))
-        .catch(err => {
-            console.error("Failed to fetch book", err);
-            setBookDetails(null);
-        });
+        api.get(`/member/book/${id}`)
+            .then(res => setBookDetails(res.data))
+            .catch(err => {
+                console.error("Failed to fetch book", err);
+                setBookDetails(null);
+            });
     }, [id]);
 
     useEffect(() => {
         if (!id) return;
 
-        mightLikedBooksData(id)
-        .then(res => setMightLikedBooks(res.data))
-        .catch(err => {
-            console.error("Failed to fetch book", err);
-            setMightLikedBooks(null);
-        });
+        api.get(`/member/might-liked-books/${id}`)
+            .then(res => setMightLikedBooks(res.data))
+            .catch(err => {
+                console.error("Failed to fetch book", err);
+                setMightLikedBooks(null);
+            });
     }, [id]);
 
     if (!bookDetails) {
@@ -55,7 +57,15 @@ function BookDetails () {
     const rating = bookDetails.averageRatings || 0;
     const likedByUser = bookDetails.likedByCurrentUser || false;
 
-    const [like,setLike] = useState(false);
+    const dispatch = useDispatch();
+
+    const isLiked = useSelector(
+        (state) => state.likes.byBookId[id] ?? likedByUser
+    );
+
+    const handleNotify = () => {
+        
+    }
 
     return (
         <div className='p-2'>
@@ -101,15 +111,22 @@ function BookDetails () {
                             </div>
 
                             <div className="d-grid gap-2 d-md-flex mt-4">
-                                <button className="btn btn-outline">
+                                <button className="btn btn-outline" >
                                     <i className="bi bi-book-fill me-2"></i>
-                                    Borrow Now
+                                    Reserve
                                 </button>
 
-                                <button className="btn btn-outline-danger btn-lg">
-                                    <i className="bi bi-heart me-2"></i>
-                                    Add to Wishlist
+                                <button
+                                    className={`btn ${isLiked ? "btn-danger" : "btn-outline-danger"} btn-lg`}
+                                    onClick={() => {
+                                        dispatch(toggleLike(id));               // instant UI update
+                                        dispatch(syncLikeWithBackend(id));      // backend sync
+                                    }}
+                                    >
+                                    <i className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"} me-2`}></i>
+                                    {isLiked ? "Wishlisted" : "Add to Wishlist"}
                                 </button>
+
                             </div>
 
                         </div>
@@ -118,7 +135,7 @@ function BookDetails () {
                 </div>
 
                 <div className="my-5">
-                    {/* <ReviewsSection bookId={book.id} /> */}
+                    <ReviewsSection bookId={id} />
                 </div>
 
                 <div className="">
@@ -130,6 +147,7 @@ function BookDetails () {
                             mightLikedBooks.map((book) => (
                                 <BookCard
                                     key={book.bookId}
+                                    bookId={book.bookId}
                                     title={book.title}
                                     author={book.author}
                                     image={book.bookImage}

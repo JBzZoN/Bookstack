@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "record_Detail_table", schema = "Bookstack")
+@Table(name = "record_detail_table", schema = "Bookstack")
 @Data
 @NoArgsConstructor
 public class RecordDetail {
@@ -29,8 +29,8 @@ public class RecordDetail {
     )
     private Record record;
 
+    @Column(name = "book_id", nullable = false)
     private Integer bookId;
-
 
     /* ------------------ Other Columns ------------------ */
 
@@ -42,7 +42,8 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
-
+    
     @Column(name = "returned")
     private Integer returned;
+    
 }
