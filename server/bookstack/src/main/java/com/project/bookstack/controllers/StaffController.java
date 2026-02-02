@@ -59,6 +59,7 @@ public class StaffController {
 	public ResponseEntity<?> renewLogicSubmit(@RequestBody BookMemberDto bookMemberDto) {
 		return ResponseEntity.ok(staffService.renewLogicSubmit(bookMemberDto));
 	}
+	
 	@PostMapping("/renew-logic/verify")
 	public ResponseEntity<?> renewLogicVerify(@RequestBody BookMemberDto bookMemberDto) {
 		return ResponseEntity.ok(staffService.renewLogicVerify(bookMemberDto));
