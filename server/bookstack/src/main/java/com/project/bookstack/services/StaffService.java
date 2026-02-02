@@ -111,6 +111,13 @@ public class StaffService {
 		
 		return bookDto;
 	}
+	
+	public void resetRenew() {
+		List<Member> allMembers = staffMemberRepository.findAll();
+		for(Member a: allMembers) {
+			a.setRenewCount(0);
+		}
+	}
 
 	public List<UserDTO> getAllMembers() {
 		List<UserDTO> searchResults = authorizationClient.getUsers();
@@ -202,7 +209,7 @@ public class StaffService {
             detail.setReturned(0);
 
             if ("Rent".equalsIgnoreCase(r.getStatus())) {
-                detail.setDueDate(LocalDate.now().plusDays(member.getMembershipData().getBorrowLimit()));
+                detail.setDueDate(LocalDate.now().plusDays(member.getMembershipData().getBorrowPeriod()));
             }
 
             staffRecordDetailRepository.save(detail);
@@ -302,7 +309,7 @@ public class StaffService {
 		
         // just increment the due date
 		for(RecordDetail rd : recordDetail) {
-			rd.setDueDate(rd.getDueDate().plusDays(member.getMembershipData().getBorrowLimit()));
+			rd.setDueDate(rd.getDueDate().plusDays(member.getMembershipData().getBorrowPeriod()));
 		}
         // increase renew count by number of copies renewed
 		member.setRenewCount(member.getRenewCount() + copies);

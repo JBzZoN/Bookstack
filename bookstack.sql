@@ -19,6 +19,10 @@
 
 -- MySQL Workbench Forward Engineering
 
+drop database book_db;
+drop database bookstack;
+drop database authorization;
+
 CREATE USER bookstack@localhost IDENTIFIED BY 'bookstack';
 GRANT ALL PRIVILEGES ON *.* TO bookstack@localhost;
 Flush privileges;

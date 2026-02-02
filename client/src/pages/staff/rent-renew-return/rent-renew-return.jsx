@@ -301,6 +301,46 @@ function RentRenewReturn() {
       records: []
     } 
 
+    
+    let renewSelected = 0;
+    let rentSelected=0;
+
+    rows.forEach(e => {
+      if(e.recordType == "Return") {
+        output.records.push({
+          status: "Returned",
+          bookId: e.searchResultBook.bookId,
+          copies: e.numberOfCopies
+        })
+      }else if(e.recordType == "Rent") {
+        output.records.push({
+          status: e.recordType,
+          bookId: e.searchResultBook.bookId,
+          copies: e.numberOfCopies
+        })
+        rentSelected+= Number.parseInt(e.numberOfCopies);
+      }else {
+        renewSelected+= Number.parseInt(e.numberOfCopies);
+      }
+    })
+
+    // check if rent count is valid rent count(member table) + num of copies rent in this record <= rent limit(membership data table)
+    const response1 = await axios.post("http://localhost:7070/staff/rent-count/valid", {memberId: searchResultUser.userId, rentSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+    if(response1.data == false) {
+      toast.error("Member cannot rent that many books")
+      return;
+    }
+
+    // check if renew count is valid renew count(member table) + num of copies renew in this record <= renew limit(membership data table)
+    const response2 = await axios.post("http://localhost:7070/staff/renew-count/valid", {memberId: searchResultUser.userId, renewSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+
+    if(response2.data == false) {
+      toast.error("Member cannot renew that many books")
+      return;
+    }
+    console.log(output)
+
     for(let a of rows) {
       if(a.searchResultBook == null) {
         toast.error("No book selected")
@@ -354,45 +394,6 @@ function RentRenewReturn() {
           }
       }
     }
-
-    let renewSelected = 0;
-    let rentSelected=0;
-
-    rows.forEach(e => {
-      if(e.recordType == "Return") {
-        output.records.push({
-          status: "Returned",
-          bookId: e.searchResultBook.bookId,
-          copies: e.numberOfCopies
-        })
-      }else if(e.recordType == "Rent") {
-        output.records.push({
-          status: e.recordType,
-          bookId: e.searchResultBook.bookId,
-          copies: e.numberOfCopies
-        })
-        rentSelected+= Number.parseInt(e.numberOfCopies);
-      }else {
-        renewSelected+= Number.parseInt(e.numberOfCopies);
-      }
-    })
-
-    // check if rent count is valid rent count(member table) + num of copies rent in this record <= rent limit(membership data table)
-    const response1 = await axios.post("http://localhost:7070/staff/rent-count/valid", {memberId: searchResultUser.userId, rentSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-
-    if(response1.data == false) {
-      toast.error("Member cannot rent that many books")
-      return;
-    }
-
-    // check if renew count is valid renew count(member table) + num of copies renew in this record <= renew limit(membership data table)
-    const response2 = await axios.post("http://localhost:7070/staff/renew-count/valid", {memberId: searchResultUser.userId, renewSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-
-    if(response2.data == false) {
-      toast.error("Member cannot renew that many books")
-      return;
-    }
-    console.log(output)
 
     // all records are directly put on here !
     const response3 = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
