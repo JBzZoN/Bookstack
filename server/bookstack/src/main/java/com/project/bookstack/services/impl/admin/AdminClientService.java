@@ -1,4 +1,4 @@
-package com.project.bookstack.services.impl;
+package com.project.bookstack.services.impl.admin;
 
 import java.util.List;
 

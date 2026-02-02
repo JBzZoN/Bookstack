@@ -1,4 +1,4 @@
-package com.project.bookstack.repositories;
+package com.project.bookstack.repositories.admin;
 
 
 import java.time.LocalDate;

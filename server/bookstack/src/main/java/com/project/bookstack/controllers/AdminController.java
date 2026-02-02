@@ -15,8 +15,8 @@ import com.project.bookstack.dto.admin.AddStaffDto;
 import com.project.bookstack.dto.admin.AllBookDto;
 import com.project.bookstack.dto.admin.EditStaffDto;
 import com.project.bookstack.dto.admin.UserId;
-import com.project.bookstack.services.impl.AdminClientService;
-import com.project.bookstack.services.impl.AdminServiceImpl;
+import com.project.bookstack.services.impl.admin.AdminClientService;
+import com.project.bookstack.services.impl.admin.AdminServiceImpl;
 
 import lombok.RequiredArgsConstructor;
 

@@ -1,4 +1,4 @@
-package com.project.bookstack.services.impl;
+package com.project.bookstack.services.impl.admin;
 
 import java.time.LocalDate;
 
@@ -31,8 +31,8 @@ import com.project.bookstack.dto.admin.ResultStaffDto;
 import com.project.bookstack.dto.admin.UserId;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.Staff;
-import com.project.bookstack.repositories.AdminMemberRepository;
-import com.project.bookstack.repositories.AdminRepository;
+import com.project.bookstack.repositories.admin.AdminMemberRepository;
+import com.project.bookstack.repositories.admin.AdminRepository;
 import com.project.bookstack.services.AdminService;
 
 import lombok.RequiredArgsConstructor;

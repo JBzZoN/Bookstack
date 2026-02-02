@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;
-import com.project.bookstack.repositories.MembershipRepository;
+import com.project.bookstack.repositories.admin.MembershipRepository;
 import com.project.bookstack.repositories.member.MemberRepository;
 import com.project.bookstack.services.RazorpayService;
 import com.razorpay.Order;
