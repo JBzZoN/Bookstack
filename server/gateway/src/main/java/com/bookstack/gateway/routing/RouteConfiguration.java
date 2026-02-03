@@ -46,7 +46,7 @@ public class RouteConfiguration {
 	            return request;
 	        })
 			.before(
-		            BeforeFilterFunctions.uri("http://localhost:9090")
+		            BeforeFilterFunctions.uri("http://auth-server:9090")
 	    	        )
 	        .build();
 	}
@@ -77,7 +77,7 @@ public class RouteConfiguration {
 	            return request;
 	        })
 			.before(
-		            BeforeFilterFunctions.uri("http://localhost:4000")
+		            BeforeFilterFunctions.uri("http://express-service:4000")
 	    	        )
 	        .build();
 	}
@@ -120,7 +120,7 @@ public class RouteConfiguration {
 	            return request;
 	        })
 			.before(
-		            BeforeFilterFunctions.uri("http://localhost:8080")
+		            BeforeFilterFunctions.uri("http://bookstack-server:8080")
 	    	        )
 	        .build();
 	}

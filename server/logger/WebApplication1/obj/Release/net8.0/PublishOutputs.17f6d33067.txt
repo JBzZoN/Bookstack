@@ -1,0 +1,17 @@
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\WebApplication1.exe
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\web.config
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\web.config
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\appsettings.Development.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\appsettings.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\appsettings.Development.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\appsettings.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\appsettings.Development.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\appsettings.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\WebApplication1.deps.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\WebApplication1.runtimeconfig.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\WebApplication1.deps.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\WebApplication1.runtimeconfig.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\WebApplication1.dll
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\WebApplication1.deps.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\WebApplication1.runtimeconfig.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\WebApplication1.pdb

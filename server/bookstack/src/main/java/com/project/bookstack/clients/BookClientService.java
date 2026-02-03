@@ -17,7 +17,7 @@ import com.project.bookstack.dto.member.BookDTO;
 import com.project.bookstack.dto.member.BookIdTitleDTO;
 
 @Service
-@FeignClient(name = "book-service", url = "http://localhost:4000")
+@FeignClient(name = "book-service", url = "http://express-service:4000")
 public interface BookClientService {
 
 	@GetMapping("book/books")

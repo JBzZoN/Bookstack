@@ -39,6 +39,9 @@ public class MessageService {
 		
 		List<String> emails = authorizationClient.getEmails();
 		
+		System.out.println(emails);
+		System.out.println(emailDTO);
+
 		for(String emailString: emails) {
 			MimeMessagePreparator a = b -> {
 				MimeMessageHelper c = new MimeMessageHelper(b);

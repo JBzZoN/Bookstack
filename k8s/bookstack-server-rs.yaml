@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: bookstack-server-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: bookstack-server
+  template:
+    metadata:
+      labels:
+        app: bookstack-server
+    spec:
+      containers:
+        - name: bookstack-server
+          image: bookstack-server:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
