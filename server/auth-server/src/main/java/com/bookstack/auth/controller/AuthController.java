@@ -22,6 +22,7 @@ import com.bookstack.auth.dto.LogDto;
 import com.bookstack.auth.dto.LoginRequest;
 import com.bookstack.auth.dto.UserResponseDTO;
 import com.bookstack.auth.dto.editStaffDto;
+import com.bookstack.auth.dto.ChangePasswordDto;
 import com.bookstack.auth.entities.User;
 import com.bookstack.auth.security.JwtUtil;
 import com.bookstack.auth.service.AuthService;
@@ -155,6 +156,16 @@ public class AuthController {
 	@PostMapping("/particularuser")
 	public ResponseEntity<AllEmailDto>senduserdetail(@RequestBody User user){
 		return ResponseEntity.ok(authService.senduserdetail(user));
+	}
+	
+	@PostMapping("/change-password")
+	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto dto) {
+		String result = authService.changePassword(dto);
+		if ("Password updated successfully".equals(result)) {
+			return ResponseEntity.ok(result);
+		} else {
+			return ResponseEntity.badRequest().body(result);
+		}
 	}
 	
 }

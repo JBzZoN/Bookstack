@@ -150,16 +150,29 @@ public class AuthService {
 		}
 		
 
-		public String savelog(LogDto logDto) {
-			return loggeClient.sendlog(logDto);
-		}
+	public String savelog(LogDto logDto) {
+		return loggeClient.sendlog(logDto);
+	}
 		
-		public AllEmailDto senduserdetail(User user) {
-			User userdetial=userRepository.findById(user.getUserId()).get();
-			AllEmailDto allEmailDto=new AllEmailDto();
-			allEmailDto.setEmail(userdetial.getName());
-			allEmailDto.setEmailId(userdetial.getEmail());
-			return allEmailDto;
+	public String changePassword(com.bookstack.auth.dto.ChangePasswordDto dto) {
+		User user = userRepository.findById(dto.getUserId()).orElse(null);
+		if (user == null) {
+			return "User not found";
 		}
+		if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
+			return "Invalid current password";
+		}
+		user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
+		userRepository.save(user);
+		return "Password updated successfully";
+	}
+
+	public AllEmailDto senduserdetail(User user) {
+		User userdetial=userRepository.findById(user.getUserId()).get();
+		AllEmailDto allEmailDto=new AllEmailDto();
+		allEmailDto.setEmail(userdetial.getName());
+		allEmailDto.setEmailId(userdetial.getEmail());
+		return allEmailDto;
+	}
 
 }

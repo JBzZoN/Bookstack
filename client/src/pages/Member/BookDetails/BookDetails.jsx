@@ -7,10 +7,12 @@ import api from '../../../api/api';
 import { use, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
-function BookDetails () {
+function BookDetails() {
     const [bookDetails, setBookDetails] = useState([]);
-    const [mightLikedBooks,setMightLikedBooks] = useState([]);
+    const [mightLikedBooks, setMightLikedBooks] = useState([]);
 
     const { id } = useParams();
 
@@ -38,9 +40,9 @@ function BookDetails () {
 
     if (!bookDetails) {
         return (
-        <div className="container py-5">
-            <h2>Book not found</h2>
-        </div>
+            <div className="container py-5">
+                <h2>Book not found</h2>
+            </div>
         );
     }
 
@@ -63,12 +65,28 @@ function BookDetails () {
         (state) => state.likes.byBookId[id] ?? likedByUser
     );
 
-    const handleNotify = () => {
-        
+    const handleNotify = async () => {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (!currentUser) {
+            toast.error("Please login");
+            return;
+        }
+
+        try {
+            const res = await api.post("/book/notify", {
+                userId: currentUser.userId,
+                bookId: id,
+                email: currentUser.email
+            });
+            toast.success(res.data);
+        } catch (err) {
+            toast.error(err.response?.data || "Request failed");
+        }
     }
 
     return (
         <div className='p-2'>
+            <ToastContainer />
             <div className="container py-5 mt-5">
 
                 <div className="details-card">
@@ -98,23 +116,25 @@ function BookDetails () {
 
                             <div className="row">
 
-                            <div className="col-md-6">
-                                <p><strong>Genre:</strong> {genres}</p>
-                                <p><strong>Publisher:</strong> {publisher}</p>
-                            </div>
+                                <div className="col-md-6">
+                                    <p><strong>Genre:</strong> {genres}</p>
+                                    <p><strong>Publisher:</strong> {publisher}</p>
+                                </div>
 
-                            <div className="col-md-6">
-                                <p><strong>ISBN:</strong> {isbn}</p>
-                                <p><strong>Copies Available:</strong> {copyAvailable} of {totalCopies}</p>
-                            </div>
+                                <div className="col-md-6">
+                                    <p><strong>ISBN:</strong> {isbn}</p>
+                                    <p><strong>Copies Available:</strong> {copyAvailable} of {totalCopies}</p>
+                                </div>
 
                             </div>
 
                             <div className="d-grid gap-2 d-md-flex mt-4">
-                                <button className="btn btn-outline" >
-                                    <i className="bi bi-book-fill me-2"></i>
-                                    Reserve
-                                </button>
+                                {bookDetails.numberOfCopiesRemaining === 0 && (
+                                    <button className="btn btn-outline-warning" onClick={handleNotify}>
+                                        <i className="bi bi-bell-fill me-2"></i>
+                                        Notify Me
+                                    </button>
+                                )}
 
                                 <button
                                     className={`btn ${isLiked ? "btn-danger" : "btn-outline-danger"} btn-lg`}
@@ -122,7 +142,7 @@ function BookDetails () {
                                         dispatch(toggleLike(id));               // instant UI update
                                         dispatch(syncLikeWithBackend(id));      // backend sync
                                     }}
-                                    >
+                                >
                                     <i className={`bi ${isLiked ? "bi-heart-fill" : "bi-heart"} me-2`}></i>
                                     {isLiked ? "Wishlisted" : "Add to Wishlist"}
                                 </button>

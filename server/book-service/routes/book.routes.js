@@ -2,7 +2,7 @@ const express = require("express");
 const bookService = require("../services/book.service");
 const fs = require("fs")
 
-const pool=require("../db/pool")
+const pool = require("../db/pool")
 
 const multer = require("multer");
 
@@ -38,7 +38,7 @@ router.get("/copy", (req, res) => {
 
 router.post("/bookFromId", (request, res) => {
 
-  const {bookId} = request.body;
+  const { bookId } = request.body;
 
   const sql = `
     SELECT
@@ -85,7 +85,7 @@ router.post("/bookFromId", (request, res) => {
 });
 
 router.post("/id", (req, res) => {
-  const {bookId} = req.body;const pool=require("../db/pool")
+  const { bookId } = req.body; const pool = require("../db/pool")
   const sql = "select number_of_copies_remaining from book_table where book_id = ?"
 
   pool.query(sql, [bookId], (error, data) => {
@@ -95,14 +95,62 @@ router.post("/id", (req, res) => {
   })
 })
 
+// Create notification table if not exists
+pool.query(`CREATE TABLE IF NOT EXISTS notification_table (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  user_id INT,
+  book_id INT,
+  email VARCHAR(255),
+  requested_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+)`, (err) => {
+  if (err) console.error("Failed to create notification table", err);
+});
+
+router.post("/notify", (req, res) => {
+  const { userId, bookId, email } = req.body;
+
+  // Check if already notified
+  pool.query("SELECT * FROM notification_table WHERE user_id = ? AND book_id = ?", [userId, bookId], (err, rows) => {
+    if (err) return res.sendStatus(500);
+    if (rows.length > 0) return res.status(400).send("You already subscribed for notification.");
+
+    const sql = "INSERT INTO notification_table (user_id, book_id, email) VALUES (?, ?, ?)";
+    pool.query(sql, [userId, bookId, email], (error, result) => {
+      if (error) {
+        console.error(error);
+        res.sendStatus(500);
+      } else {
+        res.status(200).send("Notification enabled. We will email you when available.");
+      }
+    });
+  });
+});
+
 router.put("/id", (req, res) => {
-  const {bookId, noOfCopiesRemaining} = req.body;
+  const { bookId, noOfCopiesRemaining } = req.body;
   const sql = "update book_table set number_of_copies_remaining = ? where book_id = ?"
 
   pool.query(sql, [noOfCopiesRemaining, bookId], (error, data) => {
-    if(error) {
+    if (error) {
       res.sendStatus(500)
-    }else {
+    } else {
+
+      // Check for notifications
+      if (noOfCopiesRemaining > 0) {
+        const notifySql = "SELECT * FROM notification_table WHERE book_id = ?";
+        pool.query(notifySql, [bookId], (nErr, nRows) => {
+          if (!nErr && nRows.length > 0) {
+            nRows.forEach(row => {
+              console.log(`[MAIL SERVICE] Sending email to ${row.email} for book URL http://localhost:3000/member/book/${bookId}`);
+              // Here is where you would calculate "send once" logic, effectively deleting the record ensures it's sent once.
+            });
+
+            // Clear notifications
+            pool.query("DELETE FROM notification_table WHERE book_id = ?", [bookId]);
+          }
+        });
+      }
+
       res.sendStatus(200)
     }
   })
@@ -176,14 +224,14 @@ router.post("/add", upload.single("imageFile"), (request, response) => {
     return response.status(400).send({
       status: "error",
       message: "Book image is required"
-    }); 
+    });
   }
 
   // ONLY store filename in DB
   const imageFileName = request.file.filename + ".jpg";
 
   fs.rename(request.file.path, "images/" + imageFileName, (error) => {
-    if(error) 
+    if (error)
       response.sendStatus(500)
 
     const sql = `
@@ -201,35 +249,35 @@ router.post("/add", upload.single("imageFile"), (request, response) => {
     ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)
   `;
 
-  const values = [
-    isbn,
-    title,
-    author,
-    description,
-    imageFileName,          // ✅ filename only
-    publisher,
-    "CREATED",
-    copies,
-    copies
-  ];
+    const values = [
+      isbn,
+      title,
+      author,
+      description,
+      imageFileName,          // ✅ filename only
+      publisher,
+      "CREATED",
+      copies,
+      copies
+    ];
 
-  pool.query(sql, values, (error, result) => {
-    if (error) {
-      console.error(error);const pool=require("../db/pool")
-      return response.status(500).send({
-        status: "error",
-        message: "Failed to add book"
+    pool.query(sql, values, (error, result) => {
+      if (error) {
+        console.error(error); const pool = require("../db/pool")
+        return response.status(500).send({
+          status: "error",
+          message: "Failed to add book"
+        });
+      }
+
+      response.status(201).send({
+        status: "success",
+        bookId: result.insertId
       });
-    }
-
-    response.status(201).send({
-      status: "success",
-      bookId: result.insertId
     });
-  });
   })
 
-  
+
 });
 
 
@@ -258,7 +306,7 @@ router.get("/all", (request, response) => {
     }));
 
     response.status(200).send(mappedData);
-    });
+  });
 });
 
 router.get("/books", (req, res) => {
@@ -401,21 +449,21 @@ router.post("/search", (req, res) => {
 });
 
 router.get('/allbooks', (req, res) => {
-  try{
+  try {
     const sql = `SELECT * FROM book_table`
     pool.query(sql, (error, data) => {
-        if(data){
-          console.log(data)
-          res.json(data)
-        }
-        else{
-          res.send(error)
-        }
-      
-      })
-    }catch(Error){
-      res.send(Error)
-    } 
+      if (data) {
+        console.log(data)
+        res.json(data)
+      }
+      else {
+        res.send(error)
+      }
+
+    })
+  } catch (Error) {
+    res.send(Error)
+  }
 })
 
 module.exports = router;

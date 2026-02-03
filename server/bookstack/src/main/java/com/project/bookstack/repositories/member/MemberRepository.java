@@ -80,5 +80,8 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 				AND r.member.userId = :userId
 			""")
 	List<BookIdStartDueDatesDTO> getBookIdBorrowAndReturnDates(Integer userId);
+	
+	@Query("SELECT rd FROM RecordDetail rd JOIN rd.record r WHERE r.member.userId = :userId AND rd.bookId = :bookId AND rd.status = 'Rent'")
+	java.util.Optional<com.project.bookstack.entities.RecordDetail> findActiveRent(@Param("userId") Integer userId, @Param("bookId") Integer bookId);
 
 }

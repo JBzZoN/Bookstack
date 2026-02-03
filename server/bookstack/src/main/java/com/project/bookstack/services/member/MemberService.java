@@ -32,5 +32,7 @@ public interface MemberService {
 	List<BookNameReturnDateDTO> getBorrrowedBooksHistory();
 
 	List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks();
+	
+	String renewBook(Integer userId, Integer bookId);
     
 }

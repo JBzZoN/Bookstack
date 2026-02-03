@@ -1,14 +1,40 @@
 import '../MyAccount/MyAccount.css'
 import api from '../../../api/api';
 import { format } from "date-fns";
-import { useState,useEffect } from 'react';
+import { useState, useEffect } from 'react';
+import { toast, ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const formatDate = (dateStr) =>
-  format(new Date(dateStr), "dd MMM yyyy");
+    format(new Date(dateStr), "dd MMM yyyy");
 
-function MyAccount () {
+function MyAccount() {
     const [currentlyBorrowed, setCurrentlyBorrowed] = useState([]);
     const [history, setHistory] = useState([]);
+    const [currentPassword, setCurrentPassword] = useState("");
+    const [newPassword, setNewPassword] = useState("");
+
+    const handleChangePassword = async () => {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (!currentUser || !currentUser.userId) {
+            toast.error("User not verified");
+            return;
+        }
+
+        try {
+            const response = await api.post("/auth/change-password", {
+                userId: currentUser.userId,
+                currentPassword: currentPassword,
+                newPassword: newPassword
+            });
+            toast.success(response.data);
+            setCurrentPassword("");
+            setNewPassword("");
+        } catch (error) {
+            console.error("Change password error", error);
+            toast.error(error.response?.data || "Failed to update password");
+        }
+    };
 
     useEffect(() => {
         api.get("/member/currently-borrowed-books")
@@ -28,12 +54,31 @@ function MyAccount () {
             });
     }, []);
 
-    // const handleRenew = () => {
-        
-    // }
+    const handleRenew = async (bookId) => {
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (!currentUser || !currentUser.userId) {
+            toast.error("User not verified");
+            return;
+        }
+
+        try {
+            const res = await api.post("/member/renew", {
+                userId: currentUser.userId,
+                bookId: bookId
+            });
+            toast.success(res.data);
+            api.get("/member/currently-borrowed-books")
+                .then(res => setCurrentlyBorrowed(res.data))
+                .catch(err => setCurrentlyBorrowed(null));
+        } catch (err) {
+            console.error(err);
+            toast.error(err.response?.data || "Renew failed");
+        }
+    }
 
     return (
         <div className='m-5'>
+            <ToastContainer />
             <div className="container py-4">
 
                 <div className="myaccount-title text-center mb-5">
@@ -47,19 +92,19 @@ function MyAccount () {
 
                         <li className="nav-item">
                             <button className="nav-link active" data-bs-toggle="tab" data-bs-target="#borrowed">
-                            Currently Borrowed
+                                Currently Borrowed
                             </button>
                         </li>
 
                         <li className="nav-item">
                             <button className="nav-link" data-bs-toggle="tab" data-bs-target="#history">
-                            Borrowing History
+                                Borrowing History
                             </button>
                         </li>
 
                         <li className="nav-item">
                             <button className="nav-link" data-bs-toggle="tab" data-bs-target="#settings">
-                            Profile Settings
+                                Profile Settings
                             </button>
                         </li>
 
@@ -82,7 +127,10 @@ function MyAccount () {
                                                         <strong>Due on: {formatDate(book.endDate)}</strong>
                                                     </p>
                                                 </div>
-                                                <button className="btn btn-outline btn-success">Renew</button>
+                                                <button
+                                                    className="btn btn-outline btn-success"
+                                                    onClick={() => handleRenew(book.bookId)}
+                                                >Renew</button>
                                             </li>
                                         </div>
                                     ))}
@@ -110,16 +158,15 @@ function MyAccount () {
                         </div>
 
                         <div className="tab-pane fade p-3" id="settings">
-                            <form>
-
+                            <form onSubmit={(e) => { e.preventDefault(); handleChangePassword(); }}>
                                 <div className="mb-3">
                                     <label className="form-label">Full Name</label>
-                                    <input type="text" className="form-control form-control-lg" value="Current User" />
+                                    <input type="text" className="form-control form-control-lg" value="Current User" readOnly />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Email Address</label>
-                                    <input type="email" className="form-control form-control-lg" value="user@example.com" />
+                                    <input type="email" className="form-control form-control-lg" value="user@example.com" readOnly />
                                 </div>
 
                                 <hr className="my-4" />
@@ -128,16 +175,25 @@ function MyAccount () {
 
                                 <div className="mb-3">
                                     <label className="form-label">Current Password</label>
-                                    <input type="password" className="form-control form-control-lg" />
+                                    <input
+                                        type="password"
+                                        className="form-control form-control-lg"
+                                        value={currentPassword}
+                                        onChange={(e) => setCurrentPassword(e.target.value)}
+                                    />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">New Password</label>
-                                    <input type="password" className="form-control form-control-lg" />
+                                    <input
+                                        type="password"
+                                        className="form-control form-control-lg"
+                                        value={newPassword}
+                                        onChange={(e) => setNewPassword(e.target.value)}
+                                    />
                                 </div>
 
-                                <button className="btn btn-outline btn-success ">Save Changes</button>
-
+                                <button className="btn btn-outline btn-success">Save Changes</button>
                             </form>
                         </div>
 

@@ -1,10 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "6ANRV9z3OOBqIMq7TVjgZJ0/CCy4J1S9cTHOqcywsGZRgchv+i2tSl3seSShLL1NrwiBgpfmTdDwe6HX+FhPaA==",
+  "dgSpecHash": "xxEVW77kLUTHFWtOVnvKeR2vdHYn+jGUQeXF+dBVh3VfQTxyTVgQUlrG6sLKJBtRLyq6WUSlNfLfIhewBmOxBQ==",
   "success": true,
-  "projectFilePath": "C:\\Users\\Josh Biju\\Desktop\\Bookstack\\server\\logger\\WebApplication1\\WebApplication1.csproj",
+  "projectFilePath": "/home/sunbeam/Desktop/Bookstack /server/logger/WebApplication1/WebApplication1.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\Josh Biju\\.nuget\\packages\\microsoft.visualstudio.azure.containers.tools.targets\\1.19.5\\microsoft.visualstudio.azure.containers.tools.targets.1.19.5.nupkg.sha512"
+    "/home/sunbeam/.nuget/packages/microsoft.visualstudio.azure.containers.tools.targets/1.19.5/microsoft.visualstudio.azure.containers.tools.targets.1.19.5.nupkg.sha512"
   ],
   "logs": []
 }

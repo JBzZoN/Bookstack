@@ -89,4 +89,13 @@ public class MemberController {
     	return memberService.getCurrentlyBorrowedBooks();
     }
     
+    @PostMapping("/renew")
+    public org.springframework.http.ResponseEntity<String> renewBook(@org.springframework.web.bind.annotation.RequestBody java.util.Map<String, Integer> payload) {
+        Integer userId = payload.get("userId");
+        Integer bookId = payload.get("bookId");
+        if (userId == null || bookId == null) return org.springframework.http.ResponseEntity.badRequest().body("Missing userId or bookId");
+        
+        return org.springframework.http.ResponseEntity.ok(memberService.renewBook(userId, bookId));
+    }
+    
 }

@@ -31,6 +31,8 @@ public class MemberServiceImpl implements MemberService {
     private final BookClientService bookClientService;
     private final MemberRepository memberRepository;
 
+    private final com.project.bookstack.repositories.StaffRecordDetailRepository recordDetailRepository;
+
     @Override
     public List<BookCardDTO> getAllBooks() {
         // in a real scenario, you'd get this from the security context
@@ -67,6 +69,24 @@ public class MemberServiceImpl implements MemberService {
             .toList();
     }
     
+    // ... existing methods ...
+
+    @Override
+    public String renewBook(Integer userId, Integer bookId) {
+        List<com.project.bookstack.entities.RecordDetail> details = recordDetailRepository.getReturnDataForRenew(userId, bookId);
+        
+        if (details.isEmpty()) {
+            return "No active rent record found for this book.";
+        }
+        
+        for (com.project.bookstack.entities.RecordDetail rd : details) {
+            rd.setDueDate(rd.getDueDate().plusDays(7));
+        }
+        
+        recordDetailRepository.saveAll(details);
+        return "Book renewed successfully for " + details.size() + " copy(s). Due date extended by 7 days.";
+    }
+
     @Override
     public List<BookCardDTO> getAllLikedBooks() {
     	
@@ -426,6 +446,7 @@ public class MemberServiceImpl implements MemberService {
 
         return records.stream()
                 .map(r -> new CurrentlyBorrowedBooksDTO(
+                        r.bookId(),
                         bookIdToTitle.get(r.bookId()),
                         r.startDate(),
                         r.endDate()
