@@ -100,19 +100,19 @@
     ]
   },
   "packageFolders": {
-    "C:\\Users\\Naman\\.nuget\\packages\\": {}
+    "C:\\Users\\Josh Biju\\.nuget\\packages\\": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "D:\\Revision\\logger\\WebApplication1\\WebApplication1.csproj",
+      "projectUniqueName": "C:\\Users\\Josh Biju\\Desktop\\Bookstack\\server\\logger\\WebApplication1\\WebApplication1.csproj",
       "projectName": "WebApplication1",
-      "projectPath": "D:\\Revision\\logger\\WebApplication1\\WebApplication1.csproj",
-      "packagesPath": "C:\\Users\\Naman\\.nuget\\packages\\",
-      "outputPath": "D:\\Revision\\logger\\WebApplication1\\obj\\",
+      "projectPath": "C:\\Users\\Josh Biju\\Desktop\\Bookstack\\server\\logger\\WebApplication1\\WebApplication1.csproj",
+      "packagesPath": "C:\\Users\\Josh Biju\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\Josh Biju\\Desktop\\Bookstack\\server\\logger\\WebApplication1\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
-        "C:\\Users\\Naman\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\Josh Biju\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
