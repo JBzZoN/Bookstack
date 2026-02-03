@@ -88,13 +88,33 @@ public class AuthService {
 
 	public Integer registerUser(java.util.Map<String, Object> registerData) {
 		User user = new User();
-		user.setName((String) registerData.get("name"));
+		String name = (String) registerData.get("name");
+        if (name == null) {
+            name = (String) registerData.get("fullName");
+        }
+		user.setName(name);
 		user.setEmail((String) registerData.get("email"));
 		user.setPhone((String) registerData.get("phone"));
 		user.setAddress((String) registerData.get("address"));
-		user.setDob((java.time.LocalDate) registerData.get("dob"));
+        
+        // Handle Date Parsing Safely
+        Object dobObj = registerData.get("dob");
+        if (dobObj != null) {
+            if (dobObj instanceof String) {
+               user.setDob(java.time.LocalDate.parse((String) dobObj));
+            } else if (dobObj instanceof java.time.LocalDate) {
+               user.setDob((java.time.LocalDate) dobObj);
+            }
+        }
+
 		user.setUsername((String) registerData.get("username"));
-		user.setPassword((String) registerData.get("password"));
+		
+        String rawPassword = (String) registerData.get("password");
+        if (rawPassword == null || rawPassword.trim().isEmpty()) {
+            throw new IllegalArgumentException("Password cannot be null or empty");
+        }
+        
+		user.setPassword(rawPassword);
 		user.setRoleType("Member"); // Default role
 		String encodedPassword = passwordEncoder.encode(user.getPassword());
 		user.setPassword(encodedPassword);
@@ -129,9 +149,14 @@ public class AuthService {
 			
 		}
 		
-		public String savelog(LogDto logDto) {
+	public String savelog(LogDto logDto) {
+		try {
 			return loggeClient.sendlog(logDto);
+		} catch (Exception e) {
+			System.err.println("Failed to save log: " + e.getMessage());
+			return "log_failed";
 		}
+	}
 		
 		public AllEmailDto senduserdetail(User user) {
 			User userdetial=userRepository.findById(user.getUserId()).get();

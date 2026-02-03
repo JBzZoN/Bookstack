@@ -1,6 +1,7 @@
 package com.bookstack.auth.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -30,7 +31,7 @@ public class SecurityConfiguration {
 	    http
 	        .csrf(csrf -> csrf.disable())
 	        .authorizeHttpRequests(auth -> auth
-	            .requestMatchers("/auth/**").permitAll()
+	            .requestMatchers("/auth/**", "/error").permitAll()
 	            .anyRequest().authenticated()
 	        )
 	        .sessionManagement(session ->
@@ -47,7 +48,7 @@ public class SecurityConfiguration {
 	}
 	
 	@Bean
-	AuthenticationManager authenticationManager(HttpSecurity http) {
+	AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
 		AuthenticationManagerBuilder authBuilder =
 		http.getSharedObject(AuthenticationManagerBuilder.class);
 		

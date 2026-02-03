@@ -34,6 +34,7 @@ public class PaymentServiceImpl implements PaymentService {
     private final MemberRepository memberRepository;
     private final AuthClient authClient;
     private final Environment env;
+    private final StaffMemberDataRepository staffMemberDataRepository;
 
     /* --------------------------------------------------
        CALCULATE AMOUNT (BACKEND SOURCE OF TRUTH)
@@ -104,7 +105,7 @@ public class PaymentServiceImpl implements PaymentService {
             Map<String, Object> registerData
     ) {
     	
-    	StaffMemberDataRepository staffMemberDataRepository = null;
+
 
         // 1️⃣ Create user in AUTH-SERVER
         Integer userId = authClient.createUser(registerData);

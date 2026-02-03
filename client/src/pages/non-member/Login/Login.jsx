@@ -15,9 +15,10 @@ function Login() {
     const normalizedUsername = email.trim();
     let response;
     try {
-          response = await axios.post("http://localhost:7070/auth/login", {"username": normalizedUsername, "password": password})
-    }catch(e) {
+      response = await axios.post("http://localhost:7070/auth/login", { "username": normalizedUsername, "password": password })
+    } catch (e) {
       alert("Invalid credentials")
+      return;
     }
 
     const data = response.data
@@ -27,16 +28,16 @@ function Login() {
     localStorage.setItem("currentUser", JSON.stringify(data))
 
     if (data.role === "Member") {
-       navigate("/member/home");
-    } 
+      navigate("/member/home");
+    }
     else if (data.role === "Admin") {
       navigate("/admin/books");
-    } 
+    }
     else if (data.role === "Librarian") {
       navigate("/staff/books");
-    } 
+    }
     else {
-      
+
       alert("Invalid email");
     }
   };
@@ -55,7 +56,7 @@ function Login() {
               <p className="lead mt-3">– Neil Gaiman</p>
             </div>
             <div className="mt-5 m-5 mb-2 d-flex align-items-center gap-2">
-              <img className="logo-img" src={logo} alt="logo"/>
+              <img className="logo-img" src={logo} alt="logo" />
               <div className="logo-title">
                 <span style={{ color: "#0a0d9f" }}>Book</span>
                 <span style={{ color: "#111827" }}>Stack</span>

@@ -125,23 +125,23 @@ function OrderSummary() {
      PAYMENT SUCCESS
      ======================= */
   const handlePaymentSuccess = async (response) => {
-  const membershipType =
-    selectedPlan.membershipType ||
-    selectedPlan.planType ||
-    selectedPlan.type;
+    const membershipType =
+      selectedPlan.membershipType ||
+      selectedPlan.planType ||
+      selectedPlan.type;
 
-  const payload = {
-    razorpayPaymentId: response.razorpay_payment_id,
-    razorpayOrderId: response.razorpay_order_id,
-    razorpaySignature: response.razorpay_signature,
-    membershipType,             
-    billing: selectedPlan.billing,
-    registerData
-  };
+    const payload = {
+      razorpayPaymentId: response.razorpay_payment_id,
+      razorpayOrderId: response.razorpay_order_id,
+      razorpaySignature: response.razorpay_signature,
+      membershipType,
+      billing: selectedPlan.billing,
+      registerData
+    };
 
-  console.log("✅ PAYMENT SUCCESS PAYLOAD", payload);
+    console.log("✅ PAYMENT SUCCESS PAYLOAD", payload);
 
-  try {
+    try {
       await api.post("/payment/success", payload);
       localStorage.clear();
       navigate("/login");
