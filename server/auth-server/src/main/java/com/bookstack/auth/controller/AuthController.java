@@ -68,26 +68,26 @@ public class AuthController {
 			// create a response dto
 			User user = (User) auth.getPrincipal();
 			
-//			if(user!=null) {
-//			String clientIp = IpChecking.getClientIp(httpRequest);
-//			LogDto logDto=new LogDto();
-//			logDto.setIpAddress(clientIp);
-//			logDto.setUserName(user.getUsername());
-//			logDto.setName(user.getName());
-//			logDto.setRoleType(user.getRoleType());
-//			
-//			authService.savelog(logDto);
-//			}
-//			else {
-//				String clientIp = IpChecking.getClientIp(httpRequest);
-//				LogDto logDto=new LogDto();
-//				logDto.setIpAddress(clientIp);
-//				logDto.setUserName(request.getUsername());
-//				logDto.setName("invalid userid or password");
-//				logDto.setRoleType("none");
-//				
-//				authService.savelog(logDto);
-//			}
+			if(user!=null) {
+			String clientIp = IpChecking.getClientIp(httpRequest);
+			LogDto logDto=new LogDto();
+			logDto.setIpAddress(clientIp);
+			logDto.setUserName(user.getUsername());
+			logDto.setName(user.getName());
+			logDto.setRoleType(user.getRoleType());
+			
+			authService.savelog(logDto);
+			}
+			else {
+				String clientIp = IpChecking.getClientIp(httpRequest);
+				LogDto logDto=new LogDto();
+				logDto.setIpAddress(clientIp);
+				logDto.setUserName(request.getUsername());
+				logDto.setName("invalid userid or password");
+				logDto.setRoleType("none");
+				
+				authService.savelog(logDto);
+			}
 			UserResponseDTO result = UserResponseDTO.builder()
 				.email(user.getEmail())
 				.name(user.getName())

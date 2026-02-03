@@ -3,7 +3,6 @@ package com.bookstack.auth.service;
 import java.util.List;
 
 
-import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
 	
 	private final ModelMapper modelMapper;
-	//private final LoggeClient loggeClient;
+	private final LoggeClient loggeClient;
 
 	public String onLogin() {
 		// TODO Auto-generated method stub
@@ -117,15 +116,8 @@ public class AuthService {
 			}
 		}
 		
-	public String savelog(LogDto logDto) {
-		//return loggeClient.sendlog(logDto);
-		return null;
-	}
-		
-
 		public String savelog(LogDto logDto) {
-			//return loggeClient.sendlog(logDto);
-			return null;
+			return loggeClient.sendlog(logDto);
 		}
 		
 		public AllEmailDto senduserdetail(User user) {
