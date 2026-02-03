@@ -149,14 +149,10 @@ public class AuthService {
 			
 		}
 		
-	public String savelog(LogDto logDto) {
-		try {
+
+		public String savelog(LogDto logDto) {
 			return loggeClient.sendlog(logDto);
-		} catch (Exception e) {
-			System.err.println("Failed to save log: " + e.getMessage());
-			return "log_failed";
 		}
-	}
 		
 		public AllEmailDto senduserdetail(User user) {
 			User userdetial=userRepository.findById(user.getUserId()).get();

@@ -67,5 +67,10 @@ public class AdminController {
 		return ResponseEntity.ok(adminServiceImpl.sendfine(emailDTO));
 		
 	}
+	
+	@PostMapping("/sendfinetoall")
+	public ResponseEntity<?>sendfinetoall(){
+		return ResponseEntity.ok(adminServiceImpl.sendfinetoall());
+	}
 }
 
