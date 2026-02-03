@@ -264,4 +264,3 @@ INSERT INTO book_comment (book_id,user_id,comment,comment_date) VALUES
 (259,11,'Interesting take on future AI.','2026-02-02 10:43:44'),
 (263,12,'Unique blend of AI and ethics.','2026-02-02 10:43:44'),
 (268,11,'Good introduction to algorithms.','2026-02-02 10:43:44');
-

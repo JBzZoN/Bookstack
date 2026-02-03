@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.bookstack.auth.config.IpChecking;
 import com.bookstack.auth.dto.AddAuthStaffDto;
+import com.bookstack.auth.dto.AllEmailDto;
 import com.bookstack.auth.dto.AllStaffDto;
 import com.bookstack.auth.dto.LogDto;
 import com.bookstack.auth.dto.LoginRequest;
@@ -67,26 +68,26 @@ public class AuthController {
 			// create a response dto
 			User user = (User) auth.getPrincipal();
 			
-//			if(user!=null) {
-//			String clientIp = IpChecking.getClientIp(httpRequest);
-//			LogDto logDto=new LogDto();
-//			logDto.setIpAddress(clientIp);
-//			logDto.setUserName(user.getUsername());
-//			logDto.setName(user.getName());
-//			logDto.setRoleType(user.getRoleType());
-//			
-//			authService.savelog(logDto);
-//			}
-//			else {
-//				String clientIp = IpChecking.getClientIp(httpRequest);
-//				LogDto logDto=new LogDto();
-//				logDto.setIpAddress(clientIp);
-//				logDto.setUserName(request.getUsername());
-//				logDto.setName("invalid userid or password");
-//				logDto.setRoleType("none");
-//				
-//				authService.savelog(logDto);
-//			}
+			if(user!=null) {
+			String clientIp = IpChecking.getClientIp(httpRequest);
+			LogDto logDto=new LogDto();
+			logDto.setIpAddress(clientIp);
+			logDto.setUserName(user.getUsername());
+			logDto.setName(user.getName());
+			logDto.setRoleType(user.getRoleType());
+			
+			authService.savelog(logDto);
+			}
+			else {
+				String clientIp = IpChecking.getClientIp(httpRequest);
+				LogDto logDto=new LogDto();
+				logDto.setIpAddress(clientIp);
+				logDto.setUserName(request.getUsername());
+				logDto.setName("invalid userid or password");
+				logDto.setRoleType("none");
+				
+				authService.savelog(logDto);
+			}
 			UserResponseDTO result = UserResponseDTO.builder()
 				.email(user.getEmail())
 				.name(user.getName())
@@ -102,7 +103,7 @@ public class AuthController {
 			}
 	}
 	
-	@GetMapping("/librarian")
+	@GetMapping("/librarian") 
 	public String one() {
 		return "I am a librarian";
 	}
@@ -140,11 +141,20 @@ public class AuthController {
 	public ResponseEntity<Integer> addstaff(@RequestBody User user){
 		return ResponseEntity.ok(authService.addstaff(user));
 	}
+
+	@PostMapping("/register")
+	public ResponseEntity<Integer> register(@RequestBody java.util.Map<String, Object> request) {
+		return ResponseEntity.ok(authService.registerUser(request));
+	}
 	
 	@PostMapping("/editstaff")
 	public ResponseEntity<String> editstaff(@RequestBody editStaffDto editStaffDto){
 		return ResponseEntity.ok(authService.editstaff(editStaffDto));
 	}
 	
+	@PostMapping("/particularuser")
+	public ResponseEntity<AllEmailDto>senduserdetail(@RequestBody User user){
+		return ResponseEntity.ok(authService.senduserdetail(user));
+	}
 	
 }

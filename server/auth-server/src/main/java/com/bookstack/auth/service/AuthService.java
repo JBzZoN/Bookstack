@@ -3,7 +3,6 @@ package com.bookstack.auth.service;
 import java.util.List;
 
 
-import org.jspecify.annotations.Nullable;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -13,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.bookstack.auth.client.LoggeClient;
 import com.bookstack.auth.dto.AddAuthStaffDto;
+import com.bookstack.auth.dto.AllEmailDto;
 import com.bookstack.auth.dto.AllStaffDto;
 import com.bookstack.auth.dto.LogDto;
 import com.bookstack.auth.dto.editStaffDto;
@@ -27,7 +27,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthService {
 	
 	private final ModelMapper modelMapper;
-	//private final LoggeClient loggeClient;
+	private final LoggeClient loggeClient;
 
 	public String onLogin() {
 		// TODO Auto-generated method stub
@@ -85,11 +85,27 @@ public class AuthService {
 		User user1=userRepository.save(user);
 		return user1.getUserId();
 	}
+
+	public Integer registerUser(java.util.Map<String, Object> registerData) {
+		User user = new User();
+		user.setName((String) registerData.get("name"));
+		user.setEmail((String) registerData.get("email"));
+		user.setPhone((String) registerData.get("phone"));
+		user.setAddress((String) registerData.get("address"));
+		user.setDob((java.time.LocalDate) registerData.get("dob"));
+		user.setUsername((String) registerData.get("username"));
+		user.setPassword((String) registerData.get("password"));
+		user.setRoleType("Member"); // Default role
+		String encodedPassword = passwordEncoder.encode(user.getPassword());
+		user.setPassword(encodedPassword);
+		User savedUser = userRepository.save(user);
+		return savedUser.getUserId();
+	}
 	
 	
 	
 	public String editstaff(editStaffDto editStaffDto) {
-		try {
+		
 			
 				User u=userRepository.getById(editStaffDto.getUserId());
 				
@@ -110,15 +126,19 @@ public class AuthService {
 				userRepository.save(u);
 				return "saved";
 				
-			} catch (Exception e) {
-				e.printStackTrace();
-				return "not saved";
-			}
+			
 		}
 		
-	public String savelog(LogDto logDto) {
-		//return loggeClient.sendlog(logDto);
-		return null;
-	}
+		public String savelog(LogDto logDto) {
+			return loggeClient.sendlog(logDto);
+		}
 		
+		public AllEmailDto senduserdetail(User user) {
+			User userdetial=userRepository.findById(user.getUserId()).get();
+			AllEmailDto allEmailDto=new AllEmailDto();
+			allEmailDto.setEmail(userdetial.getName());
+			allEmailDto.setEmailId(userdetial.getEmail());
+			return allEmailDto;
+		}
+
 }
