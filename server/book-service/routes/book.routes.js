@@ -2,20 +2,13 @@ const express = require("express");
 const bookService = require("../services/book.service");
 const fs = require("fs")
 
+const pool=require("../db/pool")
+
 const multer = require("multer");
 
 const upload = multer({
   dest: "images/"
 });
-
-const mysql2 = require("mysql2")
-const staffPool = mysql2.createPool({
-  host: "localhost",
-  port: "3306",
-  user: "bookstack",
-  database: "book_db",
-  password: "bookstack"
-})
 
 const router = express.Router();
 
@@ -26,14 +19,14 @@ router.get("/copy", (req, res) => {
       number_of_copies_remaining
     FROM book_table
     WHERE
-      book_id=?
+      book_id=?const pool=require("../db/pool")
   `;
 
   const values = [
     bookId
   ];
 
-  staffPool.query(sql, values, (error, rows) => {
+  pool.query(sql, values, (error, rows) => {
     if (error) {
       console.error(error);
       return res.sendStatus(500);
@@ -68,7 +61,7 @@ router.post("/bookFromId", (request, res) => {
     bookId
   ];
 
-  staffPool.query(sql, values, (error, rows) => {
+  pool.query(sql, values, (error, rows) => {
     if (error) {
       console.error(error);
       return res.sendStatus(500);
@@ -92,10 +85,10 @@ router.post("/bookFromId", (request, res) => {
 });
 
 router.post("/id", (req, res) => {
-  const {bookId} = req.body;
+  const {bookId} = req.body;const pool=require("../db/pool")
   const sql = "select number_of_copies_remaining from book_table where book_id = ?"
 
-  staffPool.query(sql, [bookId], (error, data) => {
+  pool.query(sql, [bookId], (error, data) => {
     res.send({
       noOfCopiesRemaining: data[0].number_of_copies_remaining
     })
@@ -106,7 +99,7 @@ router.put("/id", (req, res) => {
   const {bookId, noOfCopiesRemaining} = req.body;
   const sql = "update book_table set number_of_copies_remaining = ? where book_id = ?"
 
-  staffPool.query(sql, [noOfCopiesRemaining, bookId], (error, data) => {
+  pool.query(sql, [noOfCopiesRemaining, bookId], (error, data) => {
     if(error) {
       res.sendStatus(500)
     }else {
@@ -144,7 +137,7 @@ router.post("/search", (req, res) => {
     `%${search}%`    // publisher contains
   ];
 
-  staffPool.query(sql, values, (error, rows) => {
+  pool.query(sql, values, (error, rows) => {
     if (error) {
       console.error(error);
       return res.sendStatus(500);
@@ -203,7 +196,7 @@ router.post("/add", upload.single("imageFile"), (request, response) => {
       publisher,
       action,
       action_date,
-      number_of_copies,
+      number_of_copies,const pool=require("../db/pool")
       number_of_copies_remaining
     ) VALUES (?, ?, ?, ?, ?, ?, ?, NOW(), ?, ?)
   `;
@@ -220,9 +213,9 @@ router.post("/add", upload.single("imageFile"), (request, response) => {
     copies
   ];
 
-  staffPool.query(sql, values, (error, result) => {
+  pool.query(sql, values, (error, result) => {
     if (error) {
-      console.error(error);
+      console.error(error);const pool=require("../db/pool")
       return response.status(500).send({
         status: "error",
         message: "Failed to add book"
@@ -243,7 +236,7 @@ router.post("/add", upload.single("imageFile"), (request, response) => {
 router.get("/all", (request, response) => {
   const sql = "select * from book_table"
 
-  staffPool.query(sql, (error, data) => {
+  pool.query(sql, (error, data) => {
     if (error) {
       return response.sendStatus(500);
     }
@@ -268,142 +261,143 @@ router.get("/all", (request, response) => {
     });
 });
 
-const pool=require("../db/pool")
-
-router.get("/books", async (req, res) => {
-  try {
-    const books = await bookService.getAllBooks();
+router.get("/books", (req, res) => {
+  bookService.getAllBooks((err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.post("/liked-books", async (req, res) => {
-  try {
-    const likedBookIds = req.body;
-    const books = await bookService.getAllLikedBooks(likedBookIds);
+router.get("/new-arrived-books", (req, res) => {
+  bookService.getNewArrivedBooks((err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.post("/recommended-books", async (req, res) => {
-  try {
-    const recommendedBookIds = req.body;
-    const books = await bookService.getRecommendedBooks(recommendedBookIds);
+router.get("/all-new-arrived-books", (req, res) => {
+  bookService.getAllNewArrivedBooks((err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.post("/trending-books", async (req, res) => {
-  try {
-    const trendingBooksIds = req.body;
-    const books = await bookService.getTrendingBooks(trendingBooksIds);
+/* ---------------- ID BASED ---------------- */
+
+router.post("/liked-books", (req, res) => {
+  bookService.getAllLikedBooks(req.body, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.get("/new-arrived-books", async (req, res) => {
-  try {
-    const books = await bookService.getNewArrivedBooks();
+router.post("/recommended-books", (req, res) => {
+  bookService.getRecommendedBooks(req.body, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.post("/all-recommended-books", async (req, res) => {
-  try {
-    const recommendedBookIds = req.body;
-    const books = await bookService.getAllRecommendedBooks(recommendedBookIds);
+router.post("/trending-books", (req, res) => {
+  bookService.getTrendingBooks(req.body, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.post("/all-trending-books", async (req, res) => {
-  try {
-    const trendingBooksIds = req.body;
-    const books = await bookService.getAllTrendingBooks(trendingBooksIds);
+router.post("/all-recommended-books", (req, res) => {
+  bookService.getAllRecommendedBooks(req.body, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.get("/all-new-arrived-books", async (req, res) => {
-  try {
-    const books = await bookService.getAllNewArrivedBooks();
+router.post("/all-trending-books", (req, res) => {
+  bookService.getAllTrendingBooks(req.body, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching books" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.get("/book/:bookId", async (req, res) => {
-  try {
-    const bookId = req.params.bookId;
-    const books = await bookService.getBookDetails(bookId);
-    res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+/* ---------------- SINGLE BOOK ---------------- */
+
+router.get("/book/:bookId", (req, res) => {
+  bookService.getBookDetails(req.params.bookId, (err, book) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching book" });
+    }
+    res.json(book);
+  });
 });
 
-router.post("/might-liked-books/:bookId", async (req, res) => {
-  try {
-    const { bookId } = req.params;
-    const mightLikeBookIds = req.body;
-    const books = await bookService.getMightAlsoLikedBooks(mightLikeBookIds,bookId);
-    res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+router.post("/might-liked-books/:bookId", (req, res) => {
+  bookService.getMightAlsoLikedBooks(
+    req.body,
+    req.params.bookId,
+    (err, books) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error fetching books" });
+      }
+      res.json(books);
+    }
+  );
 });
 
-router.post("/names-by-id", async (req, res) => {
-  try {
-    const bookIds = req.body;
-    const books = await bookService.getBookNamesByIds(bookIds);
+/* ---------------- HELPERS ---------------- */
+
+router.post("/names-by-id", (req, res) => {
+  bookService.getBookNamesByIds(req.body, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Error fetching book names" });
+    }
     res.json(books);
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ message: "Error fetching books" });
-  }
+  });
 });
 
-router.post("/search", async(req, res) => {
-  try {
-    const { search } = req.body;
-    const books = await bookService.searchBooks(search);
+router.post("/search", (req, res) => {
+  const { search } = req.body;
+
+  bookService.searchBooks(search, (err, books) => {
+    if (err) {
+      console.error(err);
+      return res.status(500).json({ message: "Search failed" });
+    }
 
     const mapped = books.map(b => ({
-    bookId: b.book_id,
-    title: b.title,
-    author: b.author
-  }));
-  
-  res.status(200).send(mapped);
-  } catch (err) {
-    console.error
-  }
+      bookId: b.book_id,
+      title: b.title,
+      author: b.author
+    }));
+
+    res.status(200).json(mapped);
+  });
 });
 
 router.get('/allbooks', (req, res) => {

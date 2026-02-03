@@ -1,6 +1,7 @@
 package com.bookstack.gateway.security;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -30,7 +31,7 @@ public class SecurityConfiguration {
 		.authorizeHttpRequests(requests -> requests
 			.requestMatchers("/book/image/**").permitAll()
 			.requestMatchers("/payment/**").permitAll()
-			.requestMatchers("/auth/**").permitAll()
+			.requestMatchers("/auth/**","/member/**").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
 			.requestMatchers("/admin/**").hasAuthority("Admin")
 			.requestMatchers("/staff/**").hasAuthority("Librarian")

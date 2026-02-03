@@ -25,13 +25,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AdminController {
 
-    
-
 	private final AdminServiceImpl adminServiceImpl;
-
-
-    
-	
 	
 	@GetMapping("/allbooks")
 	public ResponseEntity<?> getAllBooks(){

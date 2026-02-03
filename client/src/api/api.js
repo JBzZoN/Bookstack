@@ -20,10 +20,12 @@ api.interceptors.request.use(
 
     return config;
   },
-  (error) => Promise.reject(error)
+  (error) => {
+    throw error;
+  }
 );
 
-/* RESPONSE INTERCEPTOR (optional but recommended) */
+/* RESPONSE INTERCEPTOR */
 api.interceptors.response.use(
   (response) => response,
   (error) => {
@@ -31,17 +33,9 @@ api.interceptors.response.use(
       localStorage.clear();
       window.location.href = "/login";
     }
-    return Promise.reject(error);
+
+    throw error;
   }
 );
 
 export default api;
-
-
-
-
-
-
-
-
-

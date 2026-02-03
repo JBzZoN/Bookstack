@@ -77,7 +77,7 @@ public class RouteConfiguration {
 	            return request;
 	        })
 			.before(
-		            BeforeFilterFunctions.uri("http://localhost:4000")
+		            BeforeFilterFunctions.uri("http://localhost:4040")
 	    	        )
 	        .build();
 	}

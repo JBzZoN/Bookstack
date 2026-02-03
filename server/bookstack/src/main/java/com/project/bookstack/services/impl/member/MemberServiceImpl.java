@@ -235,6 +235,7 @@ public class MemberServiceImpl implements MemberService {
 	        .toList();
 		
     }
+
     
     @Override
     public List<BookCardDTO> getAllTrendingBooks() {
@@ -433,4 +434,3 @@ public class MemberServiceImpl implements MemberService {
     }
     
 }
-

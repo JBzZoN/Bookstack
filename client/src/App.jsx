@@ -7,7 +7,6 @@ import MemberHome from './pages/Member/MemberHome/MemberHome';
 import BrowseBooks from './pages/Member/BrowseBooks/BrowseBooks';
 import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
-import ViewAllBooks from './pages/Member/ViewAllBooks/ViewAllBooks';
 import LikedBooks from './pages/Member/LikedBooks/LikedBooks';
 import AllRecommendedBooks from './pages/Member/RecommendedBooks/RecommendedBooks';
 import AllTrendingBooks from './pages/Member/TrendingBooks/TrendingBooks';
@@ -65,7 +64,6 @@ function App() {
         <Route path="browse" element={<BrowseBooks />} />
         <Route path="account" element={<MyAccount />} />
         <Route path="book/:id" element={<BookDetails />} />
-        <Route path="view" element={<ViewAllBooks />} />
         <Route path="liked-books" element={<LikedBooks />} />
       </Route>
 
