@@ -57,4 +57,20 @@ public class JwtUtil {
 		.compact(); // Generate token string
 	}
 	
+	public String validateAndGetUserId(String token) {
+		try {
+			// Parse and verify signature
+			Claims claims = Jwts.parser().verifyWith(signingKey).build()
+			.parseSignedClaims(token).getPayload();
+			
+			// Extract claims
+			String userId = claims.getSubject();
+			
+			return userId;
+		}catch (JwtException e) {
+			// Invalid token
+			return null;
+		}
+	}
+	
 }

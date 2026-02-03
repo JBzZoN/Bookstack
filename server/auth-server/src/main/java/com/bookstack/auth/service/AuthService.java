@@ -162,6 +162,9 @@ public class AuthService {
 		if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
 			return "Invalid current password";
 		}
+		if (!passwordEncoder.matches(dto.getCurrentPassword(), dto.getNewPassword())) {
+			return "Can't set! Both passwords are same";
+		}
 		user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
 		userRepository.save(user);
 		return "Password updated successfully";

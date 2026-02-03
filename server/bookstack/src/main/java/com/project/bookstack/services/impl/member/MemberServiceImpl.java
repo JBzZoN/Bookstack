@@ -19,6 +19,7 @@ import com.project.bookstack.dto.member.BookNameReturnDateDTO;
 import com.project.bookstack.dto.member.BookSearchDTO;
 import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
 import com.project.bookstack.dto.member.ReviewDTO;
+import com.project.bookstack.entities.RecordDetail;
 import com.project.bookstack.repositories.member.MemberRepository;
 import com.project.bookstack.services.member.MemberService;
 
@@ -73,17 +74,23 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public String renewBook(Integer userId, Integer bookId) {
-        List<com.project.bookstack.entities.RecordDetail> details = recordDetailRepository.getReturnDataForRenew(userId, bookId);
-        
-        if (details.isEmpty()) {
-            return "No active rent record found for this book.";
+        com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
+        if (member.getRenewCount() >= member.getMembershipData().getRenewalLimit()) {
+            return "Renewal limit reached for your membership.";
         }
-        
-        for (com.project.bookstack.entities.RecordDetail rd : details) {
+
+        List<RecordDetail> details = recordDetailRepository.getReturnDataForRenew(userId, bookId);
+              
+        for (RecordDetail rd : details) {
             rd.setDueDate(rd.getDueDate().plusDays(7));
         }
         
         recordDetailRepository.saveAll(details);
+        
+        // Increment renew count
+        member.setRenewCount(member.getRenewCount() + 1);
+        memberRepository.save(member);
+        
         return "Book renewed successfully for " + details.size() + " copy(s). Due date extended by 7 days.";
     }
 
@@ -452,6 +459,17 @@ public class MemberServiceImpl implements MemberService {
                         r.endDate()
                 ))
                 .toList();
+    }
+    
+    @Override
+    public com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId) {
+        com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
+        
+        return new com.project.bookstack.dto.member.MemberLimitsDTO(
+            member.getRenewCount() != null ? member.getRenewCount() : 0,
+            member.getMembershipData().getRenewalLimit() != null ? member.getMembershipData().getRenewalLimit() : 0,
+            member.getMembershipData().getMembershipType()
+        );
     }
     
 }

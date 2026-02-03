@@ -18,18 +18,43 @@ import jakarta.servlet.http.HttpServletResponse;
 public class JwtFilter extends OncePerRequestFilter {
 	@Autowired
 	private JwtUtil jwtUtil;
-	@Override
-	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse resp,
-	FilterChain filterChain) throws ServletException, IOException {
-		// 1. Extract Authorization header
-		String authHeader = request.getHeader("Authorization");
-		// 2. Check for Bearer token
-		if (authHeader != null && authHeader.startsWith("Bearer ")) {
-		String token = authHeader.substring(7); // Remove "Bearer "
-		Authentication auth = jwtUtil.validateToken(token); // 3. Validate token
-		if (auth != null) // 4. Set authentication in SecurityContext
-		SecurityContextHolder.getContext().setAuthentication(auth);
-		}
-		filterChain.doFilter(request, resp); // 5. Continue filter chain
-	}
+    @Override
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse resp, FilterChain filterChain)
+            throws ServletException, IOException {
+        String authHeader = request.getHeader("Authorization");
+        
+        if (authHeader != null && authHeader.startsWith("Bearer ")) {
+            String token = authHeader.substring(7);
+            Authentication auth = jwtUtil.validateToken(token);
+            
+            if (auth != null) {
+                SecurityContextHolder.getContext().setAuthentication(auth);
+                
+                final String userId = jwtUtil.validateAndGetUserId(token);
+                
+                HttpServletRequest wrappedRequest = new jakarta.servlet.http.HttpServletRequestWrapper(request) {
+                    @Override
+                    public String getHeader(String name) {
+                        if ("X-User-Id".equalsIgnoreCase(name)) {
+                            return userId;
+                        }
+                        return super.getHeader(name);
+                    }
+                    
+                    @Override
+                    public java.util.Enumeration<String> getHeaders(String name) {
+                        if ("X-User-Id".equalsIgnoreCase(name)) {
+                            return java.util.Collections.enumeration(java.util.Collections.singletonList(userId));
+                        }
+                        return super.getHeaders(name);
+                    }
+                };
+                
+                filterChain.doFilter(wrappedRequest, resp);
+                return;
+            }
+        }
+        
+        filterChain.doFilter(request, resp);
+    }
 }

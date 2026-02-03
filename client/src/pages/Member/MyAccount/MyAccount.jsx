@@ -16,14 +16,9 @@ function MyAccount() {
 
     const handleChangePassword = async () => {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        if (!currentUser || !currentUser.userId) {
-            toast.error("User not verified");
-            return;
-        }
 
         try {
             const response = await api.post("/auth/change-password", {
-                userId: currentUser.userId,
                 currentPassword: currentPassword,
                 newPassword: newPassword
             });
@@ -36,6 +31,14 @@ function MyAccount() {
         }
     };
 
+    const [memberLimits, setMemberLimits] = useState(null);
+
+    const fetchLimits = () => {
+        api.get("/member/renew-limits")
+            .then(res => setMemberLimits(res.data))
+            .catch(err => console.error("Failed to fetch limits", err));
+    };
+
     useEffect(() => {
         api.get("/member/currently-borrowed-books")
             .then(res => setCurrentlyBorrowed(res.data))
@@ -43,6 +46,7 @@ function MyAccount() {
                 console.error("Failed to fetch book", err);
                 setCurrentlyBorrowed(null);
             });
+        fetchLimits();
     }, []);
 
     useEffect(() => {
@@ -56,25 +60,23 @@ function MyAccount() {
 
     const handleRenew = async (bookId) => {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-        if (!currentUser || !currentUser.userId) {
-            toast.error("User not verified");
-            return;
-        }
 
         try {
             const res = await api.post("/member/renew", {
-                userId: currentUser.userId,
                 bookId: bookId
             });
             toast.success(res.data);
             api.get("/member/currently-borrowed-books")
                 .then(res => setCurrentlyBorrowed(res.data))
                 .catch(err => setCurrentlyBorrowed(null));
+            fetchLimits();
         } catch (err) {
             console.error(err);
             toast.error(err.response?.data || "Renew failed");
         }
     }
+
+    const isRenewLimitReached = memberLimits && memberLimits.renewCount >= memberLimits.renewalLimit;
 
     return (
         <div className='m-5'>
@@ -84,6 +86,11 @@ function MyAccount() {
                 <div className="myaccount-title text-center mb-5">
                     <h1 className="font-montserrat display-4">My Account</h1>
                     <p className="lead">Manage your membership and borrowing activity.</p>
+                    {memberLimits && (
+                        <div className="text-muted mt-2">
+                            Rentals Renewed: {memberLimits.renewCount} / {memberLimits.renewalLimit}
+                        </div>
+                    )}
                 </div>
 
                 <div className="content-card" style={{ margin: "auto" }}>
@@ -127,10 +134,13 @@ function MyAccount() {
                                                         <strong>Due on: {formatDate(book.endDate)}</strong>
                                                     </p>
                                                 </div>
-                                                <button
-                                                    className="btn btn-outline btn-success"
-                                                    onClick={() => handleRenew(book.bookId)}
-                                                >Renew</button>
+                                                <div title={isRenewLimitReached ? "Renewal limit reached" : ""}>
+                                                    <button
+                                                        className="btn btn-outline btn-success"
+                                                        onClick={() => handleRenew(book.bookId)}
+                                                        disabled={isRenewLimitReached}
+                                                    >Renew</button>
+                                                </div>
                                             </li>
                                         </div>
                                     ))}

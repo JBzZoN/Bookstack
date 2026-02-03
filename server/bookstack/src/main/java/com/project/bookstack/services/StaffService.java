@@ -80,6 +80,8 @@ public class StaffService {
 	private final AuthorizationClient authorizationClient;
 	
 	private final KafkaTemplate<String, EmailDTO> kafkaTemplate;
+
+    private final NotificationService notificationService;
 	
 	public List<BookDto> getAllBooks() {
 		// TODO Auto-generated method stub
@@ -369,6 +371,7 @@ public class StaffService {
 		memberBookRepository.save(a);
 		
 	    // return number of copies rented
+        
 		return statusCopyCountDto;
 	}
 

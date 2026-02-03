@@ -10,6 +10,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -159,13 +160,21 @@ public class AuthController {
 	}
 	
 	@PostMapping("/change-password")
-	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto dto) {
-		String result = authService.changePassword(dto);
-		if ("Password updated successfully".equals(result)) {
-			return ResponseEntity.ok(result);
-		} else {
-			return ResponseEntity.badRequest().body(result);
+	public ResponseEntity<String> changePassword(@RequestBody ChangePasswordDto dto, @RequestHeader("Authorization") String token) {
+		if (token != null && token.startsWith("Bearer ")) {
+			token = token.substring(7);
+			String userIdStr = jwtUtil.validateAndGetUserId(token);
+			if (userIdStr != null) {
+				dto.setUserId(Integer.parseInt(userIdStr));
+				String result = authService.changePassword(dto);
+				if ("Password updated successfully".equals(result)) {
+					return ResponseEntity.ok(result);
+				} else {
+					return ResponseEntity.badRequest().body(result);
+				}
+			}
 		}
+		return ResponseEntity.status(401).body("Invalid or missing token");
 	}
 	
 }

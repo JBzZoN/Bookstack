@@ -1,13 +1,15 @@
 package com.project.bookstack.controllers.member;
 
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
 
-
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,7 +32,6 @@ public class MemberController {
 
     @GetMapping("/books")
     public List<BookCardDTO> getAllBooks(@RequestHeader("X-User-Id") String id) {
-    	System.out.println(id);
         return memberService.getAllBooks();
     }
     
@@ -90,12 +91,55 @@ public class MemberController {
     }
     
     @PostMapping("/renew")
-    public org.springframework.http.ResponseEntity<String> renewBook(@org.springframework.web.bind.annotation.RequestBody java.util.Map<String, Integer> payload) {
-        Integer userId = payload.get("userId");
-        Integer bookId = payload.get("bookId");
-        if (userId == null || bookId == null) return org.springframework.http.ResponseEntity.badRequest().body("Missing userId or bookId");
-        
-        return org.springframework.http.ResponseEntity.ok(memberService.renewBook(userId, bookId));
+    public org.springframework.http.ResponseEntity<String> renewBook(
+            @RequestHeader("X-User-Id") String userIdStr,
+            @org.springframework.web.bind.annotation.RequestBody java.util.Map<String, Integer> payload) {
+      
+    	Integer userId = Integer.parseInt(userIdStr);
+    	Integer bookId = payload.get("bookId");
+    	String result = memberService.renewBook(userId, bookId);
+    	if (result.contains("successfully")) {
+    	    return org.springframework.http.ResponseEntity.ok(result);
+    	} else {
+    	    return org.springframework.http.ResponseEntity.badRequest().body(result);
+    	}
+       
     }
     
+    @GetMapping("/renew-limits")
+    public com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(@RequestHeader("X-User-Id") String id) {
+    	Integer userId = Integer.parseInt(id);
+        return memberService.getMemberLimits(userId);
+    }
+    
+    @Autowired
+    private com.project.bookstack.services.NotificationService notificationService;
+    
+    @PostMapping("/notify")
+    public ResponseEntity<String> notifyMe(
+            @RequestHeader("X-User-Id") String userIdStr,
+            @RequestBody java.util.Map<String, Object> payload) {
+        
+        Integer userId = Integer.parseInt(userIdStr);
+        Integer bookId = Integer.parseInt(payload.get("bookId").toString());
+        String email = payload.get("email").toString();
+        
+        String result = notificationService.createNotificationRequest(userId, bookId, email);
+        if (result.contains("scheduled")) {
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.badRequest().body(result);
+        }
+    }
+
+    @GetMapping("/check-notify-status/{bookId}")
+    public ResponseEntity<Boolean> checkNotifyStatus(
+            @RequestHeader("X-User-Id") String userIdStr,
+            @PathVariable Integer bookId) {
+        
+        Integer userId = Integer.parseInt(userIdStr);
+        boolean isPending = notificationService.isNotificationPending(userId, bookId);
+        return ResponseEntity.ok(isPending);
+    }
+
 }

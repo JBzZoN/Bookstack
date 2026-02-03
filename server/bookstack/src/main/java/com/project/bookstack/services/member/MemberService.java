@@ -35,4 +35,5 @@ public interface MemberService {
 	
 	String renewBook(Integer userId, Integer bookId);
     
+	com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId);
 }

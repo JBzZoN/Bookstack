@@ -13,6 +13,7 @@ import 'react-toastify/dist/ReactToastify.css';
 function BookDetails() {
     const [bookDetails, setBookDetails] = useState([]);
     const [mightLikedBooks, setMightLikedBooks] = useState([]);
+    const [isNotifyPending, setIsNotifyPending] = useState(false);
 
     const { id } = useParams();
 
@@ -36,6 +37,14 @@ function BookDetails() {
                 console.error("Failed to fetch book", err);
                 setMightLikedBooks(null);
             });
+
+        // Check notification status
+        const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+        if (currentUser && id) {
+            api.get(`/member/check-notify-status/${id}`)
+                .then(res => setIsNotifyPending(res.data))
+                .catch(err => console.error("Failed to check notify status", err));
+        }
     }, [id]);
 
     if (!bookDetails) {
@@ -73,12 +82,12 @@ function BookDetails() {
         }
 
         try {
-            const res = await api.post("/book/notify", {
-                userId: currentUser.userId,
+            const res = await api.post("/member/notify", {
                 bookId: id,
                 email: currentUser.email
             });
             toast.success(res.data);
+            setIsNotifyPending(true);
         } catch (err) {
             toast.error(err.response?.data || "Request failed");
         }
@@ -101,14 +110,25 @@ function BookDetails() {
                             <h1 className="h1-c font-montserrat display-5">{title}</h1>
                             <h4 className="fw-normal text-secondary">by {author}</h4>
 
-                            <div className="d-flex align-items-center gap-3 my-4">
-                                <div className='rating'>
-                                    <h3 className="rating-value">{rating}</h3>
-                                    <img id="star" src={star} alt="rating star" />
-                                </div>
+                            {bookDetails.numberOfCopiesRemaining > 0 ? (
+                                <div className="d-flex align-items-center gap-3 my-4">
+                                    <div className='rating'>
+                                        <h3 className="rating-value">{rating}</h3>
+                                        <img id="star" src={star} alt="rating star" />
+                                    </div>
 
-                                <span className="badge fs-6 availability"><h4 className='member-h4'>Available</h4></span>
-                            </div>
+                                    <span className="badge fs-6 availability"><h4 className='member-h4'>Available</h4></span>
+                                </div>
+                            ) : (
+                                <div className="d-flex align-items-center gap-3 my-4">
+                                    <div className='rating'>
+                                        <h3 className="rating-value">{rating}</h3>
+                                        <img id="star" src={star} alt="rating star" />
+                                    </div>
+
+                                    <span className="badge fs-6 availability bg-danger"><h4 className='member-h4'>Unavailable</h4></span>
+                                </div>
+                            )}
 
                             <p className="lead">{summary}</p>
 
@@ -130,9 +150,14 @@ function BookDetails() {
 
                             <div className="d-grid gap-2 d-md-flex mt-4">
                                 {bookDetails.numberOfCopiesRemaining === 0 && (
-                                    <button className="btn btn-outline-warning" onClick={handleNotify}>
+                                    <button
+                                        className="btn btn-outline-warning"
+                                        onClick={handleNotify}
+                                        disabled={isNotifyPending}
+                                        title={isNotifyPending ? "Notification scheduled. We will notify you when available." : "Notify me when available"}
+                                    >
                                         <i className="bi bi-bell-fill me-2"></i>
-                                        Notify Me
+                                        {isNotifyPending ? "Notification Scheduled" : "Notify Me"}
                                     </button>
                                 )}
 
