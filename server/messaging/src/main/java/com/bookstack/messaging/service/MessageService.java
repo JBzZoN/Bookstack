@@ -39,6 +39,8 @@ public class MessageService {
 		
 		List<String> emails = authorizationClient.getEmails();
 		
+		System.out.println("--------------------------------------------");
+
 		System.out.println(emails);
 		System.out.println(emailDTO);
 
