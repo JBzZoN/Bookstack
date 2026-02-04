@@ -69,3 +69,8 @@ C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\n
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\appsettings.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\WebApplication1.deps.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\WebApplication1.runtimeconfig.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\out\web.config
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\out\appsettings.Development.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\out\appsettings.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\out\WebApplication1.deps.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\bin\Release\net8.0\out\out\out\out\out\out\out\out\out\WebApplication1.runtimeconfig.json

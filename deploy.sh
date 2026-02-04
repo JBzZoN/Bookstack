@@ -60,7 +60,7 @@ kubectl apply -f book-db-mysql-rs.yaml
 kubectl delete service mysql-book-db
 kubectl apply -f book-db-mysql-sc.yaml
 
-sleep 30
+sleep 60
 
 cat sql/book_db.sql | kubectl exec -i $(kubectl get pod -l app=mysql-book-db -o name | head -n 1) -- \
 mysql -uroot -pbookstack book_db
@@ -76,7 +76,7 @@ kubectl apply -f authorization-mysql-rs.yaml
 kubectl delete service mysql-authorization
 kubectl apply -f authorization-mysql-sc.yaml
 
-sleep 30
+sleep 60
 
 cat sql/authorization.sql | kubectl exec -i $(kubectl get pod -l app=mysql-authorization -o name | head -n 1) -- \
 mysql -uroot -pbookstack authorization
@@ -111,7 +111,7 @@ kubectl apply -f bookstack-mysql-rs.yaml
 kubectl delete service mysql-bookstack
 kubectl apply -f bookstack-mysql-sc.yaml
 
-sleep 30
+sleep 60
 
 cat sql/bookstack.sql | kubectl exec -i $(kubectl get pod -l app=mysql-bookstack -o name | head -n 1) -- \
 mysql -uroot -pbookstack bookstack
@@ -120,21 +120,11 @@ cd ..
 
 echo "------------------------------------------------------8. kafka server"
 
-kubectl delete pod kafka --ignore-not-found
-kubectl delete service kafka --ignore-not-found
+cd k8s/
 
-kubectl run kafka \
-  --image=apache/kafka:4.1.1 \
-  --restart=Never \
-  --env="KAFKA_NODE_ID=1" \
-  --env="KAFKA_PROCESS_ROLES=broker,controller" \
-  --env="KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093" \
-  --env="KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092" \
-  --env="KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER" \
-  --env="KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093"
+# NO IDEA
 
-kubectl expose pod kafka --port=9092
-
+cd ..
 
 echo "------------------------------------------------------9. messaging service"
 
