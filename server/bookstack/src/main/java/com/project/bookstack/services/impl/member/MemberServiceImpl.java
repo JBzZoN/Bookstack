@@ -33,6 +33,8 @@ public class MemberServiceImpl implements MemberService {
 	private final MemberRepository memberRepository;
 
 	private final com.project.bookstack.repositories.StaffRecordDetailRepository recordDetailRepository;
+	private final com.project.bookstack.clients.member.AuthClient authClient;
+	private final com.project.bookstack.services.NotificationService notificationService;
 
 	@Override
 	public List<BookCardDTO> getAllBooks(Integer userId) {
@@ -410,7 +412,7 @@ public class MemberServiceImpl implements MemberService {
 	}
 
 	@Override
-	public com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId) {
+	public com.project.bookstack.dto.member.MemberLimitsDTO getCurrentPlan(Integer userId) {
 		com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
 
 		return new com.project.bookstack.dto.member.MemberLimitsDTO(
@@ -448,6 +450,26 @@ public class MemberServiceImpl implements MemberService {
 						likedBookIds.contains(book.bookId())))
 				.toList();
 
+	}
+
+	@Override
+	public String notifyMe(Integer userId, Integer bookId) {
+		// Fetch user email from Auth Service using AuthClient
+		java.util.Map<String, Object> request = new java.util.HashMap<>();
+		request.put("userId", userId);
+
+		com.project.bookstack.dto.EmailDTO emailDTO = authClient.getUserDetail(request);
+
+		if (emailDTO == null || emailDTO.getEmail() == null) {
+			return "Failed to fetch user email.";
+		}
+
+		return notificationService.createNotificationRequest(userId, bookId, emailDTO.getEmail());
+	}
+
+	@Override
+	public boolean checkNotifyStatus(Integer userId, Integer bookId) {
+		return notificationService.isNotificationPending(userId, bookId);
 	}
 
 }

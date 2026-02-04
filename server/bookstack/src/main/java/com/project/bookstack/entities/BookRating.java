@@ -24,4 +24,3 @@ public class BookRating {
     @Column(name = "rating", nullable = false)
     private Integer rating;
 }
-

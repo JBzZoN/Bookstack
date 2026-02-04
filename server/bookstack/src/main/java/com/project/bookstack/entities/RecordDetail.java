@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "record_detail_table", schema = "Bookstack")
+@Table(name = "record_detail_table")
 @Data
 @NoArgsConstructor
 public class RecordDetail {
@@ -22,11 +22,7 @@ public class RecordDetail {
     /* ------------------ Relationships ------------------ */
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "record_id",
-        referencedColumnName = "record_id",
-        foreignKey = @ForeignKey(name = "record_id")
-    )
+    @JoinColumn(name = "record_id", referencedColumnName = "record_id", foreignKey = @ForeignKey(name = "record_id"))
     private Record record;
 
     @Column(name = "book_id", nullable = false)
@@ -42,8 +38,8 @@ public class RecordDetail {
 
     @Column(name = "due_Date")
     private LocalDate dueDate;
-    
+
     @Column(name = "returned")
     private Integer returned;
-    
+
 }

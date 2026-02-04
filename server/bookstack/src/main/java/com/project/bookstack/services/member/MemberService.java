@@ -37,5 +37,9 @@ public interface MemberService {
 
 	String renewBook(Integer userId, Integer bookId);
 
-	com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId);
+	com.project.bookstack.dto.member.MemberLimitsDTO getCurrentPlan(Integer userId);
+
+	String notifyMe(Integer userId, Integer bookId);
+
+	boolean checkNotifyStatus(Integer userId, Integer bookId);
 }

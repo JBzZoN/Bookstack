@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import './add-books.css'
-import addImage from "../../../assets/staff/add-button.png"
-import addImageTicked from "../../../assets/staff/add-button-ticked.png"
+import addImage from "../../../assets/images/staff/add-button.png"
+import addImageTicked from "../../../assets/images/staff/add-button-ticked.png"
 import { toast } from 'react-toastify'
 import { useNavigate } from 'react-router-dom'
 import Title from './../../../components/staff/title/title';
@@ -44,13 +44,13 @@ function AddBooks() {
     payload.append("genres", genres);
     payload.append("imageFile", imageFile);
     payload.append("staffId", STAFF_ID);
-  
+
 
     console.table(payload);
 
-    const response = await axios.post("http://localhost:7070/book/add", payload, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
-    
-    const response2 = await axios.post("http://localhost:7070/staff/genre", {bookId: response.data.bookId, genres}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response = await axios.post("http://localhost:7070/book/add", payload, { headers: { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}` } })
+
+    const response2 = await axios.post("http://localhost:7070/staff/genre", { bookId: response.data.bookId, genres }, { headers: { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}` } })
 
     navigate('/staff/books')
     toast.success("Added a book")
@@ -76,83 +76,83 @@ function AddBooks() {
 
   return (
     <div className='container mt-3'>
-      <Title string={"Add a new book"}/>
+      <Title string={"Add a new book"} />
       <table>
-      <tbody>
-        <tr>
-          <td rowSpan={2}>
-            <div className='div-input position-relative'>
-              {
-                data == 0 ? <div>
-                  <img src={addImage} className='add-image'/> 
-                <div className='img-txt'>Add an image</div>
-                </div>
-                : <div>
-                  <img src={addImageTicked} className='add-image' pos alt=""/>
-                  <div className='img-txt'>Added {file.length > 10 ? file.slice(0, 10) + "...." : file}</div>
-                </div>
-              } 
-              <input type="file" className='position-absolute top-50 start-50 translate-middle input-file' onChange={(e) => {
-                setData(e.target.files.length)
-                if(e.target.files[0] != null){
-                  setFile(e.target.files[0].name)
-                  setImageFile(e.target.files[0])
+        <tbody>
+          <tr>
+            <td rowSpan={2}>
+              <div className='div-input position-relative'>
+                {
+                  data == 0 ? <div>
+                    <img src={addImage} className='add-image' />
+                    <div className='img-txt'>Add an image</div>
+                  </div>
+                    : <div>
+                      <img src={addImageTicked} className='add-image' pos alt="" />
+                      <div className='img-txt'>Added {file.length > 10 ? file.slice(0, 10) + "...." : file}</div>
+                    </div>
                 }
-              }}/>
-            </div>
-          </td>
+                <input type="file" className='position-absolute top-50 start-50 translate-middle input-file' onChange={(e) => {
+                  setData(e.target.files.length)
+                  if (e.target.files[0] != null) {
+                    setFile(e.target.files[0].name)
+                    setImageFile(e.target.files[0])
+                  }
+                }} />
+              </div>
+            </td>
 
-          <td colSpan={1} style={{ width: "100%" }}>
-        <div className="form-floating mb-3">
-          <input type="text" onChange={e => setTitle(e.target.value)} className="form-control" id="titleInput" placeholder="Title" />
-          <label htmlFor="titleInput">Title</label>
-        </div>
-      </td>
-    </tr>
+            <td colSpan={1} style={{ width: "100%" }}>
+              <div className="form-floating mb-3">
+                <input type="text" onChange={e => setTitle(e.target.value)} className="form-control" id="titleInput" placeholder="Title" />
+                <label htmlFor="titleInput">Title</label>
+              </div>
+            </td>
+          </tr>
 
-    <tr>
-      <td colSpan={1} style={{ width: "100%" }}>
-        <div className="form-floating mb-3">
-          <input type="text" onChange={e => setAuthor(e.target.value)}  className="form-control" id="publisherInput" placeholder="Publisher" />
-          <label htmlFor="publisherInput">Author</label>
-        </div>
-      </td>
-    </tr>
-      </tbody>
-    </table>
+          <tr>
+            <td colSpan={1} style={{ width: "100%" }}>
+              <div className="form-floating mb-3">
+                <input type="text" onChange={e => setAuthor(e.target.value)} className="form-control" id="publisherInput" placeholder="Publisher" />
+                <label htmlFor="publisherInput">Author</label>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
       <div className="form-floating mb-3">
-          <input type="text" className="form-control" id="publisherInput" placeholder="Publisher"  onChange={e => setPublisher(e.target.value)} />
-          <label htmlFor="publisherInput">Publisher</label>
-        </div>
+        <input type="text" className="form-control" id="publisherInput" placeholder="Publisher" onChange={e => setPublisher(e.target.value)} />
+        <label htmlFor="publisherInput">Publisher</label>
+      </div>
       <div className="row g-3">
         <div className="col">
           <div className="form-floating mb-3">
-          <input type="number" className="form-control" id="publisherInput" placeholder="Publisher" onChange={e => setCopies(e.target.value)}  />
-          <label htmlFor="publisherInput">No: of Copies</label>
-        </div>
+            <input type="number" className="form-control" id="publisherInput" placeholder="Publisher" onChange={e => setCopies(e.target.value)} />
+            <label htmlFor="publisherInput">No: of Copies</label>
+          </div>
         </div>
         <div className="col"><div className="form-floating mb-3">
-          <input type="text" className="form-control" id="publisherInput" placeholder="Publisher" onChange={e => setIsbn(e.target.value)}/>
+          <input type="text" className="form-control" id="publisherInput" placeholder="Publisher" onChange={e => setIsbn(e.target.value)} />
           <label htmlFor="publisherInput">ISBN</label>
         </div>
         </div>
-      
+
       </div>
 
-      
+
 
 
       <Select
-      options={options}
-      isMulti
-      placeholder="Choose Genre's..."
-      onChange={e => setGenreList(e.map(a => a.value))}
+        options={options}
+        isMulti
+        placeholder="Choose Genre's..."
+        onChange={e => setGenreList(e.map(a => a.value))}
       />
-      
-      <div className="form-floating mb-3 mt-3" style={{zIndex:0}}>
+
+      <div className="form-floating mb-3 mt-3" style={{ zIndex: 0 }}>
         <div className="form-floating">
-          <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{height: "100px", resize: "none"}}
-           onChange={e => setDescription(e.target.value)} ></textarea>
+          <textarea className="form-control" placeholder="Leave a comment here" id="floatingTextarea2" style={{ height: "100px", resize: "none" }}
+            onChange={e => setDescription(e.target.value)} ></textarea>
           <label htmlFor="floatingTextarea2">Description</label>
         </div>
       </div>

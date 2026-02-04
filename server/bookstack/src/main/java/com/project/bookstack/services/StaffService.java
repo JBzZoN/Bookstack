@@ -62,58 +62,55 @@ import lombok.RequiredArgsConstructor;
 public class StaffService {
 
 	private final StaffBookRepository staffBookRepository;
-	
+
 	private final StaffMemberRepository staffMemberRepository;
 
 	private final StaffDetailsRepository staffDetailsRepository;
-	
+
 	private final StaffRecordRepository staffRecordRepository;
-	
+
 	private final StaffRecordDetailRepository staffRecordDetailRepository;
-	
+
 	private final StaffMemberDataRepository staffMemberDataRepository;
-	
+
 	private final MemberBookRepository memberBookRepository;
 
 	private final BookClient bookClient;
-	
+
 	private final AuthorizationClient authorizationClient;
-	
+
 	private final KafkaTemplate<String, EmailDTO> kafkaTemplate;
 
-    private final NotificationService notificationService;
-	
+	private final NotificationService notificationService;
+
 	public List<BookDto> getAllBooks() {
 		// TODO Auto-generated method stub
-		
+
 		List<BookDto> bookDto = new ArrayList<>();
 
 		for (Book b : staffBookRepository.findAll()) {
-		    bookDto.add(
-		        new BookDto(
-		            b.getIsbn(),                       // String isbn
-		            b.getTitle(),                      // String title
-		            b.getAuthor(),                     // String author
-		            b.getDescription(),                // String description
-		            b.getPublisher(),                  // String publisher
-		            b.getStaff().getUserId(),          // Long userId
-		            b.getAction(),                     // String action
-		            b.getActionDate(),                 // LocalDate actionDate
-		            b.getBookId(),          // Long bookId
-		            b.getNumberOfCopies(),              // Integer numberOfCopies
-		            b.getNumberOfCopiesRemaining(),
-		            b.getImage()
-		        )
-		    );
+			bookDto.add(
+					new BookDto(
+							b.getIsbn(), // String isbn
+							b.getTitle(), // String title
+							b.getAuthor(), // String author
+							b.getDescription(), // String description
+							b.getPublisher(), // String publisher
+							b.getStaff().getUserId(), // Long userId
+							b.getAction(), // String action
+							b.getActionDate(), // LocalDate actionDate
+							b.getBookId(), // Long bookId
+							b.getNumberOfCopies(), // Integer numberOfCopies
+							b.getNumberOfCopiesRemaining(),
+							b.getImage()));
 		}
 
-		
 		return bookDto;
 	}
-	
+
 	public void resetRenew() {
 		List<Member> allMembers = staffMemberRepository.findAll();
-		for(Member a: allMembers) {
+		for (Member a : allMembers) {
 			a.setRenewCount(0);
 		}
 	}
@@ -121,10 +118,10 @@ public class StaffService {
 	public List<UserDTO> getAllMembers() {
 		List<UserDTO> searchResults = authorizationClient.getUsers();
 		List<Member> memberResults = staffMemberRepository.findAll();
-		
+
 		List<UserDTO> finalOutput = searchResults.stream().map((e) -> {
-			for(Member m : memberResults) {
-				if(m.getUserId() == e.getUserId()) {
+			for (Member m : memberResults) {
+				if (m.getUserId() == e.getUserId()) {
 					System.out.println(m.getMembershipData().getMembershipType());
 					e.setMemberEnd(m.getMemberEnd());
 					e.setMembershipType(m.getMembershipData().getMembershipType());
@@ -133,18 +130,18 @@ public class StaffService {
 			}
 
 			return e;
-		}).filter(e ->  e.getRoleType().equals("Member")).toList();
+		}).filter(e -> e.getRoleType().equals("Member")).toList();
 		return finalOutput;
 	}
 
 	public List<Member> addBook(BookGenreRequestDto bookGenreRequestDto) {
-		
+
 		String[] genreList = bookGenreRequestDto.getGenres().split(",");
-		
-		for(String genre : genreList) {
+
+		for (String genre : genreList) {
 			staffBookRepository.addBookGenre(bookGenreRequestDto.getBookId(), Integer.parseInt(genre));
 		}
-		
+
 		return null;
 	}
 
@@ -154,66 +151,65 @@ public class StaffService {
 
 	public List<UserDTO> searchUsers(String search) {
 		// TODO Auto-generated method stub
-		return  authorizationClient.getSearchedUsers(search);
+		return authorizationClient.getSearchedUsers(search);
 	}
 
 	public List<BookSearchDTO> searchBooks(String search) {
 		// TODO Auto-generated method stub
 		List<Book> searchResults = staffBookRepository.searchBooks(search, PageRequest.of(0, 5));
 		List<BookSearchDTO> dtoList = searchResults.stream()
-			    .map(book -> new BookSearchDTO(
-			        book.getBookId(),
-			        book.getTitle(),
-			        book.getAuthor(),
-			        book.getPublisher(),
-			        book.getIsbn()
-			    )).toList();   // Java 16+
-		
-		
-		return  dtoList;
+				.map(book -> new BookSearchDTO(
+						book.getBookId(),
+						book.getTitle(),
+						book.getAuthor(),
+						book.getPublisher(),
+						book.getIsbn()))
+				.toList(); // Java 16+
+
+		return dtoList;
 	}
 
 	public void uploadRecord(RentRenewReturnRequestDTO rentRenewReturnRequestDTO, Integer userId) {
-		
+
 		Record record = new Record();
-		if(rentRenewReturnRequestDTO.getRecords().size() == 0) {
+		if (rentRenewReturnRequestDTO.getRecords().size() == 0) {
 			return;
 		}
 
-        // Member reference (NO DB HIT)
+		// Member reference (NO DB HIT)
 		System.out.println(rentRenewReturnRequestDTO.getMemberId());
-        Member member = staffMemberRepository.findById(rentRenewReturnRequestDTO.getMemberId()).get();
-        record.setMember(member);
+		Member member = staffMemberRepository.findById(rentRenewReturnRequestDTO.getMemberId()).get();
+		record.setMember(member);
 
-        // Staff reference (NO DB HIT)
-        Staff staff = staffDetailsRepository.findById(userId).get();
-        record.setStaff(staff);
-        
-        System.out.println(rentRenewReturnRequestDTO);
+		// Staff reference (NO DB HIT)
+		Staff staff = staffDetailsRepository.findById(userId).get();
+		record.setStaff(staff);
 
-        record.setDate(LocalDate.now());
+		System.out.println(rentRenewReturnRequestDTO);
 
-        staffRecordRepository.save(record);
+		record.setDate(LocalDate.now());
 
-        /* ------------------ Create Record Details ------------------ */
+		staffRecordRepository.save(record);
 
-        for (RentRenewReturnRecordDTO r : rentRenewReturnRequestDTO.getRecords()) {
+		/* ------------------ Create Record Details ------------------ */
 
-            RecordDetail detail = new RecordDetail();
-            detail.setRecord(record);
-            
-            detail.setBookId(r.getBookId());
-            detail.setStatus(r.getStatus());
-            detail.setTotalCopies(r.getCopies());
-            detail.setReturned(0);
+		for (RentRenewReturnRecordDTO r : rentRenewReturnRequestDTO.getRecords()) {
 
-            if ("Rent".equalsIgnoreCase(r.getStatus())) {
-                detail.setDueDate(LocalDate.now().plusDays(member.getMembershipData().getBorrowPeriod()));
-            }
+			RecordDetail detail = new RecordDetail();
+			detail.setRecord(record);
 
-            staffRecordDetailRepository.save(detail);
-        }
-		
+			detail.setBookId(r.getBookId());
+			detail.setStatus(r.getStatus());
+			detail.setTotalCopies(r.getCopies());
+			detail.setReturned(0);
+
+			if ("Rent".equalsIgnoreCase(r.getStatus())) {
+				detail.setDueDate(LocalDate.now().plusDays(member.getMembershipData().getBorrowPeriod()));
+			}
+
+			staffRecordDetailRepository.save(detail);
+		}
+
 	}
 
 	public void sendEmail(String email) {
@@ -226,15 +222,15 @@ public class StaffService {
 		Member b = staffMemberRepository.findById(rentRequestDTO.getMemberId()).get();
 		// use find to find the membership rent limit
 		MembershipData c = staffMemberDataRepository.findById(b.getMembershipData().getMembershipType()).get();
-		
+
 		// rentSelected + rentCount <= rent limit, return true
-		
-		if(rentRequestDTO.getRentSelected() + b.getRentCount() <= c.getBorrowLimit()) {
+
+		if (rentRequestDTO.getRentSelected() + b.getRentCount() <= c.getBorrowLimit()) {
 			return true;
 		}
-		
+
 		// else return false
-		
+
 		return false;
 	}
 
@@ -244,95 +240,99 @@ public class StaffService {
 		Member b = staffMemberRepository.findById(renewRequestDTO.getMemberId()).get();
 		// use find to find the membership rent limit
 		MembershipData c = staffMemberDataRepository.findById(b.getMembershipData().getMembershipType()).get();
-	
+
 		// rentSelected + rentCount <= rent limit, return true
-		
-		if(renewRequestDTO.getRenewSelected() + b.getRenewCount() <= c.getRenewalLimit()) {
+
+		if (renewRequestDTO.getRenewSelected() + b.getRenewCount() <= c.getRenewalLimit()) {
 			return true;
 		}
-		
+
 		// else return false
-		
+
 		return false;
 	}
 
 	public List<DueBookDto> getFineDetails(MemberIdDto memberIdDto) {
-		
-	
+
 		return staffRecordDetailRepository.getFineDetails(memberIdDto.getMemberId(), LocalDate.now());
 	}
 
 	public void rentLogic(BookMemberDto bookMemberDto) {
-		
+
 		System.out.println(bookMemberDto);
 		// find if record already present in member book table
-		MemberBook a = memberBookRepository.findById(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId())).orElseGet(() -> null);
-			
-		if(a == null) {
+		MemberBook a = memberBookRepository
+				.findById(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId()))
+				.orElseGet(() -> null);
+
+		if (a == null) {
 			// if not present add it as a new record
-			memberBookRepository.save(new MemberBook(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId()), bookMemberDto.getCopyCount()));
-		}else {
+			memberBookRepository
+					.save(new MemberBook(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId()),
+							bookMemberDto.getCopyCount()));
+		} else {
 			// if already present then update the count and remove it from "output"
 			a.setCopyCount(a.getCopyCount() + bookMemberDto.getCopyCount());
 			memberBookRepository.save(a);
 		}
-		
+
 		// reduce rent_count by one(member_table)
-		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();	
+		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();
 		member.setRentCount(member.getRentCount() + bookMemberDto.getCopyCount());
-		
+
 	}
 
 	public StatusCopyCountDto renewLogicSubmit(BookMemberDto bookMemberDto) {
 		StatusCopyCountDto statusCopyCountDto;
 		int copies = 0;
-		
+
 		// on renew or return fetch and put the value there when staff clicks verify
-        // there is no status as renew in record_detail_table
-		// add all the rented details copy counts(List of records) lift all same book + member combined records and calculate total copies
+		// there is no status as renew in record_detail_table
+		// add all the rented details copy counts(List of records) lift all same book +
+		// member combined records and calculate total copies
 		// that needs to be renewed of that book
-		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(),
+				bookMemberDto.getBookId());
 		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();
-		
-		if(recordDetail.isEmpty()) {
+
+		if (recordDetail.isEmpty()) {
 			System.out.println("Its empty so invalid renew");
 			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
 		} else {
-			
-			for(RecordDetail a: recordDetail) {
+
+			for (RecordDetail a : recordDetail) {
 				copies += a.getTotalCopies();
 			}
 			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
 		}
-		
-		
-        // just increment the due date
-		for(RecordDetail rd : recordDetail) {
+
+		// just increment the due date
+		for (RecordDetail rd : recordDetail) {
 			rd.setDueDate(rd.getDueDate().plusDays(member.getMembershipData().getBorrowPeriod()));
 		}
-        // increase renew count by number of copies renewed
+		// increase renew count by number of copies renewed
 		member.setRenewCount(member.getRenewCount() + copies);
 		// return the rented books(in record detail) which should be renewed
 		return statusCopyCountDto;
 	}
 
 	public StatusCopyCountDto renewLogicVerify(BookMemberDto bookMemberDto) {
-		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(),
+				bookMemberDto.getBookId());
 		StatusCopyCountDto statusCopyCountDto;
 		int copies = 0;
-		
-		if(recordDetail.isEmpty()) {
+
+		if (recordDetail.isEmpty()) {
 			System.out.println("Its empty so invalid renew");
 			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
 		} else {
-			
-			for(RecordDetail a: recordDetail) {
+
+			for (RecordDetail a : recordDetail) {
 				copies += a.getTotalCopies();
 			}
 			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
 		}
-		
-		
+
 		return statusCopyCountDto;
 	}
 
@@ -340,38 +340,54 @@ public class StaffService {
 		// return status copy count dto for copy display in frontend
 		StatusCopyCountDto statusCopyCountDto;
 		int copies = 0;
-		
-		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
-		
-		if(recordDetail.isEmpty()) {
+
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(),
+				bookMemberDto.getBookId());
+
+		if (recordDetail.isEmpty()) {
 			System.out.println("Its empty so invalid renew");
 			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
 		} else {
-			
-			for(RecordDetail a: recordDetail) {
+
+			for (RecordDetail a : recordDetail) {
 				copies += a.getTotalCopies();
 
-			    // set returned to 1(record detail table)
+				// set returned to 1(record detail table)
 				a.setReturned(1);
 			}
 			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
 		}
-		
-	    // increase number of books available (+ copies)
+
+		// increase number of books available (+ copies)
 		Integer currentCopies = bookClient.getCopies(bookMemberDto.getBookId());
 		bookClient.modifyCount(new BookCopyCountDto(bookMemberDto.getBookId(), currentCopies + copies));
-		
+
+		// Trigger notifications specifically when copies are added back
+		// Check if copies > 0 (which they should be if returned)
+		if (copies > 0) {
+			// We run this asynchronously so it doesn't block the return process
+			new Thread(() -> {
+				try {
+					notificationService.notifyUsersForBook(bookMemberDto.getBookId());
+				} catch (Exception e) {
+					System.err.println("Error sending notifications: " + e.getMessage());
+				}
+			}).start();
+		}
+
 		// reduce rent_count by one(member_table)
-		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();	
+		Member member = staffMemberRepository.findById(bookMemberDto.getMemberId()).get();
 		member.setRentCount(member.getRentCount() - bookMemberDto.getCopyCount());
-		
-	    // reduce in member book table
-		MemberBook a = memberBookRepository.findById(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId())).orElseGet(() -> null);
+
+		// reduce in member book table
+		MemberBook a = memberBookRepository
+				.findById(new MemberBookId(bookMemberDto.getMemberId(), bookMemberDto.getBookId()))
+				.orElseGet(() -> null);
 		a.setCopyCount(a.getCopyCount() - bookMemberDto.getCopyCount());
 		memberBookRepository.save(a);
-		
-	    // return number of copies rented
-        
+
+		// return number of copies rented
+
 		return statusCopyCountDto;
 	}
 
@@ -379,22 +395,22 @@ public class StaffService {
 		// return status copy count dto for copy display in frontend
 		StatusCopyCountDto statusCopyCountDto;
 		int copies = 0;
-		
-		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(), bookMemberDto.getBookId());
-		
-		if(recordDetail.isEmpty()) {
+
+		List<RecordDetail> recordDetail = staffRecordDetailRepository.getReturnDataForRenew(bookMemberDto.getMemberId(),
+				bookMemberDto.getBookId());
+
+		if (recordDetail.isEmpty()) {
 			System.out.println("Its empty so invalid renew");
 			statusCopyCountDto = new StatusCopyCountDto("Invalid", -1);
 		} else {
-			
-			for(RecordDetail a: recordDetail) {
+
+			for (RecordDetail a : recordDetail) {
 				copies += a.getTotalCopies();
 			}
 			statusCopyCountDto = new StatusCopyCountDto("Valid", copies);
 		}
-		
+
 		return statusCopyCountDto;
 	}
 
-	
 }

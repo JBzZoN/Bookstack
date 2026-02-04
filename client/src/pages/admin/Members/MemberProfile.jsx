@@ -2,52 +2,52 @@ import React, { useEffect, useState } from 'react'
 import { useLocation, Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import "./MemberProfile.css"
-import profileImage from "../../../assets/default_profile_image.png"
+import profileImage from "../../../assets/images/default_profile_image.png"
 
 function MemberProfile() {
 
   const location = useLocation()
   const member = location.state.member
-   const navigate = useNavigate()
+  const navigate = useNavigate()
 
   const [fine, setFine] = useState(null)
   const [loadingFine, setLoadingFine] = useState(true)
   const [error, setError] = useState("")
 
- useEffect(() => {
-  const fetchFine = async () => {
-    try {
-      const token = JSON.parse(localStorage.getItem("currentUser")).token;
+  useEffect(() => {
+    const fetchFine = async () => {
+      try {
+        const token = JSON.parse(localStorage.getItem("currentUser")).token;
 
-      const res = await axios.post(
-        "http://localhost:7070/admin/calculatefine",
-        {
-          userId: member.userId  
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            "Content-Type": "application/json"
+        const res = await axios.post(
+          "http://localhost:7070/admin/calculatefine",
+          {
+            userId: member.userId
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+              "Content-Type": "application/json"
+            }
           }
-        }
-      );
+        );
 
-      setFine(res.data);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to load fine");
-    } finally {
-      setLoadingFine(false);
+        setFine(res.data);
+      } catch (err) {
+        console.error(err);
+        setError("Failed to load fine");
+      } finally {
+        setLoadingFine(false);
+      }
+    };
+
+    if (member?.userId) {
+      fetchFine();
     }
-  };
-
-  if (member?.userId) {
-    fetchFine();
-  }
-}, [member]);
+  }, [member]);
 
 
-   
+
 
   const handleSendEmail = () => {
     const subject = encodeURIComponent("Regarding your pending fine")
@@ -106,20 +106,20 @@ function MemberProfile() {
             </Link>
 
 
-                 
+
             <button
-                    className="btn btn-sm btn-outline-primary"
-                    onClick={() => {
-                      navigate('/admin/emailsending', {
-                      state: {
-                       member: member,
-                      fine: fine
-                     }
-                    });
-                    }}
-                  >
-                    Send Email
-                  </button>
+              className="btn btn-sm btn-outline-primary"
+              onClick={() => {
+                navigate('/admin/emailsending', {
+                  state: {
+                    member: member,
+                    fine: fine
+                  }
+                });
+              }}
+            >
+              Send Email
+            </button>
           </div>
 
         </div>

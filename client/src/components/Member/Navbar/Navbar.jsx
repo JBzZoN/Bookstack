@@ -1,8 +1,7 @@
 import '../../../components/Member/Navbar/Navbar.css'
 import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
-import logo from '../../../assets/logo.png'
-import logout from '../../../assets/images/member/logout.png'
+import logo from '../../../assets/images/logo.png'
 import likesList from '../../../assets/images/member/likes-cart.png'
 import api from "../../../api/api"
 import { useSelector, useDispatch } from 'react-redux';
@@ -46,7 +45,7 @@ function Navbar() {
         navigate("/login")
     };
     const handleLikedBooks = () => {
-        navigate("/member/liked-books")
+        navigate("/member/view-all/liked-books")
     };
     return (
         <nav className="member-navbar navbar navbar-expand-lg fixed-top">
@@ -66,7 +65,7 @@ function Navbar() {
 
                 <div className="collapse navbar-collapse" id="navbarContent">
 
-                    <form className="d-flex ms-3 flex-grow-1 position-relative" role="search">
+                    <form className="d-flex ms-3 flex-grow-1 position-relative p-2" role="search">
                         <input
                             className="form-control me-2"
                             type="search"
@@ -103,31 +102,27 @@ function Navbar() {
                             )}
                     </form>
 
-                    <div className="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 navbar-nav ">
-                        <NavLink to="/member/home" id="member-margin" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
-                        <NavLink to="/member/browse" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Browse Books</NavLink>
-                        <NavLink to="/member/account" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>My Account</NavLink>
-
-                        <div className="position-relative" style={{ cursor: 'pointer' }} onClick={handleLikedBooks}>
-                            <img id="img-size" src={likesList} alt="Liked Books" style={{ marginLeft: 0 }} />
-                            {Object.values(likes).filter(Boolean).length > 0 && (
-                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill" style={{
-                                    background: 'linear-gradient(90deg, #4f0bc5, rgb(236, 94, 117))',
-                                    fontSize: '0.75rem',
-                                    border: '2px solid white'
-                                }}>
-                                    {Object.values(likes).filter(Boolean).length}
-                                </span>
-                            )}
-                        </div>
-
-                        <button
-                            className="btn btn-sm text-white rounded-pill px-3"
-                            style={{
+                    <div className="position-relative p-2" style={{ cursor: 'pointer' }} onClick={handleLikedBooks}>
+                        <img id="img-size" src={likesList} alt="Liked Books" style={{ marginLeft: 0 }} />
+                        {Object.values(likes).filter(Boolean).length > 0 && (
+                            <span className="position-absolute badge rounded-pill" style={{
+                                top: '1px',
+                                right: '1px',
                                 background: 'linear-gradient(90deg, #4f0bc5, rgb(236, 94, 117))',
-                                border: 'none',
-                                fontWeight: '500'
-                            }}
+                                fontSize: '0.75rem',
+                                border: '2px solid white'
+                            }}>
+                                {Object.values(likes).filter(Boolean).length}
+                            </span>
+                        )}
+                    </div>
+
+                    <div className="p-2 ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 navbar-nav ">
+                        <NavLink to="/member/home" id="member-margin" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
+                        <NavLink to="/member/view-all/books" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Browse Books</NavLink>
+                        <NavLink to="/member/account" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>My Account</NavLink>
+                        <button
+                            className="btn btn-sm text-white rounded-pill px-3 btn-upgrade"
                             onClick={() => navigate('/membership')}
                         >
                             Upgrade

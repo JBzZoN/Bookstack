@@ -6,13 +6,13 @@ import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Map;
 
-@FeignClient(
-    name = "auth-service",
-    url = "http://localhost:9090"   
-)
+@FeignClient(name = "auth-service", url = "http://localhost:9090")
 public interface AuthClient {
 
-    @PostMapping("auth/register")  
+    @PostMapping("auth/register")
     Integer createUser(@RequestBody Map<String, Object> registerData);
-    
+
+    @PostMapping("auth/particularuser")
+    com.project.bookstack.dto.EmailDTO getUserDetail(@RequestBody Map<String, Object> user);
+
 }

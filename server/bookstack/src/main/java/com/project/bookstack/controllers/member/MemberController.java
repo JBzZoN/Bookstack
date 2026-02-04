@@ -133,12 +133,12 @@ public class MemberController {
 
     }
 
-    @GetMapping("/renew-limits")
-    public com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(@RequestHeader("X-User-Id") String id) {
+    @GetMapping("/current-plan")
+    public com.project.bookstack.dto.member.MemberLimitsDTO getCurrentPlan(@RequestHeader("X-User-Id") String id) {
         if (id.contains(","))
             id = id.split(",")[0].trim();
         Integer userId = Integer.parseInt(id);
-        return memberService.getMemberLimits(userId);
+        return memberService.getCurrentPlan(userId);
     }
 
     @Autowired
@@ -153,10 +153,10 @@ public class MemberController {
             userIdStr = userIdStr.split(",")[0].trim();
         Integer userId = Integer.parseInt(userIdStr);
         Integer bookId = Integer.parseInt(payload.get("bookId").toString());
-        String email = payload.get("email").toString();
+        // Email is no longer required from payload; fetched via AuthClient in Service
 
-        String result = notificationService.createNotificationRequest(userId, bookId, email);
-        if (result.contains("scheduled")) {
+        String result = memberService.notifyMe(userId, bookId);
+        if (result.contains("scheduled") || result.contains("already requested")) {
             return ResponseEntity.ok(result);
         } else {
             return ResponseEntity.badRequest().body(result);
@@ -171,7 +171,7 @@ public class MemberController {
         if (userIdStr.contains(","))
             userIdStr = userIdStr.split(",")[0].trim();
         Integer userId = Integer.parseInt(userIdStr);
-        boolean isPending = notificationService.isNotificationPending(userId, bookId);
+        boolean isPending = memberService.checkNotifyStatus(userId, bookId);
         return ResponseEntity.ok(isPending);
     }
 
@@ -181,6 +181,20 @@ public class MemberController {
         if (userIdStr.contains(","))
             userIdStr = userIdStr.split(",")[0].trim();
         return memberService.getAllMightAlsoLikedBooks(bookId, Integer.parseInt(userIdStr));
+    }
+
+    @PostMapping("/test-notify")
+    public ResponseEntity<String> testNotify(
+            @RequestBody java.util.Map<String, Object> payload) {
+
+        try {
+            Integer bookId = Integer.parseInt(payload.get("bookId").toString());
+            String email = payload.get("email").toString();
+            notificationService.sendTestNotification(email, bookId);
+            return ResponseEntity.ok("Test email sent to " + email);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Failed to send test email: " + e.getMessage());
+        }
     }
 
 }

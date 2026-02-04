@@ -6,14 +6,9 @@ import './App.css'
 /* Member pages */
 import Home from './pages/Member/Home/Home';
 import MemberHome from './pages/Member/MemberHome/MemberHome';
-import BrowseBooks from './pages/Member/BrowseBooks/BrowseBooks';
 import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
-import LikedBooks from './pages/Member/LikedBooks/LikedBooks';
-import AllRecommendedBooks from './pages/Member/RecommendedBooks/RecommendedBooks';
-import AllTrendingBooks from './pages/Member/TrendingBooks/TrendingBooks';
-import AllNewArrivedBooks from './pages/Member/NewArrivedBooks/NewArrivedBooks';
-import MightLikeBooks from './pages/Member/MightLikeBooks/MightLikeBooks';
+import ViewAllBooks from './components/Member/ViewAllBooks/ViewAllBooks';
 
 /* Admin pages */
 import AdminHome from './pages/admin/home/home';
@@ -74,14 +69,11 @@ function App() {
       <Route path="member" element={<Home />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<MemberHome />} />
-        <Route path="recommended-books" element={<AllRecommendedBooks />} />
-        <Route path="trending-books" element={<AllTrendingBooks />} />
-        <Route path="new-arrivals" element={<AllNewArrivedBooks />} />
-        <Route path="browse" element={<BrowseBooks />} />
-        <Route path="account" element={<MyAccount />} />
+        <Route path="view-all/:category/:id?" element={<ViewAllBooks />} />
+        <Route path="browse" element={<Navigate to="view-all/books" replace />} />
         <Route path="book/:id" element={<BookDetails />} />
-        <Route path="might-like-books/:id" element={<MightLikeBooks />} />
-        <Route path="liked-books" element={<LikedBooks />} />
+        <Route path="account" element={<MyAccount />} />
+
       </Route>
 
       {/* ADMIN ROUTES */}

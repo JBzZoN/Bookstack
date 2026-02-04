@@ -12,9 +12,15 @@ api.interceptors.request.use(
     const storedUser = localStorage.getItem("currentUser");
 
     if (storedUser) {
-      const { token } = JSON.parse(storedUser);
+      const { token, userId, id } = JSON.parse(storedUser);
+
       if (token) {
         config.headers.Authorization = `Bearer ${token}`;
+      }
+
+      // Add X-User-Id header if userId exists (backend requirement)
+      if (userId || id) {
+        config.headers['X-User-Id'] = userId || id;
       }
     }
 
@@ -29,7 +35,7 @@ api.interceptors.request.use(
 api.interceptors.response.use(
   (response) => response,
   (error) => {
-    if (error.response?.status === 401) {
+    if (error.response?.status === 401 || error.response?.status === 403) {
       localStorage.clear();
       window.location.href = "/login";
     }

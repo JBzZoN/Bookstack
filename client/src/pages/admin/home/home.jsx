@@ -5,8 +5,8 @@ import Navbar from '../../../components/admin/Navbar/navbar';
 function AdminHome() {
   return (
     <div>
-      <Navbar/>
-      <Outlet/>
+      <Navbar />
+      <Outlet />
     </div>
   )
 }

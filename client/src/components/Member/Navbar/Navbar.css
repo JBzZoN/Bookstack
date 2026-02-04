@@ -7,11 +7,12 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   z-index: 1030;
 }
+
 .member-navbar .nav-link {
   font-weight: 750;
   color: #2f344b;
   transition: color 0.25s;
-  font-size: large;
+  font-size: 1.2rem;
 }
 
 .member-image-fix {
@@ -25,12 +26,10 @@
 }
 
 #id1,
-.member-navbar .nav-link.active{
-  background: linear-gradient(
-    90deg,
-    #4f0bc5,
-    rgb(236, 94, 117)
-  );
+.member-navbar .nav-link.active {
+  background: linear-gradient(90deg,
+      #4f0bc5,
+      rgb(236, 94, 117));
 
   -webkit-background-clip: text;
   background-clip: text;
@@ -44,71 +43,87 @@
   height: 40px;
 }
 
+/* Gradient Upgrade Button */
 .btn-upgrade {
-  background: linear-gradient(135deg, #ff0080, #0a0d9f);
+  background: linear-gradient(90deg, #4f0bc5, #ec5e75);
   color: #fff !important;
-  border-radius: 2rem;
-  padding: 8px 22px;
+  border: none;
   font-weight: 700;
-  box-shadow: 0 6px 22px rgba(236, 72, 153, 0.1);
+  padding: 8px 24px;
+  border-radius: 50px;
+  box-shadow: 0 4px 15px rgba(236, 94, 117, 0.3);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 130px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  font-size: 0.95rem;
+  letter-spacing: 0.5px;
+}
+
+.btn-upgrade:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(79, 11, 197, 0.4);
+  color: #fff !important;
 }
 
 @media (max-width: 999px) {
   .navbar .navbar-collapse {
-      background-color: rgba(255, 255, 255, 0.9);
-      padding: 15px 0;
+    background-color: rgba(255, 255, 255, 0.9);
+    padding: 15px 0;
   }
 }
 
 @media (min-width: 1000px) {
   .navbar .navbar-collapse {
-      background-color: transparent;
+    background-color: transparent;
   }
 }
 
 /* Navbar search container must be relative */
 .navbar-search-wrapper {
-    position: relative;
-    flex-grow: 1;
+  position: relative;
+  flex-grow: 1;
 }
 
 /* Dropdown list */
 .navbar-search-dropdown {
-    position: absolute;
-    top: calc(100% + 6px);   /* appears just below input */
-    left: 0;
-    right: 0;
+  position: absolute;
+  top: calc(100% + 6px);
+  /* appears just below input */
+  left: 0;
+  right: 0;
 
-    background: #ffffff;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-    z-index: 9999;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  z-index: 9999;
 
-    max-height: 260px;
-    overflow-y: auto;
+  max-height: 260px;
+  overflow-y: auto;
 }
 
 /* Dropdown item */
 .navbar-search-dropdown .list-group-item {
-    cursor: pointer;
-    border: none;
-    padding: 10px 14px;
+  cursor: pointer;
+  border: none;
+  padding: 10px 14px;
 }
 
 /* Hover effect */
 .navbar-search-dropdown .list-group-item:hover {
-    background-color: #f4f3ff;
+  background-color: #f4f3ff;
 }
 
 /* Book title */
 .navbar-search-dropdown strong {
-    font-size: 14px;
-    font-weight: 600;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 /* Author / ISBN */
 .navbar-search-dropdown small {
-    font-size: 12px;
-    color: #777;
+  font-size: 12px;
+  color: #777;
 }
-

@@ -25,11 +25,8 @@ import org.springframework.scheduling.annotation.Scheduled;
 public class NotificationService {
 
     private final NotificationRepository notificationRepository;
-    private final JavaMailSender javaMailSender;
-    private final StaffBookRepository bookRepository; // To get book title
-
-    @Value("${bookstack.from.email}")
-    public String fromEmailAddress;
+    private final org.springframework.kafka.core.KafkaTemplate<String, com.project.bookstack.dto.EmailDTO> kafkaTemplate;
+    private final StaffBookRepository bookRepository;
 
     @Scheduled(cron = "0 * * * * *") // Run every minute
     public void processPendingNotifications() {
@@ -80,38 +77,48 @@ public class NotificationService {
         String finalBookTitle = bookTitle;
 
         for (Notification n : pendingNotifications) {
-            sendEmail(n.getEmail(), finalBookTitle);
-            notificationRepository.delete(n); // Delete after sending
+            try {
+                sendEmail(n.getEmail(), finalBookTitle);
+                notificationRepository.delete(n);
+            } catch (Exception e) {
+                System.err.println("Failed to notify " + n.getEmail() + ": " + e.getMessage());
+            }
         }
     }
 
     private void sendEmail(String toEmail, String bookTitle) {
-        MimeMessagePreparator preparator = mimeMessage -> {
-            MimeMessageHelper message = new MimeMessageHelper(mimeMessage);
-            message.setFrom(fromEmailAddress);
-            message.setTo(toEmail);
-            message.setSubject("Book Available - Bookstack Library");
+        String content = String.format(
+                """
+                        Dear Member,
 
-            String content = String.format(
-                    """
-                            Dear Member,
+                        Good news! The book "%s" is now available in the library.
 
-                            Good news! The book "%s" is now available in the library.
+                        You requested to be notified when this book became available. You can now login to your account and check the availability.
 
-                            You requested to be notified when this book became available. You can now login to your account and check the availability.
-
-                            Best regards,
-                            Team BOOKSTACK
-                            """,
-                    bookTitle);
-
-            message.setText(content);
-        };
+                        Best regards,
+                        Team BOOKSTACK
+                        """,
+                bookTitle);
 
         try {
-            javaMailSender.send(preparator);
+            System.out.println("DEBUG: Sending notification to notify-me-topic for " + toEmail);
+            kafkaTemplate.send("notify-me-topic", new com.project.bookstack.dto.EmailDTO(content, toEmail));
         } catch (Exception e) {
-            System.err.println("Failed to send notification email to " + toEmail + ": " + e.getMessage());
+            System.err.println("Failed to send Kafka message for " + toEmail + ": " + e.getMessage());
         }
+    }
+
+    public void sendTestNotification(String toEmail, Integer bookId) {
+        String bookTitle = "Test Book";
+        try {
+            com.project.bookstack.entities.Book book = bookRepository.findById(bookId).orElse(null);
+            if (book != null) {
+                bookTitle = book.getTitle();
+            }
+        } catch (Exception e) {
+            System.err.println("Failed to fetch book details for test notification: " + e.getMessage());
+        }
+
+        sendEmail(toEmail, bookTitle);
     }
 }

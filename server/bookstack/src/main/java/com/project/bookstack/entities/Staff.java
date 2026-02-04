@@ -8,7 +8,7 @@ import lombok.Setter;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "staff_table", schema = "Bookstack")
+@Table(name = "staff_table")
 @Data
 @Getter
 @Setter
@@ -23,10 +23,7 @@ public class Staff {
 
     @Column(name = "date_hired")
     private LocalDate dateHired;
-    
-    @Column(name = "status",length = 10)
+
+    @Column(name = "status", length = 10)
     private String status;
 }
-
-    
- 
