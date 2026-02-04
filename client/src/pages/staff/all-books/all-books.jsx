@@ -31,7 +31,7 @@ function AllStaffBooks() {
 
     async function getAllBooks() {
         const response = await axios.get(
-            "http://localhost:7070/book/all",
+            "http://localhost:30080/book/all",
             { headers: { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}` } }
         )
         const data = response.data
@@ -39,7 +39,7 @@ function AllStaffBooks() {
         console.log(data)
         for (let i = 0; i < data.length; i++) {
             const response = await axios.get(
-                "http://localhost:7070/staff/book/" + data[i].bookId,
+                "http://localhost:30080/staff/book/" + data[i].bookId,
                 { headers: { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}` } }
             )
             data[i].genreList = response.data
@@ -62,7 +62,7 @@ function AllStaffBooks() {
                     <div className="card book-card" key={e.bookId}>
 
                         <img
-                            src={e.bookImage.startsWith("http") ? e.bookImage : `http://localhost:7070/book/image/${e.bookImage}`}
+                            src={e.bookImage.startsWith("http") ? e.bookImage : `http://localhost:30080/book/image/${e.bookImage}`}
                             className="card-img-top book-image"
                             alt="book"
                             style={{ height: "250px" }}

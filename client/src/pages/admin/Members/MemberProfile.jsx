@@ -20,7 +20,7 @@ function MemberProfile() {
       const token = JSON.parse(localStorage.getItem("currentUser")).token;
 
       const res = await axios.post(
-        "http://localhost:7070/admin/calculatefine",
+        "http://localhost:30080/admin/calculatefine",
         {
           userId: member.userId  
         },

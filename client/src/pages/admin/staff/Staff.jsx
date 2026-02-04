@@ -14,7 +14,7 @@ const Staff = () => {
     const fetchStaff = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("currentUser")).token;
-        const res = await axios.get("http://localhost:7070/admin/allstaff", {
+        const res = await axios.get("http://localhost:30080/admin/allstaff", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setStaffList(res.data);

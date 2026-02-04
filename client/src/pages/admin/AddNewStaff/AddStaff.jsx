@@ -28,7 +28,7 @@ export default function AddStaff() {
     const token = JSON.parse(localStorage.getItem("currentUser"))?.token;
 
     // POST request with form data
-    const res = await fetch("http://localhost:7070/admin/addmember", {
+    const res = await fetch("http://localhost:30080/admin/addmember", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

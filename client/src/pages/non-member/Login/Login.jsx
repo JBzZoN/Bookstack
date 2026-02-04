@@ -15,7 +15,7 @@ function Login() {
     const normalizedUsername = email.trim();
     let response;
     try {
-          response = await axios.post("http://localhost:7070/auth/login", {"username": normalizedUsername, "password": password})
+          response = await axios.post("http://localhost:30080/auth/login", {"username": normalizedUsername, "password": password})
     }catch(e) {
       alert("Invalid credentials")
     }

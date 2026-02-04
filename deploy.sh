@@ -120,11 +120,21 @@ cd ..
 
 echo "------------------------------------------------------8. kafka server"
 
-cd k8s/
+kubectl delete pod kafka --ignore-not-found
+kubectl delete svc kafka --ignore-not-found
 
-# NO IDEA
-
-cd ..
+kubectl run kafka \
+  --image=apache/kafka:4.1.1 \
+  --restart=Never \
+  --port=9092 \
+  --env="KAFKA_PROCESS_ROLES=broker,controller" \
+  --env="KAFKA_NODE_ID=1" \
+  --env="KAFKA_LISTENERS=PLAINTEXT://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093" \
+  --env="KAFKA_ADVERTISED_LISTENERS=PLAINTEXT://kafka:9092" \
+  --env="KAFKA_CONTROLLER_LISTENER_NAMES=CONTROLLER" \
+  --env="KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT" \
+  --env="KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093" \
+  --env="KAFKA_CLUSTER_ID=5L6g3nShT-eMCtK--X86sw"
 
 echo "------------------------------------------------------9. messaging service"
 
@@ -162,5 +172,24 @@ kubectl apply -f bookstack-server-rs.yaml
 
 kubectl delete service bookstack-server
 kubectl apply -f bookstack-server-sc.yaml
+
+cd ..
+
+
+echo "------------------------------------------------------11. client react"
+
+cd client
+
+npm run build
+
+docker build -t react-client:latest .
+
+cd ../k8s
+
+kubectl delete rs react-client --ignore-not-found
+kubectl delete svc react-client --ignore-not-found
+
+kubectl apply -f client-rs.yaml
+kubectl apply -f client-sc.yaml
 
 cd ..

@@ -16,7 +16,7 @@ import com.project.bookstack.dto.admin.EditStaffSentDto;
 import com.project.bookstack.dto.admin.UserId;
 
 @Service
-@FeignClient(name="admin-auth-coonect",url="http://localhost:9090")
+@FeignClient(name="admin-auth-coonect",url="http://auth-server:9090")
 public interface AdminClientService {
 
 	@GetMapping("/auth/allstaff")
