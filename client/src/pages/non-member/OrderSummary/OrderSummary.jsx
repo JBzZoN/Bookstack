@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import Footer from "../../../components/Member/Footer/Footer";
 import logo from "../../../assets/logo.png";
 import api from "../../../api/api"; // plain axios instance
+import { toast } from "react-toastify";
 
 function OrderSummary() {
   const navigate = useNavigate();
@@ -41,7 +42,7 @@ function OrderSummary() {
       .get("/payment/config")
       .then(res => setRzpConfig(res.data))
       .catch(() =>
-        setError("Unable to load payment configuration.")
+        toast.error("Unable to load payment configuration.")
       );
   }, []);
 
@@ -59,7 +60,7 @@ function OrderSummary() {
       })
       .then(res => setAmount(res.data.amount))
       .catch(() =>
-        setError("Unable to fetch payment amount.")
+        toast.error("Unable to fetch payment amount.")
       );
   }, [membershipType, selectedPlan]);
 
@@ -78,7 +79,7 @@ function OrderSummary() {
 
       openRazorpay(res.data.orderId, res.data.amount);
     } catch {
-      setError("Unable to initiate payment.");
+      toast.error("Unable to initiate payment.");
     }
   };
 
@@ -100,7 +101,7 @@ function OrderSummary() {
 
       modal: {
         ondismiss: () =>
-          setError("Payment cancelled by user.")
+          toast.error("Payment cancelled by user.")
       },
 
       prefill: {
@@ -115,7 +116,7 @@ function OrderSummary() {
     const rzp = new window.Razorpay(options);
 
     rzp.on("payment.failed", () => {
-      setError("Payment failed. Please try again.");
+      toast.error("Payment failed. Please try again.");
     });
 
     rzp.open();
@@ -144,10 +145,11 @@ function OrderSummary() {
     try {
       await api.post("/payment/success", payload);
       localStorage.clear();
+      toast.success("Payment successful! Membership activated.");
       navigate("/login");
     } catch (err) {
       console.error("❌ PAYMENT SUCCESS ERROR", err.response?.data || err);
-      setError("Payment successful but membership activation failed.");
+      toast.error("Payment successful but membership activation failed.");
     }
   };
 

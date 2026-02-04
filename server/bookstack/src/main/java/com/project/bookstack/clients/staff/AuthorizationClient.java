@@ -1,4 +1,4 @@
-package com.project.bookstack.client;
+package com.project.bookstack.clients.staff;
 
 import java.util.List;
 

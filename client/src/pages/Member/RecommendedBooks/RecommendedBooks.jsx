@@ -1,9 +1,11 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
+import EmptyState from '../../../components/Member/EmptyState/EmptyState';
 import api from '../../../api/api';
+import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 
-function AllRecommendedBooks () {
+function AllRecommendedBooks() {
     const [allRecommendedBooks, setAllRecommendedBooks] = useState([]);
 
     useEffect(() => {
@@ -13,7 +15,8 @@ function AllRecommendedBooks () {
             })
             .catch(err => {
                 console.error("Failed to fetch books", err);
-                setAllRecommendedBooks([]);
+                toast.error("Failed to load recommended books");
+                setAllRecBooks([]);
             });
     }, []);
 
@@ -25,7 +28,10 @@ function AllRecommendedBooks () {
             </div>
 
             <div className='mt-4 container vertical-scroll'>
-                    {
+                {
+                    allRecommendedBooks.length === 0 ? (
+                        <EmptyState message="No recommended books at the moment." />
+                    ) : (
                         allRecommendedBooks.map((book) => (
                             <BookCard
                                 key={book.bookId}
@@ -37,7 +43,8 @@ function AllRecommendedBooks () {
                                 link={`/member/book/${84}`}
                             />
                         ))
-                    }
+                    )
+                }
             </div>
         </div>
     )

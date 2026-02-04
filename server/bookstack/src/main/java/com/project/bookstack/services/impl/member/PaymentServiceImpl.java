@@ -7,7 +7,7 @@ import org.json.JSONObject;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.project.bookstack.clients.AuthClient;
+import com.project.bookstack.clients.member.AuthClient;
 import com.project.bookstack.dto.PaymentSuccessRequestDTO;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;

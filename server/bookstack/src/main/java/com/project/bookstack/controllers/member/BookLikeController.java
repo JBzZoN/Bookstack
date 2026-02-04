@@ -6,6 +6,7 @@ import java.util.Map;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,9 +22,12 @@ public class BookLikeController {
     private final BookLikeService bookLikeService;
 
     @PostMapping("/toggle")
-    public Map<String, Boolean> toggleLike(@RequestBody Map<String, Integer> body) {
+    public Map<String, Boolean> toggleLike(@RequestHeader("X-User-Id") String userIdStr,
+            @RequestBody Map<String, Integer> body) {
 
-        Integer userId = 1; // later from SecurityContext
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
+        Integer userId = Integer.parseInt(userIdStr);
         Integer bookId = body.get("bookId");
 
         boolean liked = bookLikeService.toggleLike(userId, bookId);
@@ -32,11 +36,11 @@ public class BookLikeController {
     }
 
     @GetMapping
-    public List<Integer> getLikedBooks() {
-        Integer userId = 1;
+    public List<Integer> getLikedBooks(@RequestHeader("X-User-Id") String userIdStr) {
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
+        Integer userId = Integer.parseInt(userIdStr);
         return bookLikeService.getLikedBooks(userId);
     }
-    
+
 }
-
-

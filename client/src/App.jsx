@@ -1,4 +1,6 @@
-import { BrowserRouter, Routes, Route, Navigate} from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import './App.css'
 
 /* Member pages */
@@ -11,6 +13,7 @@ import LikedBooks from './pages/Member/LikedBooks/LikedBooks';
 import AllRecommendedBooks from './pages/Member/RecommendedBooks/RecommendedBooks';
 import AllTrendingBooks from './pages/Member/TrendingBooks/TrendingBooks';
 import AllNewArrivedBooks from './pages/Member/NewArrivedBooks/NewArrivedBooks';
+import MightLikeBooks from './pages/Member/MightLikeBooks/MightLikeBooks';
 
 /* Admin pages */
 import AdminHome from './pages/admin/home/home';
@@ -43,18 +46,31 @@ import AllStaffBooks from './pages/staff/all-books/all-books';
 import MemberStaffProfile from './pages/staff/member-profile/member-profile';
 
 function App() {
-  return <Routes>    
-    {/* NON MEMBER ROUTES */}
-    <Route path="/" element={<NonMemberHome />}>
-      <Route index element={<Navigate to="intro" replace />} />
-      <Route path='intro' element={<BookStackIntro />} />
-      <Route path="login" element={<Login />} />
-      <Route path="membership" element={<Membership />} />
-      <Route path="order-summary" element={<OrderSummary />} />
-      <Route path="register" element={<Register/>}/>
-    </Route>
-    
-    {/* MEMBER ROUTES */}
+  return <div className="app-container">
+    <ToastContainer
+      position="top-right"
+      autoClose={3000}
+      hideProgressBar={false}
+      newestOnTop={false}
+      closeOnClick
+      rtl={false}
+      pauseOnFocusLoss
+      draggable
+      pauseOnHover
+      theme="light"
+    />
+    <Routes>
+      {/* NON MEMBER ROUTES */}
+      <Route path="/" element={<NonMemberHome />}>
+        <Route index element={<Navigate to="intro" replace />} />
+        <Route path='intro' element={<BookStackIntro />} />
+        <Route path="login" element={<Login />} />
+        <Route path="membership" element={<Membership />} />
+        <Route path="order-summary" element={<OrderSummary />} />
+        <Route path="register" element={<Register />} />
+      </Route>
+
+      {/* MEMBER ROUTES */}
       <Route path="member" element={<Home />}>
         <Route index element={<Navigate to="home" replace />} />
         <Route path="home" element={<MemberHome />} />
@@ -64,6 +80,7 @@ function App() {
         <Route path="browse" element={<BrowseBooks />} />
         <Route path="account" element={<MyAccount />} />
         <Route path="book/:id" element={<BookDetails />} />
+        <Route path="might-like-books/:id" element={<MightLikeBooks />} />
         <Route path="liked-books" element={<LikedBooks />} />
       </Route>
 
@@ -74,21 +91,22 @@ function App() {
         <Route path="editstaff" element={<EditStaff />} />
         <Route path="books" element={<Books />} />
         <Route path="members" element={<Members />} />
-        <Route path="memberprofile" element={<MemberProfile/>} />
-        <Route path='emailsending' element={<SendLetter/>}/>
+        <Route path="memberprofile" element={<MemberProfile />} />
+        <Route path='emailsending' element={<SendLetter />} />
       </Route>
 
-    {/* STAFF ROUTES */}
-    <Route path="/staff" element={<StaffHome/>}>
-      <Route path="books" element={<AllStaffBooks/>}/>
-      <Route path="books/add" element={<AddBooks/>}/>
-      <Route path="books/profile" element={<BookProfile/>}/>
-      <Route path="transaction" element={<RentRenewReturn/>}/>
-      <Route path="newsletter" element={<SendNewsletter/>}/>
-      <Route path="members" element={<ViewMembers/>}/>
-      <Route path="members/profile" element={<MemberStaffProfile/>}/>
-    </Route>
-  </Routes>
+      {/* STAFF ROUTES */}
+      <Route path="/staff" element={<StaffHome />}>
+        <Route path="books" element={<AllStaffBooks />} />
+        <Route path="books/add" element={<AddBooks />} />
+        <Route path="books/profile" element={<BookProfile />} />
+        <Route path="transaction" element={<RentRenewReturn />} />
+        <Route path="newsletter" element={<SendNewsletter />} />
+        <Route path="members" element={<ViewMembers />} />
+        <Route path="members/profile" element={<MemberStaffProfile />} />
+      </Route>
+    </Routes>
+  </div>
 }
 
 export default App;

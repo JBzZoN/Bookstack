@@ -20,8 +20,8 @@ import org.springframework.mail.javamail.MimeMessagePreparator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
-import com.project.bookstack.client.AuthorizationClient;
-import com.project.bookstack.client.BookClient;
+import com.project.bookstack.clients.staff.AuthorizationClient;
+import com.project.bookstack.clients.staff.BookClient;
 import com.project.bookstack.dto.BookCopyCountDto;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookGenreRequestDto;

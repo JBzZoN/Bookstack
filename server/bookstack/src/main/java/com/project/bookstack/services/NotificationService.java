@@ -11,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 import com.project.bookstack.entities.Notification;
 import com.project.bookstack.repositories.NotificationRepository;
-import com.project.bookstack.client.BookClient;
+import com.project.bookstack.clients.staff.BookClient;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.entities.Book;
 import com.project.bookstack.repositories.StaffBookRepository;
@@ -34,45 +34,45 @@ public class NotificationService {
     @Scheduled(cron = "0 * * * * *") // Run every minute
     public void processPendingNotifications() {
         System.out.println("Running scheduled notification check...");
-        List<Integer> bookIds = notificationRepository.findDistinctBookIdsByStatus("PENDING");
-        
+        List<Integer> bookIds = notificationRepository.findDistinctBookIds();
+
         for (Integer bookId : bookIds) {
             bookRepository.findById(bookId).ifPresent(book -> {
                 if (book.getNumberOfCopiesRemaining() > 0) {
-                     System.out.println("Book " + bookId + " is now available. Sending notifications.");
-                     notifyUsersForBook(bookId);
+                    System.out.println("Book " + bookId + " is now available. Sending notifications.");
+                    notifyUsersForBook(bookId);
                 }
             });
         }
     }
 
     public String createNotificationRequest(Integer userId, Integer bookId, String email) {
-        if (notificationRepository.existsByUserIdAndBookIdAndStatus(userId, bookId, "PENDING")) {
+        if (notificationRepository.existsByUserIdAndBookId(userId, bookId)) {
             return "You have already requested a notification for this book.";
         }
-        
-        Notification notification = new Notification(userId, bookId, email, "PENDING");
+
+        Notification notification = new Notification(userId, bookId, email);
         notificationRepository.save(notification);
         return "Notification scheduled. You will be notified when the book is available.";
     }
 
     public boolean isNotificationPending(Integer userId, Integer bookId) {
-        return notificationRepository.existsByUserIdAndBookIdAndStatus(userId, bookId, "PENDING");
+        return notificationRepository.existsByUserIdAndBookId(userId, bookId);
     }
 
     public void notifyUsersForBook(Integer bookId) {
-        List<Notification> pendingNotifications = notificationRepository.findByBookIdAndStatus(bookId, "PENDING");
-        
+        List<Notification> pendingNotifications = notificationRepository.findByBookId(bookId);
+
         if (pendingNotifications.isEmpty()) {
             return;
         }
 
         String bookTitle = "the book you requested";
         try {
-             Book book = bookRepository.findById(bookId).orElse(null);
-             if (book != null) {
-                 bookTitle = book.getTitle();
-             }
+            Book book = bookRepository.findById(bookId).orElse(null);
+            if (book != null) {
+                bookTitle = book.getTitle();
+            }
         } catch (Exception e) {
             System.err.println("Failed to fetch book details for notification: " + e.getMessage());
         }
@@ -81,8 +81,7 @@ public class NotificationService {
 
         for (Notification n : pendingNotifications) {
             sendEmail(n.getEmail(), finalBookTitle);
-            n.setStatus("SENT");
-            notificationRepository.save(n);
+            notificationRepository.delete(n); // Delete after sending
         }
     }
 
@@ -92,21 +91,23 @@ public class NotificationService {
             message.setFrom(fromEmailAddress);
             message.setTo(toEmail);
             message.setSubject("Book Available - Bookstack Library");
-            
-            String content = String.format("""
-                    Dear Member,
-                    
-                    Good news! The book "%s" is now available in the library.
-                    
-                    You requested to be notified when this book became available. You can now login to your account and check the availability.
-                    
-                    Best regards,
-                    Team BOOKSTACK
-                    """, bookTitle);
-            
+
+            String content = String.format(
+                    """
+                            Dear Member,
+
+                            Good news! The book "%s" is now available in the library.
+
+                            You requested to be notified when this book became available. You can now login to your account and check the availability.
+
+                            Best regards,
+                            Team BOOKSTACK
+                            """,
+                    bookTitle);
+
             message.setText(content);
         };
-        
+
         try {
             javaMailSender.send(preparator);
         } catch (Exception e) {

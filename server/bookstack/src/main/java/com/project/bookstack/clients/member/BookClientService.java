@@ -1,4 +1,4 @@
-package com.project.bookstack.clients;
+package com.project.bookstack.clients.member;
 
 import java.util.Collection;
 
@@ -22,36 +22,41 @@ import com.project.bookstack.dto.member.BookIdTitleDTO;
 public interface BookClientService {
 
 	@GetMapping("book/books")
-    List<BookCoreDTO> getAllBooks();
-	
+	List<BookCoreDTO> getAllBooks();
+
 	@PostMapping("book/liked-books")
 	List<BookCoreDTO> getAllLikedBooks(@RequestBody List<Integer> LikedBookIds);
-	
+
 	@PostMapping("book/recommended-books")
 	List<BookCoreDTO> getRecommendedBooks(@RequestBody List<Integer> recommendedBookIds);
-	
+
 	@PostMapping("book/trending-books")
 	List<BookCoreDTO> getTrendingBooks(@RequestBody List<Integer> trendingBookIds);
-	
+
 	@GetMapping("book/new-arrived-books")
 	List<BookCoreDTO> getNewArrivedBooks();
-	
+
 	@PostMapping("book/all-recommended-books")
 	List<BookCoreDTO> getAllRecommendedBooks(@RequestBody List<Integer> recommendedBookIds);
-	
+
 	@PostMapping("book/all-trending-books")
 	List<BookCoreDTO> getAllTrendingBooks(@RequestBody List<Integer> trendingBookIds);
-	
+
 	@GetMapping("book/all-new-arrived-books")
 	List<BookCoreDTO> getAllNewArrivedBooks();
-	
+
 	@GetMapping("book/book/{bookId}")
 	BookDTO getBookDetails(@PathVariable("bookId") Integer bookId);
-	
+
 	@PostMapping("book/might-liked-books/{bookId}")
-	List<BookCoreDTO> getMightAlsoLikedBooks(@PathVariable("bookId") Integer bookId , @RequestBody List<Integer> mightLikeBookIds);
-	
+	List<BookCoreDTO> getMightAlsoLikedBooks(@PathVariable("bookId") Integer bookId,
+			@RequestBody List<Integer> mightLikeBookIds);
+
 	@PostMapping("book/names-by-id")
 	List<BookIdTitleDTO> getBookNamesByIds(@RequestBody List<Integer> bookIds);
+
+	@PostMapping("book/all-might-liked-books/{bookId}")
+	List<BookCoreDTO> getAllMightAlsoLikedBooks(@PathVariable("bookId") Integer bookId,
+			@RequestBody List<Integer> mightLikeBookIds);
 
 }

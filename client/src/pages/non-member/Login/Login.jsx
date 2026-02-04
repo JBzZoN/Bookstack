@@ -3,6 +3,8 @@ import "./Login.css";
 import logo from "../../../assets/logo.png";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
+import { toast } from 'react-toastify';
+// import { ToastContainer } from 'react-toastify'; // Ensure no local container
 
 function Login() {
   const [email, setEmail] = useState("");
@@ -17,7 +19,7 @@ function Login() {
     try {
       response = await axios.post("http://localhost:7070/auth/login", { "username": normalizedUsername, "password": password })
     } catch (e) {
-      alert("Invalid credentials")
+      toast.error("Invalid credentials")
       return;
     }
 
@@ -38,7 +40,7 @@ function Login() {
     }
     else {
 
-      alert("Invalid email");
+      toast.error("Invalid email");
     }
   };
 

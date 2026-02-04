@@ -1,9 +1,10 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
 import api from '../../../api/api';
+import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 
-function BrowseBooks () {
+function BrowseBooks() {
     const [allBooksCard, setAllBooksCard] = useState([]);
 
     useEffect(() => {
@@ -13,6 +14,7 @@ function BrowseBooks () {
             })
             .catch(err => {
                 console.error("Failed to fetch books", err);
+                toast.error("Failed to load books");
                 setAllBooksCard([]);
             });
     }, []);
@@ -25,20 +27,20 @@ function BrowseBooks () {
             </div>
 
             <div className='mt-4 container vertical-scroll'>
-                    {
-                        allBooksCard.map((book) => (
-                            <BookCard
-                                key={book.bookId}
-                                bookId={book.bookId}
-                                title={book.title}
-                                author={book.author}
-                                image={book.bookImage}
-                                rating={book.averageRatings}
-                                like={book.likedByCurrentUser}
-                                link={`/member/book/${book.bookId}`}
-                            />
-                        ))
-                    }
+                {
+                    allBooksCard.map((book) => (
+                        <BookCard
+                            key={book.bookId}
+                            bookId={book.bookId}
+                            title={book.title}
+                            author={book.author}
+                            image={book.bookImage}
+                            rating={book.averageRatings}
+                            like={book.likedByCurrentUser}
+                            link={`/member/book/${book.bookId}`}
+                        />
+                    ))
+                }
             </div>
         </div>
     )

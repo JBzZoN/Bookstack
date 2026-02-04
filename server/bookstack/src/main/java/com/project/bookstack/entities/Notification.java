@@ -12,14 +12,14 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Entity
-@Table(name = "notification")
+@Table(name = "notification_table")
 @Data
 @NoArgsConstructor
 public class Notification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "notification_id")
+    @Column(name = "id")
     private Integer notificationId;
 
     @Column(name = "user_id")
@@ -31,17 +31,13 @@ public class Notification {
     @Column(name = "email")
     private String email;
 
-    @Column(name = "status")
-    private String status; // "PENDING", "SENT"
+    @Column(name = "requested_at")
+    private LocalDateTime requestedAt = LocalDateTime.now();
 
-    @Column(name = "created_at")
-    private LocalDateTime createdAt = LocalDateTime.now();
-
-    public Notification(Integer userId, Integer bookId, String email, String status) {
+    public Notification(Integer userId, Integer bookId, String email) {
         this.userId = userId;
         this.bookId = bookId;
         this.email = email;
-        this.status = status;
-        this.createdAt = LocalDateTime.now();
+        this.requestedAt = LocalDateTime.now();
     }
 }

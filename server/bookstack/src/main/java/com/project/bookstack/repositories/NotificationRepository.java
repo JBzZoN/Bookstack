@@ -10,16 +10,16 @@ import com.project.bookstack.entities.Notification;
 
 @Repository
 public interface NotificationRepository extends JpaRepository<Notification, Integer> {
-    
+
     // Check if a PENDING notification exists for user and book
-    boolean existsByUserIdAndBookIdAndStatus(Integer userId, Integer bookId, String status);
+    boolean existsByUserIdAndBookId(Integer userId, Integer bookId);
 
     // Find all PENDING notifications for a book
-    List<Notification> findByBookIdAndStatus(Integer bookId, String status);
-    
-    // Find notification by user and book
-    Optional<Notification> findByUserIdAndBookIdAndStatus(Integer userId, Integer bookId, String status);
+    List<Notification> findByBookId(Integer bookId);
 
-    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT n.bookId FROM Notification n WHERE n.status = :status")
-    List<Integer> findDistinctBookIdsByStatus(@org.springframework.data.repository.query.Param("status") String status);
+    // Find notification by user and book
+    Optional<Notification> findByUserIdAndBookId(Integer userId, Integer bookId);
+
+    @org.springframework.data.jpa.repository.Query("SELECT DISTINCT n.bookId FROM Notification n")
+    List<Integer> findDistinctBookIds();
 }

@@ -7,7 +7,7 @@ import api from '../../../api/api';
 import { use, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
-import { toast, ToastContainer } from 'react-toastify';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
 function BookDetails() {
@@ -24,6 +24,7 @@ function BookDetails() {
             .then(res => setBookDetails(res.data))
             .catch(err => {
                 console.error("Failed to fetch book", err);
+                toast.error("Failed to load book details");
                 setBookDetails(null);
             });
     }, [id]);
@@ -35,6 +36,7 @@ function BookDetails() {
             .then(res => setMightLikedBooks(res.data))
             .catch(err => {
                 console.error("Failed to fetch book", err);
+                // toast.error("Failed to load recommendations"); // Optional: soft fail
                 setMightLikedBooks(null);
             });
 
@@ -43,7 +45,7 @@ function BookDetails() {
         if (currentUser && id) {
             api.get(`/member/check-notify-status/${id}`)
                 .then(res => setIsNotifyPending(res.data))
-                .catch(err => console.error("Failed to check notify status", err));
+                .catch(err => console.error("Failed to check notify status", err)); // Silently fail or use toast
         }
     }, [id]);
 
@@ -95,7 +97,6 @@ function BookDetails() {
 
     return (
         <div className='p-2'>
-            <ToastContainer />
             <div className="container py-5 mt-5">
 
                 <div className="details-card">
@@ -185,7 +186,10 @@ function BookDetails() {
 
                 <div className="">
 
-                    <h2 className="font-montserrat">You Might Also Like</h2>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h2 className="font-montserrat">You Might Also Like</h2>
+                        <a href={`/member/might-like-books/${id}`} className="text-secondary text-decoration-none">View All</a>
+                    </div>
 
                     <div className="horizontal-scroll mt-3">
                         {

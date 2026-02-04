@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import "./ReviewSection.css";
 import avatar from "./../../../assets/images/member/avatar.png";
+import EmptyState from "../EmptyState/EmptyState";
 
 const API = "http://localhost:7070";
 
@@ -17,10 +18,16 @@ function ReviewsSection({ bookId }) {
 
   const loadReviews = async () => {
     try {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const userId = currentUser ? currentUser.userId : null;
+
       const res = await axios.get(
         `${API}/member/books/${bookId}/reviews`,
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-User-Id": userId
+          }
         }
       );
       setReviews(res.data);
@@ -42,10 +49,23 @@ function ReviewsSection({ bookId }) {
     }
 
     try {
+      const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+      const userId = currentUser ? currentUser.userId : null;
+
+      if (!userId) {
+        alert("Please log in to submit a review");
+        return;
+      }
+
       await axios.post(
         `${API}/member/books/${bookId}/reviews`,
         { rating, comment },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "X-User-Id": userId
+          }
+        }
       );
 
       await loadReviews();
@@ -85,9 +105,8 @@ function ReviewsSection({ bookId }) {
               {[1, 2, 3, 4, 5].map(star => (
                 <i
                   key={star}
-                  className={`bi ${
-                    star <= rating ? "bi-star-fill text-warning" : "bi-star"
-                  } review-star`}
+                  className={`bi ${star <= rating ? "bi-star-fill text-warning" : "bi-star"
+                    } review-star`}
                   onClick={() => setRating(star)}
                 />
               ))}
@@ -109,63 +128,67 @@ function ReviewsSection({ bookId }) {
       )}
 
 
-  {/* SCROLLABLE REVIEWS */}
-  <div className="container-fluid">
-    <div className="row">
-      <div className="col-12">
+      {/* SCROLLABLE REVIEWS */}
+      <div className="container-fluid">
+        <div className="row">
+          <div className="col-12">
 
-        {/* SCROLL CONTAINER */}
-        <div className="review-scroll-box">
+            {/* SCROLL CONTAINER */}
+            <div className="review-scroll-box">
 
-          {reviews.map((review, i) => (
-            <div key={i} className="review-card mb-3">
+              {reviews && reviews.length > 0 ? (
+                reviews.map((review, i) => (
+                  <div key={i} className="review-card mb-3">
 
-              <table className="w-100">
-                <tbody>
-                  <tr>
-                    {/* COLUMN 1: AVATAR */}
-                    <td className="align-top" style={{ width: "48px" }}>
-                      <img
-                        src={avatar}
-                        alt="avatar"
-                        className="review-avatar"
-                      />
-                    </td>
+                    <table className="w-100">
+                      <tbody>
+                        <tr>
+                          {/* COLUMN 1: AVATAR */}
+                          <td className="align-top" style={{ width: "48px" }}>
+                            <img
+                              src={avatar}
+                              alt="avatar"
+                              className="review-avatar"
+                            />
+                          </td>
 
-                    {/* COLUMN 2: CONTENT */}
-                    <td className="ps-2">
+                          {/* COLUMN 2: CONTENT */}
+                          <td className="ps-2">
 
-                      {/* ROW 1: USERNAME + RATING */}
-                      <div className="d-flex align-items-center mb-1">
-                        <strong className="me-auto margintoleft">
-                          User #{review.userId}
-                        </strong>
+                            {/* ROW 1: USERNAME + RATING */}
+                            <div className="d-flex align-items-center mb-1">
+                              <strong className="me-auto margintoleft">
+                                {review.userName || `User #${review.userId}`}
+                              </strong>
 
-                        <div className="text-warning">
-                          {[...Array(review.rating)].map((_, j) => (
-                            <i key={j} className="bi bi-star-fill"></i>
-                          ))}
-                        </div>
-                      </div>
+                              <div className="text-warning">
+                                {[...Array(review.rating)].map((_, j) => (
+                                  <i key={j} className="bi bi-star-fill"></i>
+                                ))}
+                              </div>
+                            </div>
 
-                      {/* ROW 2: COMMENT */}
-                      <p className="mb-0 review-comment">
-                        {review.comment}
-                      </p>
+                            {/* ROW 2: COMMENT */}
+                            <p className="mb-0 review-comment">
+                              {review.comment}
+                            </p>
 
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+
+                  </div>
+                ))
+              ) : (
+                <EmptyState message="No reviews yet. Be the first to share your thoughts!" />
+              )}
 
             </div>
-          ))}
-
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
   );
 }
 

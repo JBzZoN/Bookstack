@@ -1,12 +1,21 @@
 import '../../../components/Member/Navbar/Navbar.css'
-import { NavLink,Link, useNavigate } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useState } from 'react';
 import logo from '../../../assets/logo.png'
 import logout from '../../../assets/images/member/logout.png'
 import likesList from '../../../assets/images/member/likes-cart.png'
 import api from "../../../api/api"
+import { useSelector, useDispatch } from 'react-redux';
+import { loadLikesFromBackend } from '../../../redux/slices/likeSlice';
+import { useEffect } from 'react';
 
-function Navbar () {
+function Navbar() {
+    const dispatch = useDispatch();
+    const likes = useSelector((state) => state.likes.byBookId);
+
+    useEffect(() => {
+        dispatch(loadLikesFromBackend());
+    }, [dispatch]);
     const [onSearch, setOnSearch] = useState(false)
     const [searchResults, setSearchResults] = useState([])
     const [searchBarOn, setSearchBarOn] = useState(false)
@@ -31,7 +40,7 @@ function Navbar () {
         }, 400)
     }
 
-    const navigate=useNavigate();
+    const navigate = useNavigate();
     const handleLogout = () => {
         localStorage.clear();
         navigate("/login")
@@ -44,14 +53,14 @@ function Navbar () {
             <div className="container">
 
                 <div className="d-flex align-items-center gap-2 text-decoration-none" to="/">
-                    <img className="logo-img" src={logo} alt="logo"/>
+                    <img className="logo-img" src={logo} alt="logo" />
                     <div className='logo-title'>
                         <span style={{ color: "#0a0d9f" }}>Book</span>
                         <span style={{ color: "#111827" }}>Stack</span>
                     </div>
                 </div>
 
-                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent"aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
+                <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span className="navbar-toggler-icon"></span>
                 </button>
 
@@ -72,34 +81,57 @@ function Navbar () {
                         {searchResults.length > 0 &&
                             searchBarOn &&
                             searchString.length >= 2 && (
-                            <div className="list-group position-absolute w-100 mt-5">
-                                {searchResults.map((book) => (
-                                <div
-                                    key={book.id}
-                                    className="list-group-item list-group-item-action"
-                                    onClick={() => {
-                                    // navigate to book page
-                                    navigate(`/member/book/${book.bookId}`)
-                                    setSearchString("")
-                                    setSearchResults([])
-                                    }}
-                                >
-                                    <strong>{book.title}</strong><br />
-                                    <small className="text-muted">
-                                    {book.author} • {book.isbn}
-                                    </small>
+                                <div className="list-group position-absolute w-100 mt-5">
+                                    {searchResults.map((book) => (
+                                        <div
+                                            key={book.id}
+                                            className="list-group-item list-group-item-action"
+                                            onClick={() => {
+                                                // navigate to book page
+                                                navigate(`/member/book/${book.bookId}`)
+                                                setSearchString("")
+                                                setSearchResults([])
+                                            }}
+                                        >
+                                            <strong>{book.title}</strong><br />
+                                            <small className="text-muted">
+                                                {book.author} • {book.isbn}
+                                            </small>
+                                        </div>
+                                    ))}
                                 </div>
-                                ))}
-                            </div>
                             )}
-                        </form>
+                    </form>
 
                     <div className="ms-auto d-flex flex-column flex-lg-row align-items-lg-center gap-3 mt-3 mt-lg-0 navbar-nav ">
                         <NavLink to="/member/home" id="member-margin" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
                         <NavLink to="/member/browse" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Browse Books</NavLink>
                         <NavLink to="/member/account" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>My Account</NavLink>
-                        <img id="img-size" src={likesList} onClick={handleLikedBooks}></img>
-                        <img className="member-image-fix" src={logout} onClick={handleLogout}></img>
+
+                        <div className="position-relative" style={{ cursor: 'pointer' }} onClick={handleLikedBooks}>
+                            <img id="img-size" src={likesList} alt="Liked Books" style={{ marginLeft: 0 }} />
+                            {Object.values(likes).filter(Boolean).length > 0 && (
+                                <span className="position-absolute top-0 start-100 translate-middle badge rounded-pill" style={{
+                                    background: 'linear-gradient(90deg, #4f0bc5, rgb(236, 94, 117))',
+                                    fontSize: '0.75rem',
+                                    border: '2px solid white'
+                                }}>
+                                    {Object.values(likes).filter(Boolean).length}
+                                </span>
+                            )}
+                        </div>
+
+                        <button
+                            className="btn btn-sm text-white rounded-pill px-3"
+                            style={{
+                                background: 'linear-gradient(90deg, #4f0bc5, rgb(236, 94, 117))',
+                                border: 'none',
+                                fontWeight: '500'
+                            }}
+                            onClick={() => navigate('/membership')}
+                        >
+                            Upgrade
+                        </button>
                     </div>
 
                 </div>

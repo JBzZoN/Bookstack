@@ -1,9 +1,10 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
 import api from '../../../api/api';
+import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 
-function AllNewArrivedBooks () {
+function AllNewArrivedBooks() {
     const [allNewArrivedBooks, setAllNewArrivedBooks] = useState([]);
 
     useEffect(() => {
@@ -13,6 +14,7 @@ function AllNewArrivedBooks () {
             })
             .catch(err => {
                 console.error("Failed to fetch books", err);
+                toast.error("Failed to load new arrivals");
                 setAllNewArrivedBooks([]);
             });
     }, []);
@@ -25,19 +27,19 @@ function AllNewArrivedBooks () {
             </div>
 
             <div className='mt-4 container vertical-scroll'>
-                    {
-                        allNewArrivedBooks.map((book) => (
-                            <BookCard
-                                key={book.bookId}
-                                title={book.title}
-                                author={book.author}
-                                image={book.bookImage}
-                                rating={book.averageRatings}
-                                like={book.likedByCurrentUser}
-                                link={`/member/book/${84}`}
-                            />
-                        ))
-                    }
+                {
+                    allNewArrivedBooks.map((book) => (
+                        <BookCard
+                            key={book.bookId}
+                            title={book.title}
+                            author={book.author}
+                            image={book.bookImage}
+                            rating={book.averageRatings}
+                            like={book.likedByCurrentUser}
+                            link={`/member/book/${84}`}
+                        />
+                    ))
+                }
             </div>
         </div>
     )

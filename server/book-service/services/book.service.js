@@ -56,6 +56,30 @@ function getTrendingBooks(ids, cb) {
   pool.query(sql, [ids], (err, rows) => cb(err, rows));
 }
 
+function getAllRecommendedBooks(ids, cb) {
+  if (!Array.isArray(ids) || ids.length === 0) return cb(null, []);
+
+  const sql = `
+    SELECT book_id AS bookId, title, author, book_image AS bookImage
+    FROM book_table
+    WHERE book_id IN (?)
+  `;
+
+  pool.query(sql, [ids], (err, rows) => cb(err, rows));
+}
+
+function getAllTrendingBooks(ids, cb) {
+  if (!Array.isArray(ids) || ids.length === 0) return cb(null, []);
+
+  const sql = `
+    SELECT book_id AS bookId, title, author, book_image AS bookImage
+    FROM book_table
+    WHERE book_id IN (?)
+  `;
+
+  pool.query(sql, [ids], (err, rows) => cb(err, rows));
+}
+
 /* ---------------- NEW ARRIVED ---------------- */
 
 function getNewArrivedBooks(cb) {
@@ -103,7 +127,21 @@ function getBookDetails(bookId, cb) {
 
 /* ---------------- EXTRA ---------------- */
 
+
 function getMightAlsoLikedBooks(ids, bookId, cb) {
+  if (!Array.isArray(ids) || ids.length === 0) return cb(null, []);
+
+  const sql = `
+    SELECT book_id AS bookId, title, author, book_image AS bookImage
+    FROM book_table
+    WHERE book_id IN (?) AND book_id != ?
+    LIMIT 10
+  `;
+
+  pool.query(sql, [ids, bookId], (err, rows) => cb(err, rows));
+}
+
+function getAllMightAlsoLikedBooks(ids, bookId, cb) {
   if (!Array.isArray(ids) || ids.length === 0) return cb(null, []);
 
   const sql = `
@@ -153,11 +191,15 @@ module.exports = {
   getAllBooks,
   getAllLikedBooks,
   getRecommendedBooks,
+  getAllRecommendedBooks,
   getTrendingBooks,
+  getAllTrendingBooks,
   getNewArrivedBooks,
   getAllNewArrivedBooks,
   getBookDetails,
+  getBookDetails,
   getMightAlsoLikedBooks,
+  getAllMightAlsoLikedBooks,
   getBookNamesByIds,
   searchBooks
 };

@@ -4,11 +4,11 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -17,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookDTO;
 import com.project.bookstack.dto.member.BookNameReturnDateDTO;
-import com.project.bookstack.dto.member.BookSearchDTO;
+import com.project.bookstack.dto.member.BookNameReturnDateDTO;
 import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
 import com.project.bookstack.services.member.MemberService;
 
@@ -32,98 +32,129 @@ public class MemberController {
 
     @GetMapping("/books")
     public List<BookCardDTO> getAllBooks(@RequestHeader("X-User-Id") String id) {
-        return memberService.getAllBooks();
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getAllBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/liked-books")
-    public List<BookCardDTO> getAllLikedBooks() {
-        return memberService.getAllLikedBooks();
+    public List<BookCardDTO> getAllLikedBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getAllLikedBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/recommended-books")
-    public List<BookCardDTO> getRecommendedBooks() {
-        return memberService.getRecommendedBooks();
+    public List<BookCardDTO> getRecommendedBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getRecommendedBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/trending-books")
-    public List<BookCardDTO> getTrendingBooks() {
-        return memberService.getTrendingBooks();
+    public List<BookCardDTO> getTrendingBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getTrendingBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/new-arrived-books")
-    public List<BookCardDTO> getNewArrivedBooks() {
-        return memberService.getNewArrivedBooks();
+    public List<BookCardDTO> getNewArrivedBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getNewArrivedBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/all-recommended-books")
-    public List<BookCardDTO> getAllRecommendedBooks() {
-        return memberService.getAllRecommendedBooks();
+    public List<BookCardDTO> getAllRecommendedBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getAllRecommendedBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/all-trending-books")
-    public List<BookCardDTO> getAllTrendingBooks() {
-        return memberService.getAllTrendingBooks();
+    public List<BookCardDTO> getAllTrendingBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getAllTrendingBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/all-new-arrived-books")
-    public List<BookCardDTO> getAllNewArrivedBooks() {
-        return memberService.getAllNewArrivedBooks();
+    public List<BookCardDTO> getAllNewArrivedBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getAllNewArrivedBooks(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/book/{id}")
-    public BookDTO getBookDetails(@PathVariable("id") Integer bookId) {
-        return memberService.getBookDetails(bookId);
+    public BookDTO getBookDetails(@PathVariable("id") Integer bookId, @RequestHeader("X-User-Id") String userIdStr) {
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
+        return memberService.getBookDetails(bookId, Integer.parseInt(userIdStr));
     }
-    
+
     @GetMapping("/might-liked-books/{id}")
-    public List<BookCardDTO> getMightAlsoLikedBooks(@PathVariable("id") Integer bookId) {
-        return memberService.getMightAlsoLikedBooks(bookId);
+    public List<BookCardDTO> getMightAlsoLikedBooks(@PathVariable("id") Integer bookId,
+            @RequestHeader("X-User-Id") String userIdStr) {
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
+        return memberService.getMightAlsoLikedBooks(bookId, Integer.parseInt(userIdStr));
     }
-    
+
     @GetMapping("/history-borrowed-books")
-    public List<BookNameReturnDateDTO> getBorrrowedBooksHistory() {
-    	return memberService.getBorrrowedBooksHistory();
+    public List<BookNameReturnDateDTO> getBorrrowedBooksHistory(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getBorrrowedBooksHistory(Integer.parseInt(id));
     }
-    
+
     @GetMapping("/currently-borrowed-books")
-    public List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks() {
-    	return memberService.getCurrentlyBorrowedBooks();
+    public List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks(@RequestHeader("X-User-Id") String id) {
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        return memberService.getCurrentlyBorrowedBooks(Integer.parseInt(id));
     }
-    
+
     @PostMapping("/renew")
     public org.springframework.http.ResponseEntity<String> renewBook(
             @RequestHeader("X-User-Id") String userIdStr,
             @org.springframework.web.bind.annotation.RequestBody java.util.Map<String, Integer> payload) {
-      
-    	Integer userId = Integer.parseInt(userIdStr);
-    	Integer bookId = payload.get("bookId");
-    	String result = memberService.renewBook(userId, bookId);
-    	if (result.contains("successfully")) {
-    	    return org.springframework.http.ResponseEntity.ok(result);
-    	} else {
-    	    return org.springframework.http.ResponseEntity.badRequest().body(result);
-    	}
-       
+
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
+        Integer userId = Integer.parseInt(userIdStr);
+        Integer bookId = payload.get("bookId");
+        String result = memberService.renewBook(userId, bookId);
+        if (result.contains("successfully")) {
+            return org.springframework.http.ResponseEntity.ok(result);
+        } else {
+            return org.springframework.http.ResponseEntity.badRequest().body(result);
+        }
+
     }
-    
+
     @GetMapping("/renew-limits")
     public com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(@RequestHeader("X-User-Id") String id) {
-    	Integer userId = Integer.parseInt(id);
+        if (id.contains(","))
+            id = id.split(",")[0].trim();
+        Integer userId = Integer.parseInt(id);
         return memberService.getMemberLimits(userId);
     }
-    
+
     @Autowired
     private com.project.bookstack.services.NotificationService notificationService;
-    
+
     @PostMapping("/notify")
     public ResponseEntity<String> notifyMe(
             @RequestHeader("X-User-Id") String userIdStr,
             @RequestBody java.util.Map<String, Object> payload) {
-        
+
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
         Integer userId = Integer.parseInt(userIdStr);
         Integer bookId = Integer.parseInt(payload.get("bookId").toString());
         String email = payload.get("email").toString();
-        
+
         String result = notificationService.createNotificationRequest(userId, bookId, email);
         if (result.contains("scheduled")) {
             return ResponseEntity.ok(result);
@@ -136,10 +167,20 @@ public class MemberController {
     public ResponseEntity<Boolean> checkNotifyStatus(
             @RequestHeader("X-User-Id") String userIdStr,
             @PathVariable Integer bookId) {
-        
+
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
         Integer userId = Integer.parseInt(userIdStr);
         boolean isPending = notificationService.isNotificationPending(userId, bookId);
         return ResponseEntity.ok(isPending);
+    }
+
+    @GetMapping("/all-might-liked-books/{id}")
+    public List<BookCardDTO> getAllMightAlsoLikedBooks(@PathVariable("id") Integer bookId,
+            @RequestHeader("X-User-Id") String userIdStr) {
+        if (userIdStr.contains(","))
+            userIdStr = userIdStr.split(",")[0].trim();
+        return memberService.getAllMightAlsoLikedBooks(bookId, Integer.parseInt(userIdStr));
     }
 
 }

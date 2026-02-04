@@ -1,7 +1,7 @@
 import React from 'react'
 import '../MemberHome/MemberHome.css'
-import { Link, Outlet } from 'react-router-dom'; 
-import { useState,useEffect } from 'react'; 
+import { Link, Outlet } from 'react-router-dom';
+import { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
 import { loadLikesFromBackend } from "../../../redux/slices/likeSlice.js";
 import BookCard from '../../../components/Member/BookCard/BookCard.jsx';
@@ -13,6 +13,7 @@ import banner5 from '../../../assets/images/member/banner5.png';
 import banner6 from '../../../assets/images/member/banner6.png';
 import banner7 from '../../../assets/images/member/banner7.png';
 import api from '../../../api/api'
+import { toast } from 'react-toastify';
 
 function MemberHome() {
   const dispatch = useDispatch();
@@ -24,33 +25,56 @@ function MemberHome() {
 
   const [recommendedBooks, setRecommendedBooks] = useState([]);
   const [trendingBooks, setTrendingBooks] = useState([]);
-  const [newArrivedBooks, setNewArrivedBooks] = useState([]); 
-  
+  const [newArrivedBooks, setNewArrivedBooks] = useState([]);
+  const [todaysQuote, setTodaysQuote] = useState({
+    quote: "A reader lives a thousand lives before he dies . . . The man who never reads lives only one.",
+    author: "George R.R. Martin"
+  });
+
+  useEffect(() => {
+    // Fetch daily quote
+    fetch('https://dummyjson.com/quotes/random')
+      .then(res => res.json())
+      .then(data => {
+        setTodaysQuote({
+          quote: data.quote,
+          author: data.author
+        });
+      })
+      .catch(err => {
+        console.error("Failed to fetch quote", err);
+        // Fallback to default quote is handled by initial state
+      });
+  }, []);
+
   useEffect(() => {
     api.get("/member/recommended-books")
       .then(res => {
         setRecommendedBooks(Array.isArray(res.data) ? res.data : []);
       })
-       .catch(err => {
+      .catch(err => {
         console.error("Failed to fetch books", err);
+        toast.error("Failed to load recommended books");
         setRecommendedBooks([]);
       });
 
     api.get("/member/trending-books")
       .then(res => {
         setTrendingBooks(Array.isArray(res.data) ? res.data : []);
-      }) 
-      .catch(err => {
+      })
+      .catch(err => { // Corrected the trending books catch block
         console.error("Failed to fetch books", err);
+        toast.error("Failed to load trending books");
         setTrendingBooks([]);
       });
 
     api.get("/member/new-arrived-books")
       .then(res => {
         setNewArrivedBooks(Array.isArray(res.data) ? res.data : []);
-      }) 
+      })
       .catch(err => {
         console.error("Failed to fetch books", err);
+        toast.error("Failed to load new arrived books"); // Added toast.error for new arrived books
         setNewArrivedBooks([]);
       });
   }, []);
@@ -105,17 +129,17 @@ function MemberHome() {
           </button>
         </div>
 
-        <Outlet/>
-        
+        <Outlet />
+
         <div>
           {/* Recommended Books */}
           <div className='container d-flex justify-content-between align-items-center'>
-            <h1 className='home-h1 mt-4'>Recommended Books</h1> 
-            <Link to="/member/recommended-books"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
+            <h1 className='home-h1 mt-4'>Recommended Books</h1>
+            <Link to="/member/recommended-books"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>
           </div>
 
           <div className="horizontal-scroll">
-            { 
+            {
               recommendedBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
@@ -131,16 +155,16 @@ function MemberHome() {
             }
           </div>
         </div>
-        
+
         {/* Trending Books */}
         <div>
           <div className='container d-flex justify-content-between align-items-center'>
-            <h1 className='home-h1 mt-4'>Trending Books</h1> 
-            <Link to="/member/trending-books"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>    
+            <h1 className='home-h1 mt-4'>Trending Books</h1>
+            <Link to="/member/trending-books"><h3 id='view-all' className='btn home-h3 mt-4'>View All</h3></Link>
           </div>
 
           <div className="horizontal-scroll">
-            { 
+            {
               trendingBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
@@ -161,10 +185,10 @@ function MemberHome() {
         <div className="quote-section mt-4 mb-4">
           <h2 className="font-montserrat">Today's Quote</h2>
           <blockquote className="blockquote fs-4 fst-italic mt-3">
-            "A reader lives a thousand lives before he dies . . . The man who never reads lives only one."
+            "{todaysQuote.quote}"
           </blockquote>
           <figcaption className="blockquote-footer text-white-50 mt-2 fs-6">
-            George R.R. Martin
+            {todaysQuote.author}
           </figcaption>
         </div>
 
@@ -180,7 +204,7 @@ function MemberHome() {
           </div>
 
           <div className="horizontal-scroll">
-            { 
+            {
               newArrivedBooks.map((book) => (
                 <BookCard
                   key={book.bookId}
@@ -200,5 +224,4 @@ function MemberHome() {
     </div>
   )
 }
-
 export default MemberHome

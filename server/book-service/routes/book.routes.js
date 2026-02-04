@@ -95,8 +95,8 @@ router.post("/id", (req, res) => {
   })
 })
 
-// Create notification table if not exists
-pool.query(`CREATE TABLE IF NOT EXISTS notification_table (
+// Create notification table if not exists in bookstack schema
+pool.query(`CREATE TABLE IF NOT EXISTS bookstack.notification_table (
   id INT AUTO_INCREMENT PRIMARY KEY,
   user_id INT,
   book_id INT,
@@ -110,11 +110,11 @@ router.post("/notify", (req, res) => {
   const { userId, bookId, email } = req.body;
 
   // Check if already notified
-  pool.query("SELECT * FROM notification_table WHERE user_id = ? AND book_id = ?", [userId, bookId], (err, rows) => {
+  pool.query("SELECT * FROM bookstack.notification_table WHERE user_id = ? AND book_id = ?", [userId, bookId], (err, rows) => {
     if (err) return res.sendStatus(500);
     if (rows.length > 0) return res.status(400).send("You already subscribed for notification.");
 
-    const sql = "INSERT INTO notification_table (user_id, book_id, email) VALUES (?, ?, ?)";
+    const sql = "INSERT INTO bookstack.notification_table (user_id, book_id, email) VALUES (?, ?, ?)";
     pool.query(sql, [userId, bookId, email], (error, result) => {
       if (error) {
         console.error(error);
@@ -137,7 +137,7 @@ router.put("/id", (req, res) => {
 
       // Check for notifications
       if (noOfCopiesRemaining > 0) {
-        const notifySql = "SELECT * FROM notification_table WHERE book_id = ?";
+        const notifySql = "SELECT * FROM bookstack.notification_table WHERE book_id = ?";
         pool.query(notifySql, [bookId], (nErr, nRows) => {
           if (!nErr && nRows.length > 0) {
             nRows.forEach(row => {
@@ -146,7 +146,7 @@ router.put("/id", (req, res) => {
             });
 
             // Clear notifications
-            pool.query("DELETE FROM notification_table WHERE book_id = ?", [bookId]);
+            pool.query("DELETE FROM bookstack.notification_table WHERE book_id = ?", [bookId]);
           }
         });
       }
@@ -405,6 +405,20 @@ router.get("/book/:bookId", (req, res) => {
 
 router.post("/might-liked-books/:bookId", (req, res) => {
   bookService.getMightAlsoLikedBooks(
+    req.body,
+    req.params.bookId,
+    (err, books) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error fetching books" });
+      }
+      res.json(books);
+    }
+  );
+});
+
+router.post("/all-might-liked-books/:bookId", (req, res) => {
+  bookService.getAllMightAlsoLikedBooks(
     req.body,
     req.params.bookId,
     (err, books) => {

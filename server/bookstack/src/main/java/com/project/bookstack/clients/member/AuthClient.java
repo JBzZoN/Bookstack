@@ -1,4 +1,4 @@
-package com.project.bookstack.clients;
+package com.project.bookstack.clients.member;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

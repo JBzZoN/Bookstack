@@ -1,9 +1,11 @@
 import '../BrowseBooks/BrowseBooks.css'
 import BookCard from '../../../components/Member/BookCard/BookCard'
+import EmptyState from '../../../components/Member/EmptyState/EmptyState';
 import api from '../../../api/api';
+import { toast } from 'react-toastify';
 import { useState, useEffect } from 'react';
 
-function LikedBooks () {
+function LikedBooks() {
     const [allLikedBooksCard, setAllLikedBooksCard] = useState([]);
 
     useEffect(() => {
@@ -13,6 +15,7 @@ function LikedBooks () {
             })
             .catch(err => {
                 console.error("Failed to fetch books", err);
+                toast.error("Failed to load liked books");
                 setAllLikedBooksCard([]);
             });
     }, []);
@@ -25,7 +28,10 @@ function LikedBooks () {
             </div>
 
             <div className='mt-4 container vertical-scroll'>
-                    {
+                {
+                    allLikedBooksCard.length === 0 ? (
+                        <EmptyState message="You haven't liked any books yet." />
+                    ) : (
                         allLikedBooksCard.map((book) => (
                             <BookCard
                                 key={book.bookId}
@@ -37,7 +43,8 @@ function LikedBooks () {
                                 link={`/member/book/${84}`}
                             />
                         ))
-                    }
+                    )
+                }
             </div>
         </div>
     )

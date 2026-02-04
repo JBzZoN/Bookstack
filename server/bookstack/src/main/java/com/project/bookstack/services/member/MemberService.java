@@ -9,31 +9,33 @@ import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
 
 public interface MemberService {
 
-	List<BookCardDTO> getAllBooks();
-	
-	List<BookCardDTO> getAllLikedBooks();
+	List<BookCardDTO> getAllBooks(Integer userId);
 
-	List<BookCardDTO> getRecommendedBooks();
+	List<BookCardDTO> getAllLikedBooks(Integer userId);
 
-	List<BookCardDTO> getTrendingBooks();
+	List<BookCardDTO> getRecommendedBooks(Integer userId);
 
-	List<BookCardDTO> getNewArrivedBooks();
+	List<BookCardDTO> getTrendingBooks(Integer userId);
 
-	List<BookCardDTO> getAllRecommendedBooks();
-	
-	List<BookCardDTO> getAllTrendingBooks();
+	List<BookCardDTO> getNewArrivedBooks(Integer userId);
 
-	List<BookCardDTO> getAllNewArrivedBooks();
+	List<BookCardDTO> getAllRecommendedBooks(Integer userId);
 
-	BookDTO getBookDetails(Integer bookId);
+	List<BookCardDTO> getAllTrendingBooks(Integer userId);
 
-	List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId);
+	List<BookCardDTO> getAllNewArrivedBooks(Integer userId);
 
-	List<BookNameReturnDateDTO> getBorrrowedBooksHistory();
+	BookDTO getBookDetails(Integer bookId, Integer userId);
 
-	List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks();
-	
+	List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId, Integer userId);
+
+	List<BookCardDTO> getAllMightAlsoLikedBooks(Integer bookId, Integer userId);
+
+	List<BookNameReturnDateDTO> getBorrrowedBooksHistory(Integer userId);
+
+	List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks(Integer userId);
+
 	String renewBook(Integer userId, Integer bookId);
-    
+
 	com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId);
 }

@@ -2,8 +2,10 @@ import '../MyAccount/MyAccount.css'
 import api from '../../../api/api';
 import { format } from "date-fns";
 import { useState, useEffect } from 'react';
-import { toast, ToastContainer } from 'react-toastify';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import EmptyState from '../../../components/Member/EmptyState/EmptyState';
 
 const formatDate = (dateStr) =>
     format(new Date(dateStr), "dd MMM yyyy");
@@ -13,6 +15,8 @@ function MyAccount() {
     const [history, setHistory] = useState([]);
     const [currentPassword, setCurrentPassword] = useState("");
     const [newPassword, setNewPassword] = useState("");
+    const navigate = useNavigate();
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
 
     const handleChangePassword = async () => {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -36,7 +40,10 @@ function MyAccount() {
     const fetchLimits = () => {
         api.get("/member/renew-limits")
             .then(res => setMemberLimits(res.data))
-            .catch(err => console.error("Failed to fetch limits", err));
+            .catch(err => {
+                console.error("Failed to fetch limits", err);
+                toast.error("Failed to load membership limits");
+            });
     };
 
     useEffect(() => {
@@ -44,6 +51,7 @@ function MyAccount() {
             .then(res => setCurrentlyBorrowed(res.data))
             .catch(err => {
                 console.error("Failed to fetch book", err);
+                toast.error("Failed to load borrowed books");
                 setCurrentlyBorrowed(null);
             });
         fetchLimits();
@@ -54,6 +62,7 @@ function MyAccount() {
             .then(res => setHistory(res.data))
             .catch(err => {
                 console.error("Failed to fetch book", err);
+                toast.error("Failed to load borrowing history");
                 setHistory(null);
             });
     }, []);
@@ -68,7 +77,10 @@ function MyAccount() {
             toast.success(res.data);
             api.get("/member/currently-borrowed-books")
                 .then(res => setCurrentlyBorrowed(res.data))
-                .catch(err => setCurrentlyBorrowed(null));
+                .catch(err => {
+                    setCurrentlyBorrowed(null);
+                    toast.error("Failed to refresh borrowed list");
+                });
             fetchLimits();
         } catch (err) {
             console.error(err);
@@ -80,7 +92,6 @@ function MyAccount() {
 
     return (
         <div className='m-5'>
-            <ToastContainer />
             <div className="container py-4">
 
                 <div className="myaccount-title text-center mb-5">
@@ -120,11 +131,11 @@ function MyAccount() {
                     <div className="tab-content">
 
                         <div className="tab-pane fade show active" id="borrowed">
-                            <ul className="list-group list-group-flush">
+                            {currentlyBorrowed && currentlyBorrowed.length > 0 ? (
                                 <ul className="list-group list-group-flush">
                                     {currentlyBorrowed.map((book, index) => (
-                                        <div>
-                                            <li key={index} className="list-group-item d-flex justify-content-between align-items-center p-3">
+                                        <div key={index}>
+                                            <li className="list-group-item d-flex justify-content-between align-items-center p-3">
                                                 <div>
                                                     <h5 className="mb-1">{book.title}</h5>
                                                     <p className="mb-0 text-secondary">
@@ -145,15 +156,20 @@ function MyAccount() {
                                         </div>
                                     ))}
                                 </ul>
-
-                            </ul>
+                            ) : (
+                                <EmptyState
+                                    message="You haven't borrowed any books yet."
+                                    action={{
+                                        label: "Browse Books",
+                                        onClick: () => window.location.href = '/member/browse'
+                                    }}
+                                />
+                            )}
                         </div>
 
                         <div className="tab-pane fade" id="history">
-
-                            <ul className="list-group list-group-flush">
-
-                                <ul className="list-group">
+                            {history && history.length > 0 ? (
+                                <ul className="list-group list-group-flush">
                                     {history.map((book, index) => (
                                         <li key={index} className="list-group-item p-3">
                                             <h5 className="mb-1">{book.bookName}</h5>
@@ -163,20 +179,29 @@ function MyAccount() {
                                         </li>
                                     ))}
                                 </ul>
-
-                            </ul>
+                            ) : (
+                                <EmptyState message="No borrowing history found." />
+                            )}
                         </div>
 
                         <div className="tab-pane fade p-3" id="settings">
                             <form onSubmit={(e) => { e.preventDefault(); handleChangePassword(); }}>
                                 <div className="mb-3">
                                     <label className="form-label">Full Name</label>
-                                    <input type="text" className="form-control form-control-lg" value="Current User" readOnly />
+                                    <input type="text" className="form-control form-control-lg" value={currentUser?.name || "Member"} readOnly />
                                 </div>
 
                                 <div className="mb-3">
                                     <label className="form-label">Email Address</label>
-                                    <input type="email" className="form-control form-control-lg" value="user@example.com" readOnly />
+                                    <input type="email" className="form-control form-control-lg" value={currentUser?.email || ""} readOnly />
+                                </div>
+
+                                <div className="mb-3">
+                                    <label className="form-label">Current Plan</label>
+                                    <div className="d-flex align-items-center">
+                                        <input type="text" className="form-control form-control-lg text-primary fw-bold" value={currentUser?.role || "Member"} readOnly />
+                                        {/* Optional badges or icons logic here */}
+                                    </div>
                                 </div>
 
                                 <hr className="my-4" />
@@ -204,6 +229,25 @@ function MyAccount() {
                                 </div>
 
                                 <button className="btn btn-outline btn-success">Save Changes</button>
+
+                                <hr className="my-5" />
+
+                                <div className="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <h5 className="text-danger mb-2">Danger Zone</h5>
+                                        <p className="text-muted small mb-0">Once you log out, you will need to sign in again to access your account.</p>
+                                    </div>
+                                    <button
+                                        type="button"
+                                        className="btn btn-danger px-4"
+                                        onClick={() => {
+                                            localStorage.clear();
+                                            navigate("/login");
+                                        }}
+                                    >
+                                        Log Out
+                                    </button>
+                                </div>
                             </form>
                         </div>
 

@@ -7,7 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.project.bookstack.client.AuthorizationClient;
+import com.project.bookstack.clients.staff.AuthorizationClient;
 import com.project.bookstack.configuration.KafkaConfiguration;
 import com.project.bookstack.dto.BookDto;
 import com.project.bookstack.dto.BookGenreRequestDto;

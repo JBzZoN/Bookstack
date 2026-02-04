@@ -27,4 +27,5 @@ public interface StaffRecordDetailRepository extends JpaRepository<RecordDetail,
     @Query("select r from RecordDetail r where r.record.member.userId=:memberId"
     		+ " and r.returned=0 and r.status='Rent' and r.bookId=:bookId")
 	List<RecordDetail> getReturnDataForRenew(@Param("memberId") Integer memberId,@Param("bookId") Integer bookId);
+
 }

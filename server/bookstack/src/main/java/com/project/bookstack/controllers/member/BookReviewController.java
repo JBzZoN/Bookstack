@@ -23,16 +23,19 @@ public class BookReviewController {
             @PathVariable Integer bookId) {
 
         return reviewService.getReviews(bookId);
-        
+
     }
 
     @PostMapping("/{bookId}/reviews")
     public ResponseEntity<?> addReview(
             @PathVariable Integer bookId,
-            @RequestBody Map<String, Object> body,
-            org.apache.tomcat.util.net.openssl.ciphers.Authentication authentication) {
+            @RequestHeader("X-User-Id") String userIdStr,
+            @RequestBody Map<String, Object> body) {
 
-    	Integer userId = 1;
+        if (userIdStr.contains(",")) {
+            userIdStr = userIdStr.split(",")[0].trim();
+        }
+        Integer userId = Integer.parseInt(userIdStr);
 
         Integer rating = (Integer) body.get("rating");
         String comment = (String) body.get("comment");
@@ -41,8 +44,7 @@ public class BookReviewController {
                 bookId,
                 userId,
                 rating,
-                comment
-        );
+                comment);
 
         return ResponseEntity.ok(Map.of("message", "Review added"));
     }
