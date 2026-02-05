@@ -7,8 +7,14 @@ import lombok.Setter;
 
 import java.time.LocalDate;
 
+/**
+ * Staff Entity
+ * =========================================================================
+ * Represents a library employee (Admins, Librarians).
+ * Stores employment-specific data like salary, hiring date, and system status.
+ */
 @Entity
-@Table(name = "staff_table")
+@Table(name = "staff_table", schema = "Bookstack")
 @Data
 @Getter
 @Setter

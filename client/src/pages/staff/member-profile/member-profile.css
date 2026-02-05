@@ -1,8 +1,24 @@
+/*
+ * Staff/member-profile/member-profile.css
+ * ==========================================================================
+ * Styles for the Staff-side Member Profile view.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Base Container & Card
+ * 2. Profile Header (Gradient)
+ * 3. Profile Image & Placement
+ * 4. Content Layout & Table
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Base Container & Card
+   ========================================================================== */
+
 .s-profile-container {
     max-width: 900px;
 }
 
-/* Card */
 .s-profile-card {
     border: none;
     border-radius: 18px;
@@ -11,17 +27,21 @@
     background: #ffffff;
 }
 
-/* Gradient header */
+/* ==========================================================================
+   2. Profile Header (Gradient)
+   ========================================================================== */
+
 .s-profile-header {
     height: 120px;
-    background: linear-gradient(
-        90deg,
-        #4f0bc5,
-        rgb(236, 94, 117)
-    );
+    background: linear-gradient(90deg,
+            #4f0bc5,
+            rgb(236, 94, 117));
 }
 
-/* s-Profile image */
+/* ==========================================================================
+   3. Profile Image & Placement
+   ========================================================================== */
+
 .s-profile-image {
     width: 120px;
     height: 120px;
@@ -35,7 +55,10 @@
     background: #f4f4f4;
 }
 
-/* Body spacing */
+/* ==========================================================================
+   4. Content Layout & Table
+   ========================================================================== */
+
 .s-profile-body {
     margin-top: 80px;
     padding: 1.5rem 2rem 2rem;

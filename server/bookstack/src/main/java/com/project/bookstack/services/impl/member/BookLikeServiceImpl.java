@@ -9,39 +9,50 @@ import com.project.bookstack.entities.BookLike;
 import com.project.bookstack.repositories.member.BookLikeRepository;
 import com.project.bookstack.services.member.BookLikeService;
 
+import lombok.RequiredArgsConstructor;
+
+/**
+ * Book Like Service Implementation
+ * =========================================================================
+ * Manages the social 'like' interactions for books.
+ * Supports retrieving a user's liked collection and toggling like status.
+ */
 @Service
 @Transactional
+@RequiredArgsConstructor
 public class BookLikeServiceImpl implements BookLikeService {
 
     private final BookLikeRepository bookLikeRepository;
 
-    public BookLikeServiceImpl(BookLikeRepository bookLikeRepository) {
-        this.bookLikeRepository = bookLikeRepository;
-    }
-
-    /* =========================
-       Get all liked books
-       ========================= */
+    /**
+     * Retrieves the IDs of all books liked by a specific user.
+     * 
+     * @param userId The ID of the member.
+     * @return List of book IDs.
+     */
     @Override
     public List<Integer> getLikedBooks(Integer userId) {
         return bookLikeRepository.findLikedBookIds(userId);
     }
 
-    /* =========================
-       Toggle like / unlike
-       ========================= */
+    /**
+     * Toggles the like status of a book for a user.
+     * If already liked, it will be removed (unliked).
+     * If not liked, a new record will be created.
+     * 
+     * @param userId The ID of the member.
+     * @param bookId The ID of the book.
+     * @return True if the book is now liked, false if unliked.
+     */
     @Override
     public boolean toggleLike(Integer userId, Integer bookId) {
 
-        boolean alreadyLiked =
-                bookLikeRepository.existsByUserIdAndBookId(userId, bookId);
+        boolean alreadyLiked = bookLikeRepository.existsByUserIdAndBookId(userId, bookId);
 
         if (alreadyLiked) {
-            // UNLIKE
             bookLikeRepository.deleteByUserIdAndBookId(userId, bookId);
             return false;
         } else {
-            // LIKE
             BookLike like = new BookLike();
             like.setUserId(userId);
             like.setBookId(bookId);

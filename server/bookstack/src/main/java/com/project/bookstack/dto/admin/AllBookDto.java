@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 
-
 @Data
 @Setter
 @Getter
@@ -24,5 +23,5 @@ public class AllBookDto {
 	private int number_of_copies_remaining;
 	private LocalDateTime created_at;
 	private LocalDateTime updated_at;
-	
+
 }

@@ -3,6 +3,11 @@ package com.project.bookstack.dto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+/**
+ * Book Search DTO
+ * =========================================================================
+ * Extended search result with full book metadata.
+ */
 @Data
 @AllArgsConstructor
 public class BookSearchDTO {

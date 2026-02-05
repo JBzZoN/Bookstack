@@ -8,18 +8,32 @@ import Title from './../../../components/staff/title/title';
 import Select from "react-select";
 import axios from "axios"
 
+/**
+ * AddBooks Component
+ * ==========================================================================
+ * Provides a form for staff members to add new books to the library system.
+ * 
+ * Features:
+ * - Image Upload: Supports book cover image selection with preview status.
+ * - Dynamic Genre Selection: Uses react-select for multi-genre assignment.
+ * - Form Validation: Captures Title, Author, Publisher, ISBN, Copies, and Description.
+ * - API Integration: Multi-part form submission to /book/add and /staff/genre.
+ *
+ * @component
+ * @returns {JSX.Element} The book addition form.
+ */
 function AddBooks() {
 
 
-  // THIS IS HARD-CODED REMOVE THIS AFTER LOGIN 
-  // STORE USER DETAILS ON LOGIN
-  // ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
+  /* ==========================================================================
+     State Management
+     ========================================================================== */
+
+  // TODO: Replace with dynamic user context after login implementation
   const STAFF_ID = 4;
-  // ⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️⚠️
 
   const [data, setData] = useState(0)
   const [file, setFile] = useState("")
-
   const [imageFile, setImageFile] = useState(null)
   const [description, setDescription] = useState("");
   const [title, setTitle] = useState("");
@@ -31,6 +45,17 @@ function AddBooks() {
 
 
   const navigate = useNavigate()
+  /* ==========================================================================
+     Event Handlers
+     ========================================================================== */
+
+  /**
+   * Finalizes book registration.
+   * 1. Constructs FormData for multi-part (image + metadata) submission.
+   * 2. Registers book details.
+   * 3. Links selected genres to the new book.
+   * 4. Redirects to book list on success.
+   */
   const onSubmit = async () => {
     const genres = genreList.join(",")
 
@@ -48,9 +73,12 @@ function AddBooks() {
 
     console.table(payload);
 
-    const response = await axios.post("http://localhost:7070/book/add", payload, { headers: { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}` } })
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const config = { headers: { "Authorization": `Bearer ${currentUser.token}` } };
 
-    const response2 = await axios.post("http://localhost:7070/staff/genre", { bookId: response.data.bookId, genres }, { headers: { "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}` } })
+    const response = await axios.post("http://localhost:7070/book/add", payload, config)
+
+    await axios.post("http://localhost:7070/staff/genre", { bookId: response.data.bookId, genres }, config)
 
     navigate('/staff/books')
     toast.success("Added a book")

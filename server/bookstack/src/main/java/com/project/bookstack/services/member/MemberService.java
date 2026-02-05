@@ -25,21 +25,12 @@ public interface MemberService {
 
 	List<BookCardDTO> getAllNewArrivedBooks(Integer userId);
 
-	BookDTO getBookDetails(Integer bookId, Integer userId);
+	BookDTO getBookDetails(Integer userId, Integer bookId);
 
-	List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId, Integer userId);
-
-	List<BookCardDTO> getAllMightAlsoLikedBooks(Integer bookId, Integer userId);
+	List<BookCardDTO> getMightAlsoLikedBooks(Integer userId, Integer bookId);
 
 	List<BookNameReturnDateDTO> getBorrrowedBooksHistory(Integer userId);
 
 	List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks(Integer userId);
 
-	String renewBook(Integer userId, Integer bookId);
-
-	com.project.bookstack.dto.member.MemberLimitsDTO getCurrentPlan(Integer userId);
-
-	String notifyMe(Integer userId, Integer bookId);
-
-	boolean checkNotifyStatus(Integer userId, Integer bookId);
 }

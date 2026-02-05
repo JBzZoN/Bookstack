@@ -1,7 +1,0 @@
-.git
-.gitignore
-.mvn
-src
-uploads
-target/*.original
-Dockerfile

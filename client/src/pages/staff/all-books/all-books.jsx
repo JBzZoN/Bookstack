@@ -5,8 +5,29 @@ import axios from "axios"
 import { toast } from 'react-toastify'
 import Title from '../../../components/staff/title/title'
 
+/**
+ * AllStaffBooks Component
+ * ==========================================================================
+ * Displays a grid of all books in the library for staff management.
+ * 
+ * Features:
+ * - Visual Feedback: Maps genres to specific Bootstrap badge colors.
+ * - Dynamic Data: Fetches all books and then iteratively retrieves genres for each.
+ * - Management Actions: Provides "More info" navigation and a "Remove" placeholder.
+ * - Responsive Grid: Uses a CSS Grid for flexible layout.
+ *
+ * @component
+ * @returns {JSX.Element} The books management grid.
+ */
 function AllStaffBooks() {
 
+    /* ==========================================================================
+       Configuration & Helpers
+       ========================================================================== */
+
+    /**
+     * Color mapping for specific genres.
+     */
     const genreColorMap = {
         "Fantasy": "text-bg-primary",
         "Science Fiction": "text-bg-info",
@@ -26,9 +47,19 @@ function AllStaffBooks() {
         toast.info("Removal request sent")
     }
 
+    /* ==========================================================================
+       Data Fetching (Effects & Handlers)
+       ========================================================================== */
+
     const navigate = useNavigate()
     const [bookData, setBookData] = useState([])
 
+    /**
+     * Fetches all books and their respective genres.
+     * Logic:
+     * 1. GET /book/all to get basic book data.
+     * 2. Iteratively GET /staff/book/{id} to append genre lists.
+     */
     async function getAllBooks() {
         const response = await axios.get(
             "http://localhost:7070/book/all",
@@ -36,7 +67,6 @@ function AllStaffBooks() {
         )
         const data = response.data
 
-        console.log(data)
         for (let i = 0; i < data.length; i++) {
             const response = await axios.get(
                 "http://localhost:7070/staff/book/" + data[i].bookId,
@@ -83,9 +113,9 @@ function AllStaffBooks() {
                                     </span>
                                 ))}
                                 {e.genreList.length > 2 && (
-                                <span className="badge rounded-pill text-bg-info">
-                                    +{e.genreList.length - 2}
-                                </span>
+                                    <span className="badge rounded-pill text-bg-info">
+                                        +{e.genreList.length - 2}
+                                    </span>
                                 )}
 
                             </div>

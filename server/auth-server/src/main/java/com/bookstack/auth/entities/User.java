@@ -13,6 +13,18 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.UserDetails;
 
+/**
+ * User Entity
+ * ==========================================================================
+ * Represents a registered user in the BookStack system.
+ * This class implements the {@link UserDetails} interface to integrate
+ * seamlessly with Spring Security's authentication provider.
+ * 
+ * Fields:
+ * - userId: Primary key (Auto-incremented).
+ * - roleType: Defines the user's authority (e.g., ADMIN, LIBRARIAN, MEMBER).
+ * - authorities: Derived from roleType for security checks.
+ */
 @Entity
 @Table(name = "user_table")
 @Getter
@@ -47,13 +59,20 @@ public class User implements UserDetails {
 	@Column(name = "password", length = 100)
 	private String password;
 
+	/**
+	 * Stores the user's role (e.g., "Member", "Librarian", "Admin").
+	 */
 	@Column(name = "role_type", length = 45)
 	private String roleType;
 
+	/**
+	 * Bridges the roleType field to Spring Security's GrantedAuthority collection.
+	 * 
+	 * @return A collection containing the user's authority.
+	 */
 	@Override
 	public Collection<? extends GrantedAuthority> getAuthorities() {
-		return  AuthorityUtils.createAuthorityList(this.roleType);
+		return AuthorityUtils.createAuthorityList(this.roleType);
 	}
 
 }
-

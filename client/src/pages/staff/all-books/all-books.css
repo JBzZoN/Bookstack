@@ -1,14 +1,36 @@
-/* 🔥 CSS GRID */
+/*
+ * Staff/all-books/all-books.css
+ * ==========================================================================
+ * Styles for the All Books Management Grid.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Grid Container
+ * 2. Book Card Layout
+ * 3. Media & Imagery
+ * 4. Content & Actions
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Grid Container
+   ========================================================================== */
+
 .books-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
     gap: 20px;
-    justify-items: center; /* centers cards like your flex setup */
+    justify-items: center;
+    /* centers cards like your flex setup */
 }
+
+/* ==========================================================================
+   2. Book Card Layout
+   ========================================================================== */
 
 .book-card {
     width: 270px;
-    border: 1px solid #e6e8ef;   /* soft dashboard border */
+    border: 1px solid #e6e8ef;
+    /* soft dashboard border */
     border-radius: 14px;
     overflow: hidden;
     background: #ffffff;
@@ -20,21 +42,29 @@
 .book-card:hover {
     transform: translateY(-4px);
     box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
-    border-color: #d0d5e6; /* slightly darker on hover */
+    border-color: #d0d5e6;
+    /* slightly darker on hover */
 }
 
 
-/* Book image */
+/* ==========================================================================
+   3. Media & Imagery
+   ========================================================================== */
+
 .book-image {
     width: 100%;
     height: 200px;
     object-fit: cover;
     background-color: #f1f1f1;
-    border-bottom: 1px solid #e6e8ef; /* matches card border */
+    border-bottom: 1px solid #e6e8ef;
+    /* matches card border */
 }
 
 
-/* Title */
+/* ==========================================================================
+   4. Content & Actions
+   ========================================================================== */
+
 .book-title {
     height: 42px;
     font-weight: 600;

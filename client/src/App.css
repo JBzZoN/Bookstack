@@ -1,3 +1,19 @@
+/*
+ * App.css
+ * =========================================================================
+ * Global application-wide styles and utility classes.
+ * 
+ * TABLE OF CONTENTS:
+ * 1. Typography (Montserrat)
+ * 2. Visual Utilities (Gradients)
+ * 3. Button Components (Global Outline)
+ * =========================================================================
+ */
+
+/* =========================================================================
+   1. Typography
+   ========================================================================= */
+
 .font-montserrat {
   font-family: "Montserrat", sans-serif;
   font-weight: 800;
@@ -7,37 +23,55 @@
   font-weight: bold;
 }
 
-.btn-outline {
-  background: linear-gradient(
-    90deg,
-    #4f0bc5,
-    rgb(236, 94, 117)
-  );
-  color: white;
-  font-weight: 700;
-  padding: 0.75rem 2rem;
-  border-radius: 10px;
-  font-size: 1rem;
-  border: none;
-  text-decoration: none;
-  transition: background 0.3s ease;
-}
+/* =========================================================================
+   2. Visual Utilities
+   ========================================================================= */
 
-.btn-outline:hover,
-.btn-outline:active,
-.btn-outline:focus {
-  color: white;  
-}
-
+/**
+ * .gradient-text
+ * Masks a linear gradient to the text content.
+ */
 .gradient-text {
-  background: linear-gradient(
-    90deg,
-    #4f0bc5,
-    rgb(236, 94, 117)
-  );
+  background: linear-gradient(90deg,
+      #4f0bc5,
+      rgb(236, 94, 117));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
 }
 
+/* =========================================================================
+   3. Button Components
+   ========================================================================= */
+
+/**
+ * .btn-outline
+ * Primary branded button using the theme's core linear gradient.
+ */
+.btn-outline {
+  /* Visuals */
+  background: linear-gradient(90deg,
+      #4f0bc5,
+      rgb(236, 94, 117));
+  border: none;
+
+  /* Typography */
+  color: white;
+  font-weight: 700;
+  font-size: 1rem;
+  text-decoration: none;
+
+  /* Box Model */
+  padding: 0.75rem 2rem;
+  border-radius: 10px;
+
+  /* Animation */
+  transition: background 0.3s ease;
+}
+
+.btn-outline:hover,
+.btn-outline:active,
+.btn-outline:focus {
+  color: white;
+}

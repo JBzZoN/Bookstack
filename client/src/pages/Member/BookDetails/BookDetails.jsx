@@ -10,13 +10,39 @@ import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice
 import { toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
+/**
+ * BookDetails Component
+ * ==========================================================================
+ * Displays comprehensive information about a single book.
+ * 
+ * Features:
+ * - Shows book metadata (Cover, Title, Author, ISBN, etc.)
+ * - Displays availability status (Available/Unavailable)
+ * - "Notify Me" functionality for out-of-stock books
+ * - "Add to Wishlist" (Like) functionality synchronized with Redux/Backend
+ * - Shows "You might also like" recommendations
+ */
 function BookDetails() {
+    /* ==========================================================================
+       State & Hooks
+       ========================================================================== */
     const [bookDetails, setBookDetails] = useState([]);
     const [mightLikedBooks, setMightLikedBooks] = useState([]);
     const [isNotifyPending, setIsNotifyPending] = useState(false);
 
     const { id } = useParams();
 
+    /* ==========================================================================
+       Effects
+       ========================================================================== */
+
+    /**
+     * Fetch Book Data
+     * --------------------------------------------------------------------------
+     * 1. Fetches main book details by ID.
+     * 2. Fetches "Might Like" recommendations.
+     * 3. Checks if the current user has already requested a notification for this book.
+     */
     useEffect(() => {
         if (!id) return;
 
@@ -43,9 +69,9 @@ function BookDetails() {
         // Check notification status
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if (currentUser && id) {
-            api.get(`/member/check-notify-status/${id}`)
+            api.get(`/member/check-notify-status/${id}?email=${currentUser.email}`)
                 .then(res => setIsNotifyPending(res.data))
-                .catch(err => console.error("Failed to check notify status", err)); // Silently fail or use toast
+                .catch(err => console.error("Failed to check notify status", err));
         }
     }, [id]);
 
@@ -76,6 +102,16 @@ function BookDetails() {
         (state) => state.likes.byBookId[id] ?? likedByUser
     );
 
+    /* ==========================================================================
+       Handlers
+       ========================================================================== */
+
+    /**
+     * Handles "Notify Me" Click
+     * --------------------------------------------------------------------------
+     * triggered when a user wants to be notified about an out-of-stock book.
+     * Sends a request to the backend to queue a notification.
+     */
     const handleNotify = async () => {
         const currentUser = JSON.parse(localStorage.getItem("currentUser"));
         if (!currentUser) {

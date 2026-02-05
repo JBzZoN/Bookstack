@@ -2,6 +2,20 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 import './navbar.css'
 
+/**
+ * StaffNavbar Component
+ * ==========================================================================
+ * Vertical sidebar navigation tailored for library staff and administrators.
+ * 
+ * Features:
+ * - Expandable Sections: Toggleable sub-menus for categorized actions (e.g., Books).
+ * - Sticky Positioning: Remains visible during vertical scrolling for quick access.
+ * - Branding & Logout: Clear entry and exit points for the staff session.
+ * - Responsive Design: Adapts to system-wide sidebar layout requirements.
+ *
+ * @component
+ * @returns {JSX.Element} The side navigation bar for staff.
+ */
 function StaffNavbar() {
 
   const [booksOpen, setBooksOpen] = useState(false)
@@ -63,6 +77,11 @@ function StaffNavbar() {
 
       </ul>
 
+      {/* 
+        Session Integrity
+        ------------------
+        Logout link to terminate current session.
+      */}
       <div className="sidebar-footer">
         <Link to="/login" className="sidebar-logout">
           Log out

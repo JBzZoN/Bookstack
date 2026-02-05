@@ -5,12 +5,36 @@ import { toast } from "react-toastify"
 import axios from "axios"
 import { useNavigate } from 'react-router-dom';
 
+/**
+ * SendNewsletter Component
+ * ==========================================================================
+ * Allows Staff members to compose and broadcast newsletters to all library members.
+ * 
+ * Features:
+ * - Template Generation: Pre-fills the body with a professional library update draft.
+ * - Dynamic Composition: Textarea for custom messaging with real-time state updates.
+ * - Broadcast Integration: Sends the composed content via the Staff email API.
+ * - Navigation: Redirects to the book list upon successful dispatch.
+ *
+ * @component
+ * @returns {JSX.Element} The newsletter composition and broadcast interface.
+ */
 function SendNewsletter() {
 
-  const [emailBody, setEmailBody] = useState("")
+  /* ==========================================================================
+     State & Navigation
+     ========================================================================== */
 
+  const [emailBody, setEmailBody] = useState("")
   const navigate = useNavigate()
 
+  /* ==========================================================================
+     Newsletter Logic
+     ========================================================================== */
+
+  /**
+   * Populates the email body with a pre-defined newsletter template.
+   */
   const generateTemplate = () => {
     setEmailBody(`📚 BOOKSTACK Library Newsletter
 
@@ -99,6 +123,11 @@ Happy Reading!
       `)
   }
 
+  /**
+   * Dispatches the newsletter to the backend broadcast service.
+   * 1. Updates UI state and redirects.
+   * 2. Triggers Axios POST to /staff/email with the current body.
+   */
   const sendEmail = async () => {
     navigate("/staff/books")
     toast.success("Email Sent!")

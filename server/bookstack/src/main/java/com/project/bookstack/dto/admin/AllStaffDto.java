@@ -11,11 +11,11 @@ import lombok.Setter;
 @Setter
 public class AllStaffDto {
 
-	    private Integer userId;
-	    private String name;
-	    private String email;
-	    private String phone;
-	    private String address;
-	    private LocalDate dob;
-	    private String username;
+	private Integer userId;
+	private String name;
+	private String email;
+	private String phone;
+	private String address;
+	private LocalDate dob;
+	private String username;
 }

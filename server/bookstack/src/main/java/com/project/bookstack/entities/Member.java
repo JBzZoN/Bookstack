@@ -5,6 +5,12 @@ import lombok.Data;
 
 import java.time.LocalDate;
 
+/**
+ * Member Entity
+ * =========================================================================
+ * Represents a library patron (member) and their subscription details.
+ * Tracks membership duration, plan type, and usage statistics.
+ */
 @Entity
 @Table(name = "member_table")
 @Data

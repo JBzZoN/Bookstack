@@ -2,25 +2,46 @@ import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import "./book-profile.css"
 
+/**
+ * BookProfile Component
+ * ==========================================================================
+ * Detailed profile view for a specific book in the Staff interface.
+ * 
+ * Features:
+ * - Data Retrieval: Accesses book data passed via React Router's location state.
+ * - Profile Layout: Displays cover image, basic metadata, and full description.
+ * - Badge Integration: Color-coded genre badges consistent with the system.
+ *
+ * @component
+ * @returns {JSX.Element} The detailed book profile view.
+ */
 function BookProfile() {
+
+  /* ==========================================================================
+     Configuration & Context
+     ========================================================================== */
 
   const location = useLocation()
 
+  /**
+   * Color mapping for specific genres.
+   */
   const genreColorMap = {
-      "Fantasy": "text-bg-primary",
-      "Science Fiction": "text-bg-info",
-      "Fiction": "text-bg-secondary",
-      "Non-Fiction": "text-bg-dark",
-      "History": "text-bg-warning",
-      "Biography & Memoir": "text-bg-success",
-      "Business & Economics": "text-bg-success",
-      "Philosophy": "text-bg-light",
-      "Psychology": "text-bg-info",
-      "Programming & Technology": "text-bg-warning",
-      "Science": "text-bg-primary",
-      "Self-Help": "text-bg-warning"
+    "Fantasy": "text-bg-primary",
+    "Science Fiction": "text-bg-info",
+    "Fiction": "text-bg-secondary",
+    "Non-Fiction": "text-bg-dark",
+    "History": "text-bg-warning",
+    "Biography & Memoir": "text-bg-success",
+    "Business & Economics": "text-bg-success",
+    "Philosophy": "text-bg-light",
+    "Psychology": "text-bg-info",
+    "Programming & Technology": "text-bg-warning",
+    "Science": "text-bg-primary",
+    "Self-Help": "text-bg-warning"
   }
 
+  // Extract book data from router state
   const book = location.state.book
 
   return (

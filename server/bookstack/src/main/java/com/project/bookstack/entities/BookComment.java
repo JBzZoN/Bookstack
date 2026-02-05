@@ -5,6 +5,11 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * Book Comment Entity
+ * =========================================================================
+ * Stores textual reviews and comments provided by members for specific books.
+ */
 @Entity
 @Table(name = "book_comment")
 @Data

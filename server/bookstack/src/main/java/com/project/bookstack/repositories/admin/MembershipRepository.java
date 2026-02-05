@@ -8,7 +8,4 @@ import com.project.bookstack.entities.MembershipData;
 @Repository
 public interface MembershipRepository extends JpaRepository<MembershipData, String> {
 
-	
-	
 }
-

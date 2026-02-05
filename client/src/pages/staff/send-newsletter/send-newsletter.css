@@ -1,3 +1,20 @@
+/*
+ * Staff/send-newsletter/send-newsletter.css
+ * ==========================================================================
+ * Styles for the Newsletter dispatch interface.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Layout & Containers
+ * 2. Card & Header (Gradient)
+ * 3. Typography & Messaging
+ * 4. Interactive Elements (Buttons & Textarea)
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Layout & Containers
+   ========================================================================== */
+
 .profile {
     height: 100%;
 }
@@ -22,18 +39,30 @@
     margin-right: 20px;
 }
 
+/* ==========================================================================
+   3. Typography & Messaging
+   ========================================================================== */
+
 .text-send {
     font-size: 30px;
 }
 
-.text-send-2{
+.text-send-2 {
     font-size: 20px;
     font-weight: 400;
 }
 
+/* ==========================================================================
+   4. Interactive Elements (Buttons & Textarea)
+   ========================================================================== */
+
 .send-button {
     width: 300px;
 }
+
+/* ==========================================================================
+   2. Card & Header (Gradient)
+   ========================================================================== */
 
 /* Card styling (no size change) */
 .profile {
@@ -45,11 +74,9 @@
 
 /* Header gradient */
 .profile .card-header {
-    background: linear-gradient(
-        90deg,
-        rgba(79, 11, 197, 0.85),
-        rgba(236, 94, 117, 0.85)
-    );
+    background: linear-gradient(90deg,
+            rgba(79, 11, 197, 0.85),
+            rgba(236, 94, 117, 0.85));
     color: #ffffff;
     font-weight: 600;
     letter-spacing: 0.4px;
@@ -58,11 +85,9 @@
 
 /* Primary button gradient ONLY (size untouched) */
 .button-out {
-    background: linear-gradient(
-        90deg,
-        rgba(79, 11, 197, 0.85),
-        rgba(236, 94, 117, 0.85)
-    );
+    background: linear-gradient(90deg,
+            rgba(79, 11, 197, 0.85),
+            rgba(236, 94, 117, 0.85));
     border: none;
     color: #ffffff;
 }

@@ -20,6 +20,13 @@ import com.bookstack.auth.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Authentication Service
+ * ==========================================================================
+ * Provides business logic for authentication, authorization, and user account
+ * management. Interacts directly with the UserRepository and external logger
+ * service.
+ */
 @Service
 @Transactional
 @RequiredArgsConstructor
@@ -28,17 +35,16 @@ public class AuthService {
 	private final ModelMapper modelMapper;
 	private final LoggeClient loggeClient;
 
-	public String onLogin() {
-		// TODO Auto-generated method stub
-		return "Hi josh welcome to bookstack";
-	}
-
 	@Autowired
 	PasswordEncoder passwordEncoder;
 
 	@Autowired
 	UserRepository userRepository;
 
+	/**
+	 * Maintenance method to migrate plaintext passwords in the database
+	 * to secure BCrypt hashes.
+	 */
 	public void migratePasswordsToBCrypt() {
 		List<User> users = userRepository.findAll();
 
@@ -50,25 +56,42 @@ public class AuthService {
 		userRepository.saveAll(users);
 	}
 
+	/**
+	 * Retrieves all registered users in the system.
+	 * 
+	 * @return List of all User entities.
+	 */
 	public List<User> findAll() {
-		// TODO Auto-generated method stub
 		return userRepository.findAll();
 	}
 
+	/**
+	 * Performs a paginated search for users matching a specific query string.
+	 * 
+	 * @param search The search query.
+	 * @return List of matching users (limited to top 5 results).
+	 */
 	public List<User> getSearchedUsers(String search) {
-		// TODO Auto-generated method stub
 		return userRepository.searchUsers(search, PageRequest.of(0, 5));
 	}
 
+	/**
+	 * Extracts all unique user emails from the database.
+	 * 
+	 * @return List of email addresses.
+	 */
 	public List<String> getEmails() {
-		// TODO Auto-generated method stub
-		List<String> emails = userRepository.findAll()
+		return userRepository.findAll()
 				.stream()
 				.map(e -> e.getEmail())
 				.toList();
-		return emails;
 	}
 
+	/**
+	 * Filters and retrieves all users with the 'Librarian' role.
+	 * 
+	 * @return List of staff DTOs.
+	 */
 	public List<AllStaffDto> getallstaff() {
 		List<User> users = userRepository.findByRoleType("Librarian");
 		return users.stream()
@@ -76,6 +99,11 @@ public class AuthService {
 				.toList();
 	}
 
+	/**
+	 * Filters and retrieves all users with the 'Member' role.
+	 * 
+	 * @return List of member DTOs.
+	 */
 	public List<AllStaffDto> getallmember() {
 		List<User> users = userRepository.findByRoleType("Member");
 		return users.stream()
@@ -83,6 +111,12 @@ public class AuthService {
 				.toList();
 	}
 
+	/**
+	 * Registers a new staff member with an encoded password.
+	 * 
+	 * @param user The user object to persist.
+	 * @return The generated unique ID for the new user.
+	 */
 	public Integer addstaff(User user) {
 		String newpassord = passwordEncoder.encode(user.getPassword());
 		user.setPassword(newpassord);
@@ -90,93 +124,56 @@ public class AuthService {
 		return user1.getUserId();
 	}
 
-	public Integer registerUser(java.util.Map<String, Object> registerData) {
-		String email = (String) registerData.get("email");
-		User existingUser = userRepository.findByEmail(email);
-
-		User user;
-		if (existingUser != null) {
-			user = existingUser; // Update existing user
-		} else {
-			user = new User(); // Create new user
-			user.setEmail(email);
-		}
-
-		String name = (String) registerData.get("name");
-		if (name == null) {
-			name = (String) registerData.get("fullName");
-		}
-		user.setName(name);
-		user.setPhone((String) registerData.get("phone"));
-		user.setAddress((String) registerData.get("address"));
-
-		// Handle Date Parsing Safely
-		Object dobObj = registerData.get("dob");
-		if (dobObj != null) {
-			if (dobObj instanceof String) {
-				user.setDob(java.time.LocalDate.parse((String) dobObj));
-			} else if (dobObj instanceof java.time.LocalDate) {
-				user.setDob((java.time.LocalDate) dobObj);
-			}
-		}
-
-		user.setUsername((String) registerData.get("username"));
-
-		String rawPassword = (String) registerData.get("password");
-		if (rawPassword == null || rawPassword.trim().isEmpty()) {
-			throw new IllegalArgumentException("Password cannot be null or empty");
-		}
-
-		user.setRoleType("Member"); // Reactivate or set role
-		String encodedPassword = passwordEncoder.encode(rawPassword);
-		user.setPassword(encodedPassword);
-		User savedUser = userRepository.save(user);
-		return savedUser.getUserId();
-	}
-
+	/**
+	 * Updates an existing staff member's profile details.
+	 * Handles optional password updates (only updates if a non-empty string is
+	 * provided).
+	 * 
+	 * @param editStaffDto DTO with updated information.
+	 * @return Status string ("saved" or "not saved").
+	 */
 	public String editstaff(editStaffDto editStaffDto) {
+		try {
+			User u = userRepository.getById(editStaffDto.getUserId());
 
-		User u = userRepository.getById(editStaffDto.getUserId());
+			u.setName(editStaffDto.getName());
+			u.setEmail(editStaffDto.getEmail());
+			u.setPhone(editStaffDto.getPhone());
+			u.setAddress(editStaffDto.getAddress());
+			u.setUsername(editStaffDto.getUsername());
 
-		u.setName(editStaffDto.getName());
-		u.setEmail(editStaffDto.getEmail());
-		u.setPhone(editStaffDto.getPhone());
-		u.setAddress(editStaffDto.getAddress());
-		u.setUsername(editStaffDto.getUsername());
-		System.out.println(editStaffDto.getPassword());
-		if (editStaffDto.getPassword() != " ") {
-			String newpassword = passwordEncoder.encode(editStaffDto.getPassword());
-			u.setPassword(newpassword);
-		} else {
-			System.out.println("namanhia");
+			// Conditional password update
+			if (editStaffDto.getPassword() != null && !editStaffDto.getPassword().trim().isEmpty()) {
+				String newpassword = passwordEncoder.encode(editStaffDto.getPassword());
+				u.setPassword(newpassword);
+			}
+
+			u.setDob(editStaffDto.getDob());
+			userRepository.save(u);
+			return "saved";
+
+		} catch (Exception e) {
+			e.printStackTrace();
+			return "not saved";
 		}
-		u.setDob(editStaffDto.getDob());
-
-		userRepository.save(u);
-		return "saved";
-
 	}
 
+	/**
+	 * Forwards an authentication log entry to the external Logger Service.
+	 * 
+	 * @param logDto The log data (IP, Username, etc.)
+	 * @return Success/Failure response from the Feign client.
+	 */
 	public String savelog(LogDto logDto) {
 		return loggeClient.sendlog(logDto);
 	}
 
-	public String changePassword(com.bookstack.auth.dto.ChangePasswordDto dto) {
-		User user = userRepository.findById(dto.getUserId()).orElse(null);
-		if (user == null) {
-			return "User not found";
-		}
-		if (!passwordEncoder.matches(dto.getCurrentPassword(), user.getPassword())) {
-			return "Invalid current password";
-		}
-		if (!passwordEncoder.matches(dto.getCurrentPassword(), dto.getNewPassword())) {
-			return "Can't set! Both passwords are same";
-		}
-		user.setPassword(passwordEncoder.encode(dto.getNewPassword()));
-		userRepository.save(user);
-		return "Password updated successfully";
-	}
-
+	/**
+	 * Retrieves basic identification details for a specific user ID.
+	 * 
+	 * @param user User object containing the ID to search for.
+	 * @return DTO with user name and email.
+	 */
 	public AllEmailDto senduserdetail(User user) {
 		User userdetial = userRepository.findById(user.getUserId()).get();
 		AllEmailDto allEmailDto = new AllEmailDto();
@@ -184,5 +181,4 @@ public class AuthService {
 		allEmailDto.setEmailId(userdetial.getEmail());
 		return allEmailDto;
 	}
-
 }

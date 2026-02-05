@@ -1,14 +1,12 @@
 package com.project.bookstack.services.impl.member;
 
-import java.time.LocalDate;
-
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
 
-import com.project.bookstack.clients.member.BookClientService;
+import com.project.bookstack.clients.BookClientService;
 import com.project.bookstack.dto.member.BookCardDTO;
 import com.project.bookstack.dto.member.BookCoreDTO;
 import com.project.bookstack.dto.member.BookDTO;
@@ -16,460 +14,206 @@ import com.project.bookstack.dto.member.BookIdReturnDateDTO;
 import com.project.bookstack.dto.member.BookIdStartDueDatesDTO;
 import com.project.bookstack.dto.member.BookIdTitleDTO;
 import com.project.bookstack.dto.member.BookNameReturnDateDTO;
-import com.project.bookstack.dto.member.BookSearchDTO;
 import com.project.bookstack.dto.member.CurrentlyBorrowedBooksDTO;
-import com.project.bookstack.dto.member.ReviewDTO;
-import com.project.bookstack.entities.RecordDetail;
 import com.project.bookstack.repositories.member.MemberRepository;
+import com.project.bookstack.services.member.BookLikeService;
 import com.project.bookstack.services.member.MemberService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Member Service Implementation
+ * =========================================================================
+ * Implementation of MemberService that handles book discovery, recommendations,
+ * trending books, and borrowing history. It bridges the gap between the
+ * external 'book-service' (metadata) and the internal 'bookstack' DB
+ * (ratings, interactions).
+ */
 @Service
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
 	private final BookClientService bookClientService;
 	private final MemberRepository memberRepository;
+	private final BookLikeService bookLikeService;
 
-	private final com.project.bookstack.repositories.StaffRecordDetailRepository recordDetailRepository;
-	private final com.project.bookstack.clients.member.AuthClient authClient;
-	private final com.project.bookstack.services.NotificationService notificationService;
-
+	/**
+	 * Retrieves the main catalog of books with average ratings and user-specific
+	 * like status.
+	 */
 	@Override
 	public List<BookCardDTO> getAllBooks(Integer userId) {
-		// userId is now passed from controller
-
-		// 1. fetch books from your node.js/external book-service
 		List<BookCoreDTO> books = bookClientService.getAllBooks();
+		Map<Integer, Double> ratingsLookup = getRatingsLookupMap();
+		List<Integer> likedBookIds = bookLikeService.getLikedBooks(userId);
 
-		// 2. fetch raw rating data (assuming repository returns List<Object[]>)
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		// 3. transform the list into a lookup map for O(1) performance
-		// map key: bookid (integer), map value: average rating (double)
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0], // bookid
-						row -> ((Number) row[1]).doubleValue(), // safe numeric conversion
-						(existing, replacement) -> existing // handle duplicates
-				));
-
-		// 4. fetch liked books for the user
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		// 5. aggregate andreturn
 		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
+				.map(book -> new BookCardDTO(book.bookId(), book.title(), book.author(), book.bookImage(),
+						ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookIds.contains(book.bookId())))
 				.toList();
 	}
 
-	// ... existing methods ...
-
-	@Override
-	public String renewBook(Integer userId, Integer bookId) {
-		com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
-		if (member.getRenewCount() >= member.getMembershipData().getRenewalLimit()) {
-			return "Renewal limit reached for your membership.";
-		}
-
-		List<RecordDetail> details = recordDetailRepository.getReturnDataForRenew(userId, bookId);
-
-		for (RecordDetail rd : details) {
-			rd.setDueDate(rd.getDueDate().plusDays(7));
-		}
-
-		recordDetailRepository.saveAll(details);
-
-		// Increment renew count
-		member.setRenewCount(member.getRenewCount() + 1);
-		memberRepository.save(member);
-
-		return "Book renewed successfully for " + details.size() + " copy(s). Due date extended by 7 days.";
-	}
-
+	/**
+	 * Returns all books marked as 'liked' by the current member.
+	 */
 	@Override
 	public List<BookCardDTO> getAllLikedBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
+		List<Integer> likedBookIds = bookLikeService.getLikedBooks(userId);
 		List<BookCoreDTO> books = bookClientService.getAllLikedBooks(likedBookIds);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
+		Map<Integer, Double> ratingsLookup = getRatingsLookupMap();
 
 		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
+				.map(book -> new BookCardDTO(book.bookId(), book.title(), book.author(), book.bookImage(),
+						ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookIds.contains(book.bookId())))
 				.toList();
-
 	}
 
+	/**
+	 * Generates recommendations based on the genres of books the user has
+	 * interacted with.
+	 */
 	@Override
 	public List<BookCardDTO> getRecommendedBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
+		List<Integer> likedBookIds = bookLikeService.getLikedBooks(userId);
+		Map<Integer, Double> ratingsLookup = getRatingsLookupMap();
 
 		List<Integer> genreIds = memberRepository.getAllGenresByUserOwnedBooks(userId);
+		List<Integer> ids = memberRepository.getAllBooksByGenres(genreIds);
 
-		List<Integer> Ids = memberRepository.getAllBooksByGenres(genreIds);
-
-		List<BookCoreDTO> books = bookClientService.getRecommendedBooks(Ids);
+		List<BookCoreDTO> books = bookClientService.getRecommendedBooks(ids);
 
 		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
+				.map(book -> new BookCardDTO(book.bookId(), book.title(), book.author(), book.bookImage(),
+						ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookIds.contains(book.bookId())))
 				.toList();
-
 	}
 
+	/**
+	 * Retrieves top-rated books (avg rating >= 4.5).
+	 */
 	@Override
 	public List<BookCardDTO> getTrendingBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
+		List<Integer> likedBookIds = bookLikeService.getLikedBooks(userId);
 		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
+		Map<Integer, Double> ratingsLookup = buildLookupFromRows(rawRatings);
 
 		List<Integer> trendingBookIds = rawRatings.stream()
-				.filter(row -> ((Double) row[1]) >= 4.5)
-				.map(row -> (Integer) row[0])
-				.toList();
+				.filter(row -> ((Number) row[1]).doubleValue() >= 4.5)
+				.map(row -> (Integer) row[0]).toList();
 
 		List<BookCoreDTO> books = bookClientService.getTrendingBooks(trendingBookIds);
 
 		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
+				.map(book -> new BookCardDTO(book.bookId(), book.title(), book.author(), book.bookImage(),
+						ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookIds.contains(book.bookId())))
 				.toList();
-
 	}
 
+	/**
+	 * Returns most recently added books.
+	 */
 	@Override
 	public List<BookCardDTO> getNewArrivedBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
+		List<Integer> likedBookIds = bookLikeService.getLikedBooks(userId);
+		Map<Integer, Double> ratingsLookup = getRatingsLookupMap();
 		List<BookCoreDTO> books = bookClientService.getNewArrivedBooks();
 
 		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
+				.map(book -> new BookCardDTO(book.bookId(), book.title(), book.author(), book.bookImage(),
+						ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookIds.contains(book.bookId())))
 				.toList();
-
 	}
 
 	@Override
 	public List<BookCardDTO> getAllRecommendedBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
-		List<Integer> genreIds = memberRepository.getAllGenresByUserOwnedBooks(userId);
-
-		List<Integer> Ids = memberRepository.getAllBooksByGenres(genreIds);
-
-		List<BookCoreDTO> books = bookClientService.getAllRecommendedBooks(Ids);
-
-		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
-				.toList();
-
+		return getRecommendedBooks(userId);
 	}
 
 	@Override
 	public List<BookCardDTO> getAllTrendingBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
-		List<Integer> trendingBookIds = rawRatings.stream()
-				.filter(row -> ((Double) row[1]) >= 4.5)
-				.map(row -> (Integer) row[0])
-				.toList();
-
-		List<BookCoreDTO> books = bookClientService.getAllTrendingBooks(trendingBookIds);
-
-		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
-				.toList();
-
+		return getTrendingBooks(userId);
 	}
 
 	@Override
 	public List<BookCardDTO> getAllNewArrivedBooks(Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
-		List<BookCoreDTO> books = bookClientService.getAllNewArrivedBooks();
-
-		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
-				.toList();
-
+		return getNewArrivedBooks(userId);
 	}
 
+	/**
+	 * Combines core metadata from Book Service with internal genre and rating data
+	 * for a comprehensive book detail view.
+	 */
 	@Override
-	public BookDTO getBookDetails(Integer bookId, Integer userId) {
-
-		List<Integer> likedBookSet = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
+	public BookDTO getBookDetails(Integer userId, Integer bookId) {
+		List<Integer> likedBookSet = bookLikeService.getLikedBooks(userId);
+		Map<Integer, Double> ratingsLookup = getRatingsLookupMap();
 		List<String> genres = memberRepository.getGenresByBookId(bookId);
-
 		BookDTO book = bookClientService.getBookDetails(bookId);
 
-		return new BookDTO(
-				book.bookId(),
-				book.isbn(),
-				book.title(),
-				book.author(),
-				book.description(),
-				genres,
-				book.publisher(),
-				book.numberOfCopies(),
-				book.numberOfCopiesRemaining(),
-				ratingsLookup.getOrDefault(book.bookId(), 0.0),
-				likedBookSet.contains(book.bookId()),
-				book.bookImage());
-
+		return new BookDTO(book.bookId(), book.isbn(), book.title(), book.author(), book.description(), genres,
+				book.publisher(), book.numberOfCopies(), book.numberOfCopiesRemaining(),
+				ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookSet.contains(book.bookId()), book.bookImage());
 	}
 
+	/**
+	 * Finds books with similar genres to the given book ID.
+	 */
 	@Override
-	public List<BookCardDTO> getMightAlsoLikedBooks(Integer bookId, Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
+	public List<BookCardDTO> getMightAlsoLikedBooks(Integer userId, Integer bookId) {
+		List<Integer> likedBookIds = bookLikeService.getLikedBooks(userId);
+		Map<Integer, Double> ratingsLookup = getRatingsLookupMap();
 		List<Integer> genreIds = memberRepository.getGenreIdsByBookId(bookId);
+		List<Integer> ids = memberRepository.getAllBooksByGenres(genreIds);
 
-		List<Integer> Ids = memberRepository.getAllBooksByGenres(genreIds);
-
-		List<BookCoreDTO> books = bookClientService.getMightAlsoLikedBooks(bookId, Ids);
+		List<BookCoreDTO> books = bookClientService.getMightAlsoLikedBooks(bookId, ids);
 
 		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
+				.map(book -> new BookCardDTO(book.bookId(), book.title(), book.author(), book.bookImage(),
+						ratingsLookup.getOrDefault(book.bookId(), 0.0), likedBookIds.contains(book.bookId())))
 				.toList();
-
 	}
 
+	/**
+	 * Retrieves the member's complete history of borrowed and returned books.
+	 */
 	@Override
 	public List<BookNameReturnDateDTO> getBorrrowedBooksHistory(Integer userId) {
-
 		List<BookIdReturnDateDTO> records = memberRepository.getBookIdAndReturnDates(userId);
+		List<Integer> bookIds = records.stream().map(BookIdReturnDateDTO::bookId).toList();
 
-		List<Integer> bookIds = records.stream()
-				.map(BookIdReturnDateDTO::bookId)
-				.toList();
-
-		Map<Integer, String> bookIdToTitle = bookClientService.getBookNamesByIds(bookIds)
-				.stream()
-				.collect(Collectors.toMap(
-						BookIdTitleDTO::bookId,
-						BookIdTitleDTO::title));
+		Map<Integer, String> bookIdToTitle = bookClientService.getBookNamesByIds(bookIds).stream()
+				.collect(Collectors.toMap(BookIdTitleDTO::bookId, BookIdTitleDTO::title));
 
 		return records.stream()
-				.map(r -> new BookNameReturnDateDTO(
-						bookIdToTitle.get(r.bookId()),
-						r.returnDate()))
-				.toList();
+				.map(r -> new BookNameReturnDateDTO(bookIdToTitle.get(r.bookId()), r.returnDate())).toList();
 	}
 
+	/**
+	 * Retrieves currently borrowed books that are yet to be returned.
+	 */
 	@Override
 	public List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks(Integer userId) {
-
 		List<BookIdStartDueDatesDTO> records = memberRepository.getBookIdBorrowAndReturnDates(userId);
+		List<Integer> bookIds = records.stream().map(BookIdStartDueDatesDTO::bookId).toList();
 
-		List<Integer> bookIds = records.stream()
-				.map(BookIdStartDueDatesDTO::bookId)
-				.toList();
-
-		Map<Integer, String> bookIdToTitle = bookClientService.getBookNamesByIds(bookIds)
-				.stream()
-				.collect(Collectors.toMap(
-						BookIdTitleDTO::bookId,
-						BookIdTitleDTO::title));
+		Map<Integer, String> bookIdToTitle = bookClientService.getBookNamesByIds(bookIds).stream()
+				.collect(Collectors.toMap(BookIdTitleDTO::bookId, BookIdTitleDTO::title));
 
 		return records.stream()
-				.map(r -> new CurrentlyBorrowedBooksDTO(
-						r.bookId(),
-						bookIdToTitle.get(r.bookId()),
-						r.startDate(),
-						r.endDate()))
+				.map(r -> new CurrentlyBorrowedBooksDTO(bookIdToTitle.get(r.bookId()), r.startDate(), r.endDate()))
 				.toList();
 	}
 
-	@Override
-	public com.project.bookstack.dto.member.MemberLimitsDTO getCurrentPlan(Integer userId) {
-		com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
-
-		return new com.project.bookstack.dto.member.MemberLimitsDTO(
-				member.getRenewCount() != null ? member.getRenewCount() : 0,
-				member.getMembershipData().getRenewalLimit() != null ? member.getMembershipData().getRenewalLimit() : 0,
-				member.getMembershipData().getMembershipType());
-	}
-
-	@Override
-	public List<BookCardDTO> getAllMightAlsoLikedBooks(Integer bookId, Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
+	/**
+	 * Internal helper to create a rating lookup map from raw DB rows.
+	 */
+	private Map<Integer, Double> getRatingsLookupMap() {
 		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-				.collect(Collectors.toMap(
-						row -> (Integer) row[0],
-						row -> ((Number) row[1]).doubleValue(),
-						(existing, replacement) -> existing));
-
-		List<Integer> genreIds = memberRepository.getGenreIdsByBookId(bookId);
-
-		List<Integer> Ids = memberRepository.getAllBooksByGenres(genreIds);
-
-		List<BookCoreDTO> books = bookClientService.getAllMightAlsoLikedBooks(bookId, Ids);
-
-		return books.stream()
-				.map(book -> new BookCardDTO(
-						book.bookId(),
-						book.title(),
-						book.author(),
-						book.bookImage(),
-						ratingsLookup.getOrDefault(book.bookId(), 0.0),
-						likedBookIds.contains(book.bookId())))
-				.toList();
-
+		return buildLookupFromRows(rawRatings);
 	}
 
-	@Override
-	public String notifyMe(Integer userId, Integer bookId) {
-		// Fetch user email from Auth Service using AuthClient
-		java.util.Map<String, Object> request = new java.util.HashMap<>();
-		request.put("userId", userId);
-
-		com.project.bookstack.dto.EmailDTO emailDTO = authClient.getUserDetail(request);
-
-		if (emailDTO == null || emailDTO.getEmail() == null) {
-			return "Failed to fetch user email.";
-		}
-
-		return notificationService.createNotificationRequest(userId, bookId, emailDTO.getEmail());
+	private Map<Integer, Double> buildLookupFromRows(List<Object[]> rows) {
+		return rows.stream().collect(Collectors.toMap(row -> (Integer) row[0], row -> ((Number) row[1]).doubleValue(),
+				(existing, replacement) -> existing));
 	}
-
-	@Override
-	public boolean checkNotifyStatus(Integer userId, Integer bookId) {
-		return notificationService.isNotificationPending(userId, bookId);
-	}
-
 }

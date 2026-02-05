@@ -8,8 +8,15 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Book Entity
+ * =========================================================================
+ * Represents a logical book record in the library system.
+ * Managed by staff members, it contains metadata, inventory counts,
+ * and tracking info for physical copies.
+ */
 @Entity
-@Table(name = "book_table")
+@Table(name = "book_table", schema = "Bookstack")
 @Data
 @NoArgsConstructor
 @AllArgsConstructor

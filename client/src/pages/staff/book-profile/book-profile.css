@@ -1,10 +1,25 @@
-/* Container (bigger) */
+/*
+ * Staff/book-profile/book-profile.css
+ * ==========================================================================
+ * Styles for the Staff-side Book Profile view.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Base Container & Card
+ * 2. Profile Header (Gradient)
+ * 3. Profile Image Overlap
+ * 4. Content Typography & Table
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Base Container & Card
+   ========================================================================== */
+
 .s-book-container-lol {
     margin-top: 80px;
     max-width: 950px;
 }
 
-/* Card */
 .s-book-card-lol {
     border-radius: 18px;
     border: none;
@@ -13,21 +28,28 @@
     overflow: hidden;
 }
 
+/* ==========================================================================
+   2. Profile Header (Gradient)
+   ========================================================================== */
+
 /* Gradient header */
 .s-book-header {
     height: 140px;
-    background: linear-gradient(
-        90deg,
-        #4f0bc5,
-        rgb(236, 94, 117)
-    );
+    background: linear-gradient(90deg,
+            #4f0bc5,
+            rgb(236, 94, 117));
 }
+
+/* ==========================================================================
+   3. Profile Image Overlap
+   ========================================================================== */
 
 /* Image wrapper INSIDE card */
 .s-book-image-wrapper {
     display: flex;
     justify-content: center;
-    margin-top: -75px; /* overlap header like member profile */
+    margin-top: -75px;
+    /* overlap header like member profile */
 }
 
 /* Book image */
@@ -39,6 +61,10 @@
     outline: 3px solid #4f0bc5;
     background: #f4f4f4;
 }
+
+/* ==========================================================================
+   4. Content Typography & Table
+   ========================================================================== */
 
 /* Body */
 .s-book-body {

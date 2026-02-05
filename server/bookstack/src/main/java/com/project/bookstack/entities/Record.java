@@ -6,6 +6,12 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Record Entity
+ * =========================================================================
+ * Represents a high-level transaction record for book circulation.
+ * Links a member and a staff member to a specific date of interaction.
+ */
 @Entity
 @Data
 @NoArgsConstructor

@@ -2,15 +2,16 @@ package com.project.bookstack.services.impl.member;
 
 import lombok.RequiredArgsConstructor;
 
-
 import org.json.JSONObject;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 
-import com.project.bookstack.clients.member.AuthClient;
+import com.project.bookstack.clients.AuthClient;
 import com.project.bookstack.dto.PaymentSuccessRequestDTO;
 import com.project.bookstack.entities.Member;
 import com.project.bookstack.entities.MembershipData;
+import com.project.bookstack.exception.PaymentException;
+import com.project.bookstack.exception.ResourceNotFoundException;
 import com.project.bookstack.repositories.StaffMemberDataRepository;
 import com.project.bookstack.repositories.admin.MembershipRepository;
 import com.project.bookstack.repositories.member.MemberRepository;
@@ -18,7 +19,7 @@ import com.project.bookstack.services.PaymentService;
 
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
-import com.razorpay.Utils;   // ✅ CORRECT CLASS
+import com.razorpay.Utils;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -32,50 +33,53 @@ public class PaymentServiceImpl implements PaymentService {
 
     private final MembershipRepository membershipRepository;
     private final MemberRepository memberRepository;
+    private final StaffMemberDataRepository staffMemberDataRepository;
     private final AuthClient authClient;
     private final Environment env;
-    private final StaffMemberDataRepository staffMemberDataRepository;
 
-    /* --------------------------------------------------
-       CALCULATE AMOUNT (BACKEND SOURCE OF TRUTH)
-       -------------------------------------------------- */
+    /*
+     * --------------------------------------------------
+     * CALCULATE AMOUNT (BACKEND SOURCE OF TRUTH)
+     * --------------------------------------------------
+     */
     @Override
     public int calculateAmount(String purpose, String membershipType, String billing) {
 
         MembershipData data = membershipRepository.findById(membershipType)
-                .orElseThrow(() ->
-                        new RuntimeException("Invalid membership type"));
+                .orElseThrow(() -> new ResourceNotFoundException("Membership type", membershipType));
 
         return billing.equalsIgnoreCase("monthly")
                 ? data.getMonthlyCost()
                 : data.getYearlyCost();
     }
 
-    /* --------------------------------------------------
-       CREATE RAZORPAY ORDER
-       -------------------------------------------------- */
+    /*
+     * --------------------------------------------------
+     * CREATE RAZORPAY ORDER
+     * --------------------------------------------------
+     */
     @Override
     public Order createRazorpayOrder(int amount) throws Exception {
 
-    	RazorpayClient client = new RazorpayClient(
+        RazorpayClient client = new RazorpayClient(
                 env.getProperty("razorpay.key.id"),
-                env.getProperty("razorpay.key.secret")
-        );
+                env.getProperty("razorpay.key.secret"));
 
         JSONObject orderRequest = new JSONObject();
         orderRequest.put("amount", amount * 100); // paise
         orderRequest.put("currency", env.getProperty("razorpay.currency"));
         orderRequest.put(
                 "receipt",
-                "bs_" + UUID.randomUUID().toString().substring(0, 20)
-        );
+                "bs_" + UUID.randomUUID().toString().substring(0, 20));
 
         return client.orders.create(orderRequest);
     }
 
-    /* --------------------------------------------------
-       VERIFY RAZORPAY SIGNATURE (✅ FIXED)
-       -------------------------------------------------- */
+    /*
+     * --------------------------------------------------
+     * VERIFY RAZORPAY SIGNATURE
+     * --------------------------------------------------
+     */
     @Override
     public void verifySignature(PaymentSuccessRequestDTO req) {
         try {
@@ -84,33 +88,31 @@ public class PaymentServiceImpl implements PaymentService {
             options.put("razorpay_order_id", req.getRazorpayOrderId());
             options.put("razorpay_signature", req.getRazorpaySignature());
 
-            // ✅ CORRECT METHOD (works in all SDK versions)
+            // CORRECT METHOD (works in all SDK versions)
             Utils.verifyPaymentSignature(
                     options,
-                    env.getProperty("razorpay.key.secret")
-            );
+                    env.getProperty("razorpay.key.secret"));
 
         } catch (Exception e) {
-            throw new RuntimeException("Invalid Razorpay payment signature");
+            throw new PaymentException("Invalid Razorpay payment signature");
         }
     }
 
-    /* --------------------------------------------------
-       COMPLETE MEMBERSHIP PURCHASE
-       -------------------------------------------------- */
+    /*
+     * --------------------------------------------------
+     * COMPLETE MEMBERSHIP PURCHASE
+     * --------------------------------------------------
+     */
     @Override
     public void completeMembershipPurchase(
             String membershipType,
             String billing,
-            Map<String, Object> registerData
-    ) {
-    	
+            Map<String, Object> registerData) {
 
-
-        // 1️⃣ Create user in AUTH-SERVER
+        // 1 Create user in AUTH-SERVER
         Integer userId = authClient.createUser(registerData);
 
-        // 2️⃣ Insert membership in member_table
+        // 2 Insert membership in member_table
         LocalDate start = LocalDate.now();
         LocalDate end = billing.equalsIgnoreCase("monthly")
                 ? start.plusMonths(1)
@@ -124,8 +126,7 @@ public class PaymentServiceImpl implements PaymentService {
         member.setRenewCount(0);
         member.setRentCount(0);
 
-        memberRepository.save(member); 
-
+        memberRepository.save(member);
 
     }
 }

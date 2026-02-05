@@ -3,11 +3,27 @@ import { useLocation, Link } from 'react-router-dom'
 import "./member-profile.css"
 import profileImage from "../../../assets/images/staff/default_profile_image.png"
 
+/**
+ * MemberStaffProfile Component
+ * ==========================================================================
+ * Detailed profile view for a library member within the Staff interface.
+ * 
+ * Features:
+ * - Data Retrieval: Receives member information via React Router's location state.
+ * - Profile Layout: Displays personal details, contact info, and membership status.
+ * - Visuals: Features a card layout with a gradient header and centered avatar.
+ *
+ * @component
+ * @returns {JSX.Element} The detailed member profile view for staff.
+ */
 function MemberStaffProfile() {
+
+  /* ==========================================================================
+     Data Context
+     ========================================================================== */
 
   const location = useLocation()
   const member = location.state.member
-  console.log(member)
 
   return (
     <div className="container s-profile-container mb-5">

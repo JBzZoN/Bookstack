@@ -8,53 +8,45 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-@Component 
+/**
+ * JWT Filter
+ * =========================================================================
+ * Intercepts incoming requests to validate the JSON Web Token (JWT) provided
+ * in the Authorization header. If valid, sets the security context for the
+ * current request.
+ */
+@Component
 public class JwtFilter extends OncePerRequestFilter {
+
 	@Autowired
 	private JwtUtil jwtUtil;
-    @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse resp, FilterChain filterChain)
-            throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
-        
-        if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            Authentication auth = jwtUtil.validateToken(token);
-            
-            if (auth != null) {
-                SecurityContextHolder.getContext().setAuthentication(auth);
-                
-                final String userId = jwtUtil.validateAndGetUserId(token);
-                
-                HttpServletRequest wrappedRequest = new jakarta.servlet.http.HttpServletRequestWrapper(request) {
-                    @Override
-                    public String getHeader(String name) {
-                        if ("X-User-Id".equalsIgnoreCase(name)) {
-                            return userId;
-                        }
-                        return super.getHeader(name);
-                    }
-                    
-                    @Override
-                    public java.util.Enumeration<String> getHeaders(String name) {
-                        if ("X-User-Id".equalsIgnoreCase(name)) {
-                            return java.util.Collections.enumeration(java.util.Collections.singletonList(userId));
-                        }
-                        return super.getHeaders(name);
-                    }
-                };
-                
-                filterChain.doFilter(wrappedRequest, resp);
-                return;
-            }
-        }
-        
-        filterChain.doFilter(request, resp);
-    }
+
+	@Override
+	protected void doFilterInternal(HttpServletRequest request, HttpServletResponse resp,
+			FilterChain filterChain) throws ServletException, IOException {
+
+		// 1. Extract Authorization header from the incoming request
+		String authHeader = request.getHeader("Authorization");
+
+		// 2. Check for Bearer token existence
+		if (authHeader != null && authHeader.startsWith("Bearer ")) {
+			String token = authHeader.substring(7); // Remove "Bearer " prefix
+
+			// 3. Validate token and extract authentication details
+			Authentication auth = jwtUtil.validateToken(token);
+
+			// 4. Set authentication object in Spring SecurityContext if valid
+			if (auth != null) {
+				SecurityContextHolder.getContext().setAuthentication(auth);
+			}
+		}
+
+		// 5. Hand over to the next filter in the chain
+		filterChain.doFilter(request, resp);
+	}
 }

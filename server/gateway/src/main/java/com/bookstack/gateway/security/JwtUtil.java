@@ -1,6 +1,5 @@
 package com.bookstack.gateway.security;
 
-
 import java.security.Key;
 import java.util.Date;
 import java.util.List;
@@ -21,57 +20,61 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
 
+/**
+ * JWT Utility
+ * =========================================================================
+ * Provides methods for validating JSON Web Tokens and extracting user claims.
+ * Used by the gateway to authenticate incoming requests.
+ */
 @Component
 public class JwtUtil {
-	
+
 	@Value("${jwt.secret}")
 	private String secretKey;
-	
+
 	@Value("${jwt.expiration}")
 	private long expirationMillis;
-	
+
 	private SecretKey signingKey;
-	
+
 	@PostConstruct
 	public void init() {
 		// Convert secret string to Key object
 		signingKey = Keys.hmacShaKeyFor(secretKey.getBytes());
 	}
-	
-	
+
 	public Authentication validateToken(String token) {
-		try {
-		// Parse and verify signature
-		Claims claims = Jwts.parser().verifyWith(signingKey).build()
-		.parseSignedClaims(token).getPayload();
-		// Extract claims
-		String userId = claims.getSubject();
-		String roles = claims.get("roles", String.class);
-		// Convert roles to authorities
-		List<GrantedAuthority> authorities=
-		AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
-		// Create Authentication object
-		return new UsernamePasswordAuthenticationToken(userId, null, authorities);
-		} catch (JwtException e) {
-		// Invalid token
-		return null;
-		}
-	}
-	
-	public String validateAndGetUserId(String token) {
 		try {
 			// Parse and verify signature
 			Claims claims = Jwts.parser().verifyWith(signingKey).build()
-			.parseSignedClaims(token).getPayload();
-			
+					.parseSignedClaims(token).getPayload();
 			// Extract claims
 			String userId = claims.getSubject();
-			
-			return userId;
-		}catch (JwtException e) {
+			String roles = claims.get("roles", String.class);
+			// Convert roles to authorities
+			List<GrantedAuthority> authorities = AuthorityUtils.commaSeparatedStringToAuthorityList(roles);
+			// Create Authentication object
+			return new UsernamePasswordAuthenticationToken(userId, null, authorities);
+		} catch (JwtException e) {
 			// Invalid token
 			return null;
 		}
 	}
-	
+
+	public String validateAndGetUserId(String token) {
+		try {
+			// Parse and verify signature
+			Claims claims = Jwts.parser().verifyWith(signingKey).build()
+					.parseSignedClaims(token).getPayload();
+
+			// Extract claims
+			String userId = claims.getSubject();
+
+			return userId;
+		} catch (JwtException e) {
+			// Invalid token
+			return null;
+		}
+	}
+
 }

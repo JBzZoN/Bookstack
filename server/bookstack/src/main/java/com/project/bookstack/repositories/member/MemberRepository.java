@@ -15,10 +15,16 @@ import com.project.bookstack.dto.member.BookNameReturnDateDTO;
 import com.project.bookstack.dto.member.BookSearchDTO;
 import com.project.bookstack.dto.member.ReviewDTO;
 import com.project.bookstack.entities.Member;
-import com.project.bookstack.entities.User;
 
 import jakarta.transaction.Transactional;
 
+/**
+ * Member Repository
+ * =========================================================================
+ * Provides data access for member-centric operations.
+ * Includes complex joins to fetch liked books, average ratings, genres,
+ * book reviews, and circulation history.
+ */
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Integer> {
 
@@ -45,13 +51,11 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 			        c.userId,
 			        COALESCE(r.rating, 0),
 			        c.comment,
-			        c.createdAt,
-			        COALESCE(u.name, 'Unknown User')
+			        c.createdAt
 			    )
 			    FROM BookComment c
 			    LEFT JOIN BookRating r
 			        ON r.bookId = c.bookId AND r.userId = c.userId
-			       LEFT JOIN User u ON u.userId = c.userId
 			    WHERE c.bookId = :bookId
 			    ORDER BY c.createdAt DESC
 			""")
@@ -81,9 +85,5 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 				AND r.member.userId = :userId
 			""")
 	List<BookIdStartDueDatesDTO> getBookIdBorrowAndReturnDates(Integer userId);
-
-	@Query("SELECT rd FROM RecordDetail rd JOIN rd.record r WHERE r.member.userId = :userId AND rd.bookId = :bookId AND rd.status = 'Rent'")
-	java.util.Optional<com.project.bookstack.entities.RecordDetail> findActiveRent(@Param("userId") Integer userId,
-			@Param("bookId") Integer bookId);
 
 }

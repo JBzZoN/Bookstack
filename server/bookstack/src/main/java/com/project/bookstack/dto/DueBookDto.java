@@ -6,6 +6,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Due Book DTO
+ * =========================================================================
+ * Tracks overdue book copies with due dates.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

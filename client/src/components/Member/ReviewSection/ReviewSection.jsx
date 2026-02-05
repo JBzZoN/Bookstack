@@ -6,16 +6,42 @@ import EmptyState from "../EmptyState/EmptyState";
 
 const API = "http://localhost:7070";
 
+/**
+ * ReviewsSection Component
+ * ==========================================================================
+ * Manages the display and submission of book reviews.
+ * 
+ * Features:
+ * - Fetches and displays a list of reviews for a specific book.
+ * - Allows authenticated users to submit a new review (rating + comment).
+ * - Implements a toggleable review form.
+ * - Handles user identity via localStorage and custom headers.
+ * 
+ * @param {Object} props
+ * @param {string|number} props.bookId - Unique identifier of the book.
+ */
 function ReviewsSection({ bookId }) {
+  /* ==========================================================================
+     State Management
+     ========================================================================== */
   const [showForm, setShowForm] = useState(false);
   const [comment, setComment] = useState("");
   const [rating, setRating] = useState(0);
   const [reviews, setReviews] = useState([]);
 
+  // Authentication Context
   const token = localStorage.getItem("token");
 
-  /* ---------------- FETCH REVIEWS ---------------- */
+  /* ==========================================================================
+     Data Fetching (Effects & Handlers)
+     ========================================================================== */
 
+  /**
+   * Fetch Reviews from Backend
+   * --------------------------------------------------------------------------
+   * Retrieves the list of reviews for the current book. 
+   * Includes X-User-Id header for personalized context if available.
+   */
   const loadReviews = async () => {
     try {
       const currentUser = JSON.parse(localStorage.getItem("currentUser"));
@@ -36,12 +62,23 @@ function ReviewsSection({ bookId }) {
     }
   };
 
+  /**
+   * Reload reviews whenever the bookId changes.
+   */
   useEffect(() => {
     if (bookId) loadReviews();
   }, [bookId]);
 
-  /* ---------------- SUBMIT REVIEW ---------------- */
+  /* ==========================================================================
+     Event Handlers
+     ========================================================================== */
 
+  /**
+   * Submit New Review
+   * --------------------------------------------------------------------------
+   * Validates input, checks authentication, and posts the review to the backend.
+   * Reloads the review list on successful submission.
+   */
   const handleSubmit = async () => {
     if (!comment.trim() || rating < 1 || rating > 5) {
       alert("Please add rating (1–5) and comment");

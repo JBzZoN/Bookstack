@@ -8,6 +8,18 @@ import { useSelector, useDispatch } from 'react-redux';
 import { loadLikesFromBackend } from '../../../redux/slices/likeSlice';
 import { useEffect } from 'react';
 
+/**
+ * Member Navbar Component
+ * ==========================================================================
+ * Navigation bar for authenticated members.
+ * 
+ * Features:
+ * - Search bar for books (ISBN, Title, Author) with debouncing.
+ * - Links to Home, Browse Books, and My Account.
+ * - "Upgrade" button for membership plan upgrades.
+ * - Likes/Wishlist indicator with badge count.
+ * - Logout functionality.
+ */
 function Navbar() {
     const dispatch = useDispatch();
     const likes = useSelector((state) => state.likes.byBookId);
@@ -20,6 +32,12 @@ function Navbar() {
     const [searchBarOn, setSearchBarOn] = useState(false)
     const [searchString, setSearchString] = useState("")
 
+    /**
+     * Handles Book Search
+     * --------------------------------------------------------------------------
+     * Debounced search handler. API call is delayed by 400ms to avoid
+     * flooding the backend while typing.
+     */
     const onSearchBook = (e) => {
         const value = e.target.value
         setSearchString(value)

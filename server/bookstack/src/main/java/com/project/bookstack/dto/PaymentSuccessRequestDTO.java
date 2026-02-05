@@ -3,6 +3,12 @@ package com.project.bookstack.dto;
 import lombok.Data;
 import java.util.Map;
 
+/**
+ * Payment Success Request DTO
+ * =========================================================================
+ * Captures payment gateway response and user registration data after successful
+ * payment.
+ */
 @Data
 public class PaymentSuccessRequestDTO {
 

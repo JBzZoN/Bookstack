@@ -21,46 +21,46 @@ export default function AddStaff() {
   };
 
   const handleSubmit = async (e) => {
-  e.preventDefault(); // prevent page reload
+    e.preventDefault(); // prevent page reload
 
-  try {
-    // Get token from localStorage
-    const token = JSON.parse(localStorage.getItem("currentUser"))?.token;
+    try {
+      // Get token from localStorage
+      const token = JSON.parse(localStorage.getItem("currentUser"))?.token;
 
-    // POST request with form data
-    const res = await fetch("http://localhost:7070/admin/addmember", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`, // auth header
-      },
-      body: JSON.stringify(formData), // form data from state
-    });
-
-    if (res.ok) {
-      alert("Staff added successfully!");
-      // Reset form after success
-      setFormData({
-        name: "",
-        email: "",
-        phone: "",
-        address: "",
-        dob: "",
-        username: "",
-        password: "",
-        roleType: "",
-        salary: "",
-        dateHired: "",
-        status: "active",
+      // POST request with form data
+      const res = await fetch("http://localhost:7070/admin/addmember", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`, // auth header
+        },
+        body: JSON.stringify(formData), // form data from state
       });
-    } else {
-      alert("Failed to add staff. Check server or token.");
+
+      if (res.ok) {
+        alert("Staff added successfully!");
+        // Reset form after success
+        setFormData({
+          name: "",
+          email: "",
+          phone: "",
+          address: "",
+          dob: "",
+          username: "",
+          password: "",
+          roleType: "",
+          salary: "",
+          dateHired: "",
+          status: "active",
+        });
+      } else {
+        alert("Failed to add staff. Check server or token.");
+      }
+    } catch (err) {
+      console.error(err);
+      alert("Error sending staff data. See console for details.");
     }
-  } catch (err) {
-    console.error(err);
-    alert("Error sending staff data. See console for details.");
-  }
-};
+  };
 
   const themeGradient = "linear-gradient(90deg, #4f0bc5, rgb(236, 94, 117))";
 

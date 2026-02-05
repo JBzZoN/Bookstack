@@ -8,6 +8,13 @@ import org.springframework.stereotype.Repository;
 
 import com.project.bookstack.entities.BookLike;
 
+/**
+ * Book Like Repository
+ * =========================================================================
+ * Repository for managing user book likes/favorites.
+ * Handles operations for checking, adding, and removing book likes,
+ * as well as retrieving all liked books for a specific user.
+ */
 @Repository
 public interface BookLikeRepository extends JpaRepository<BookLike, Integer> {
 
@@ -17,6 +24,5 @@ public interface BookLikeRepository extends JpaRepository<BookLike, Integer> {
 
     @Query("SELECT bl.bookId FROM BookLike bl WHERE bl.userId = :userId")
     List<Integer> findLikedBookIds(Integer userId);
-    
-}
 
+}

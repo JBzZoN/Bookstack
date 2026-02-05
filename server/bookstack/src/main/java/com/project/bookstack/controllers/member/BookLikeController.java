@@ -14,6 +14,12 @@ import com.project.bookstack.services.member.BookLikeService;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * Book Like Controller
+ * =========================================================================
+ * Manages member interactions with the "Like" feature for books.
+ * Allows users to toggle likes and retrieve their list of liked book IDs.
+ */
 @RestController
 @RequestMapping("/member/likes")
 @RequiredArgsConstructor
@@ -21,13 +27,13 @@ public class BookLikeController {
 
     private final BookLikeService bookLikeService;
 
+    /**
+     * Toggles the "Like" status for a specific book.
+     */
     @PostMapping("/toggle")
-    public Map<String, Boolean> toggleLike(@RequestHeader("X-User-Id") String userIdStr,
+    public Map<String, Boolean> toggleLike(@RequestHeader("X-User-Id") String id,
             @RequestBody Map<String, Integer> body) {
-
-        if (userIdStr.contains(","))
-            userIdStr = userIdStr.split(",")[0].trim();
-        Integer userId = Integer.parseInt(userIdStr);
+        Integer userId = Integer.parseInt(id);
         Integer bookId = body.get("bookId");
 
         boolean liked = bookLikeService.toggleLike(userId, bookId);
@@ -35,12 +41,11 @@ public class BookLikeController {
         return Map.of("liked", liked);
     }
 
+    /**
+     * Retrieves the list of all book IDs liked by the current member.
+     */
     @GetMapping
-    public List<Integer> getLikedBooks(@RequestHeader("X-User-Id") String userIdStr) {
-        if (userIdStr.contains(","))
-            userIdStr = userIdStr.split(",")[0].trim();
-        Integer userId = Integer.parseInt(userIdStr);
-        return bookLikeService.getLikedBooks(userId);
+    public List<Integer> getLikedBooks(@RequestHeader("X-User-Id") String id) {
+        return bookLikeService.getLikedBooks(Integer.parseInt(id));
     }
-
 }

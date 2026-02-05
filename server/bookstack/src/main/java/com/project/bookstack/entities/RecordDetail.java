@@ -6,6 +6,13 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
 
+/**
+ * Record Detail Entity
+ * =========================================================================
+ * Stores granular details for each book involved in a circulation transaction.
+ * Tracks status (Rent/Return/Renew), due dates, and return status for
+ * individual book IDs.
+ */
 @Entity
 @Table(name = "record_detail_table")
 @Data

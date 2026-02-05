@@ -4,6 +4,11 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Book Copy Count DTO
+ * =========================================================================
+ * Used for updating book inventory counts.
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

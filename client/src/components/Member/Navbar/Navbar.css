@@ -1,4 +1,21 @@
-/* Navbar */
+/*
+ * Member/Navbar/Navbar.css
+ * ==========================================================================
+ * Navigation bar styles for the Member Interface.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Base Navbar Layout
+ * 2. Nav Links & Branding
+ * 3. Search Bar & Dropdown
+ * 4. Action Buttons (Upgrade)
+ * 5. Responsive Media Queries
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Base Navbar Layout
+   ========================================================================== */
+
 .member-navbar {
   height: 80px;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
@@ -7,6 +24,10 @@
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
   z-index: 1030;
 }
+
+/* ==========================================================================
+   2. Nav Links & Branding
+   ========================================================================== */
 
 .member-navbar .nav-link {
   font-weight: 750;
@@ -43,6 +64,10 @@
   height: 40px;
 }
 
+/* ==========================================================================
+   3. Search Bar & Dropdown
+   ========================================================================== */
+
 /* Gradient Upgrade Button */
 .btn-upgrade {
   background: linear-gradient(90deg, #4f0bc5, #ec5e75);
@@ -68,6 +93,10 @@
   color: #fff !important;
 }
 
+/* ==========================================================================
+   4. Action Buttons (Upgrade)
+   ========================================================================== */
+
 @media (max-width: 999px) {
   .navbar .navbar-collapse {
     background-color: rgba(255, 255, 255, 0.9);
@@ -80,6 +109,10 @@
     background-color: transparent;
   }
 }
+
+/* ==========================================================================
+   5. Responsive Media Queries
+   ========================================================================== */
 
 /* Navbar search container must be relative */
 .navbar-search-wrapper {

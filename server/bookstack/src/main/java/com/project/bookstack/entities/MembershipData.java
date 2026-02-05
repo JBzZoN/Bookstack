@@ -3,6 +3,13 @@ package com.project.bookstack.entities;
 import jakarta.persistence.*;
 import lombok.Data;
 
+/**
+ * Membership Data Entity
+ * =========================================================================
+ * Defines the parameters for different membership tiers (e.g., BRONZE, GOLD,
+ * DIAMOND).
+ * Includes borrow limits, duration policies, and pricing.
+ */
 @Entity
 @Table(name = "membership_data_table")
 @Data

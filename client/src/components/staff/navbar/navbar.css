@@ -1,21 +1,40 @@
+/*
+ * Staff/navbar/navbar.css
+ * ==========================================================================
+ * Styles for the Staff-side Sidebar Navigation.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Sidebar Container & Layout
+ * 2. Branding (Gradient)
+ * 3. Navigation Items & Interaction
+ * 4. Expandable Sub-menus
+ * 5. Layout Alignment (Base Structure)
+ * 6. Footer & Logout Action
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Sidebar Container & Layout
+   ========================================================================== */
+
 .staff-sidebar {
     width: 220px;
     min-width: 220px;
     max-width: 220px;
-
     height: 100vh;
     background: #ffffff;
     border-right: 1px solid #eee;
-
     display: flex;
     flex-direction: column;
-
     flex-shrink: 0;
-
-    position: sticky;   /* 👈 KEY */
-    top: 0;             /* 👈 KEY */
+    position: sticky;
+    top: 0;
 }
-/* Toggle row */
+
+/* ==========================================================================
+   4. Expandable Sub-menus
+   ========================================================================== */
+
 .sidebar-toggle {
     display: flex;
     justify-content: space-between;
@@ -23,7 +42,6 @@
     cursor: pointer;
 }
 
-/* Chevron */
 .chevron {
     font-size: 0.8rem;
     transition: transform 0.2s ease;
@@ -33,7 +51,6 @@
     transform: rotate(180deg);
 }
 
-/* Sub menu */
 .sidebar-subnav {
     list-style: none;
     padding-left: 1rem;
@@ -44,7 +61,6 @@
     margin-bottom: 0.25rem;
 }
 
-/* Sub links */
 .sidebar-sublink {
     display: block;
     padding: 0.4rem 0.75rem;
@@ -60,6 +76,10 @@
 }
 
 
+/* ==========================================================================
+   5. Layout Alignment (Base Structure)
+   ========================================================================== */
+
 .staff-layout {
     display: flex;
     flex-direction: row;
@@ -71,63 +91,10 @@
     padding: 1.5rem;
 }
 
-/* Brand */
-.sidebar-brand {
-    padding: 0.5rem 0.75rem 1rem;
-    margin-bottom: 0.5rem;
-}
+/* ==========================================================================
+   6. Footer & Logout Action
+   ========================================================================== */
 
-.brand-link {
-    font-size: 1.3rem;
-    font-weight: 700;
-    text-decoration: none;
-    background: linear-gradient(
-        90deg,
-        #4f0bc5,
-        rgb(236, 94, 117)
-    );
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-}
-
-/* Nav list */
-.sidebar-nav {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    flex-grow: 1;
-}
-
-/* Nav item */
-.sidebar-item {
-    margin-bottom: 0.3rem;
-}
-
-/* Links */
-.sidebar-link {
-    display: block;
-    padding: 0.55rem 0.75rem;
-    border-radius: 8px;
-    color: #444;
-    font-weight: 500;
-    text-decoration: none;
-    cursor: pointer;
-    transition: background 0.2s ease, color 0.2s ease;
-}
-
-.sidebar-link:hover {
-    background: #f4f3ff;
-    color: #4f0bc5;
-}
-
-/* Dropdown menu */
-.staff-dropdown {
-    border-radius: 10px;
-    border: none;
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-}
-
-/* Footer */
 .sidebar-footer {
     padding: 0.75rem;
 }
@@ -140,11 +107,9 @@
     text-decoration: none;
     font-weight: 500;
     color: #fff;
-    background: linear-gradient(
-        90deg,
-        #4f0bc5,
-        rgb(236, 94, 117)
-    );
+    background: linear-gradient(90deg,
+            #4f0bc5,
+            rgb(236, 94, 117));
     transition: opacity 0.2s ease;
 }
 

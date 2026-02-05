@@ -1,13 +1,35 @@
+/*
+ * Member/ReviewSection/ReviewSection.css
+ * ==========================================================================
+ * Styles for the Books Review and Ratings Section.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Base Container
+ * 2. Scrollable Review Box
+ * 3. Individual Review Cards & Media
+ * 4. Typography & Utility
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Base Container
+   ========================================================================== */
+
 .reviews-container {
   width: 100%;
 }
 
-/* SCROLL CONTAINER */
+/* ==========================================================================
+   2. Scrollable Review Box
+   ========================================================================== */
+
 .review-scroll-box {
   margin-left: 15px;
   width: 100%;
-  max-width: 100%;   /* 🔥 INCREASE WIDTH HERE */
-  max-height: 320px;   /* ~3–4 reviews visible */
+  max-width: 100%;
+  /* 🔥 INCREASE WIDTH HERE */
+  max-height: 320px;
+  /* ~3–4 reviews visible */
   overflow-y: auto;
   padding-right: 12px;
 }
@@ -22,7 +44,10 @@
   border-radius: 4px;
 }
 
-/* REVIEW CARD */
+/* ==========================================================================
+   3. Individual Review Cards & Media
+   ========================================================================== */
+
 .review-card {
   width: 100%;
   border: 1px solid #e5e7eb;
@@ -40,12 +65,15 @@
   flex-shrink: 0;
 }
 
-/* COMMENT TEXT */
+/* ==========================================================================
+   4. Typography & Utility
+   ========================================================================== */
+
 .review-comment {
   margin-left: 5px;
   color: #374151;
 }
 
 .margintoleft {
-    margin-left: 5px;
+  margin-left: 5px;
 }

@@ -4,10 +4,32 @@ import Title from '../../../components/staff/title/title'
 import axios from 'axios'
 import './view-members.css'
 
+/**
+ * ViewMembers Component
+ * ==========================================================================
+ * Provides a comprehensive list of all registered library members for staff oversight.
+ * 
+ * Features:
+ * - Data Fetching: Retrieves the full member list from the Staff API.
+ * - Responsive Table: Displays key member details (Name, Email, Phone, etc.).
+ * - Access Control: Requires a valid staff authorization token.
+ * - Navigation: Links to individual member profiles for detailed information.
+ *
+ * @component
+ * @returns {JSX.Element} The members administration table.
+ */
 function ViewMembers() {
+
+  /* ==========================================================================
+     Configuration & State
+     ========================================================================== */
 
   const navigate = useNavigate()
   const [members, setMembers] = useState([])
+
+  /* ==========================================================================
+     Data Fetching (Effects & Handlers)
+     ========================================================================== */
 
   async function getAllMembers() {
     const response = await axios.get(
@@ -18,7 +40,7 @@ function ViewMembers() {
         }
       }
     )
-    
+
     setMembers(response.data)
   }
   useEffect(() => {

@@ -1,19 +1,39 @@
+/*
+ * Member/BookDetails/BookDetails.css
+ * ==========================================================================
+ * Styles for the Book Detailed Information Page.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Book Cover & Media
+ * 2. Ratings & Badges
+ * 3. Typography & Utility
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Book Cover & Media
+   ========================================================================== */
+
 .book-cover {
   width: 100%;
-  max-width: 320px;      
-  height: 480px;         
-  object-fit: cover;     
-  border-radius: 8px;    
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15); 
+  max-width: 320px;
+  height: 480px;
+  object-fit: cover;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
+
+/* ==========================================================================
+   2. Ratings & Badges
+   ========================================================================== */
 
 .h1-c {
   color: black;
 }
 
 .rating {
-  display: flex;     
+  display: flex;
   align-items: center;
   gap: 4px;
 }
@@ -40,9 +60,10 @@
   color: var(--brand-teal);
 }
 
+/* ==========================================================================
+   3. Typography & Utility
+   ========================================================================== */
+
 .member-h4 {
   margin-top: 9px;
 }
-
-
-

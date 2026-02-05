@@ -39,6 +39,7 @@ public interface AdminService {
 	public String sendfine(EmailDTO emailDTO);
 	
 	public String sendfinetoall();
-	}
+
+}
 
 

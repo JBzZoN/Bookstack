@@ -1,3 +1,14 @@
+/*
+ * Staff/home/home.css
+ * ==========================================================================
+ * Layout styles for the Staff dashboard wrapper.
+ * ==========================================================================
+ */
+
 .staff-content {
+    /* 
+   * Float adjustment to ensure content alignment 
+   * as per the legacy sidebar/navbar layout.
+   */
     float: left;
 }

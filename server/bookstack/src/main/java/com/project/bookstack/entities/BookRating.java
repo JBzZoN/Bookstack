@@ -5,6 +5,12 @@ import lombok.Data;
 
 import java.time.LocalDateTime;
 
+/**
+ * Book Rating Entity
+ * =========================================================================
+ * Stores numerical ratings (e.g., 1-5 stars) given by users to books.
+ * Used to calculate average ratings for discovery features.
+ */
 @Entity
 @Table(name = "book_rating")
 @Data

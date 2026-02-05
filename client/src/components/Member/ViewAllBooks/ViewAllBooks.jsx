@@ -81,14 +81,7 @@ const ViewAllBooks = () => {
                     subtitle: "Handpicked recommendations based on this book."
                 };
                 break;
-            case 'might-like':
-                // For this category, we expect an ID in the URL params
-                endpoint = `/member/all-might-liked-books/${id}`;
-                info = {
-                    title: "You Might Also Like",
-                    subtitle: "Handpicked recommendations based on this book."
-                };
-                break;
+
             case 'liked-books':
                 endpoint = "/member/liked-books";
                 info = {

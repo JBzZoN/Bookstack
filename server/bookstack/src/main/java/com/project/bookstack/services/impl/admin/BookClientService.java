@@ -11,7 +11,7 @@ import com.project.bookstack.dto.admin.AllBookDto;
 import kotlin.jvm.internal.SerializedIr;
 
 @Service
-@FeignClient(name = "admin-book-service", url = "http://localhost:4040")
+@FeignClient(name = "admin-book-service", url = "http://localhost:4000")
 public interface BookClientService {
 
 	@GetMapping("/book/allbooks")
