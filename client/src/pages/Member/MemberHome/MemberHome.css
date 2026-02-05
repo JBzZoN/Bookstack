@@ -1,173 +1,108 @@
-/*
- * Member/MemberHome/MemberHome.css
- * ==========================================================================
- * Styles for the Member Landing Page (Dashboard).
- *
- * TABLE OF CONTENTS:
- * 1. Hero Carousel
- * 2. Typography & Headings
- * 3. Layout Components (Scroll, Wrappers)
- * 4. Feature Sections (Quote)
- * ==========================================================================
- */
-
-/* ==========================================================================
-   1. Hero Carousel
-   ========================================================================== */
-
 .carousel-indicators {
   display: flex !important;
   justify-content: center;
   gap: 10px;
 }
 
-.carousel-indicators [data-bs-target] {
-  background-color: white;
-  width: 12px;
-  height: 12px;
-  border-radius: 50%;
-  /* Circular indicators */
-  border: none;
-}
-
-.carousel-indicators .active {
-  background-color: white;
-  opacity: 1;
-}
-
-.carousel-item {
-  height: 500px;
-  background: rgba(255, 255, 255, 0.6);
-}
-
-.carousel-item img {
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
-}
-
-/* Custom Arrows */
-.carousel-control-prev-icon,
-.carousel-control-next-icon {
-  width: 3rem;
-  height: 3rem;
-  opacity: 0.3; /* light by default */
-  filter: invert(30%) sepia(80%) saturate(600%) hue-rotate(260deg);
-  transition: opacity 0.25s ease, filter 0.25s ease;
-}
-
-/* When user hovers on the control */
-.carousel-control-prev:hover .carousel-control-prev-icon,
-.carousel-control-next:hover .carousel-control-next-icon {
-  opacity: 1; /* fully visible */
-  filter: invert(10%) sepia(90%) saturate(900%) hue-rotate(260deg);
-}
-
-/* ==========================================================================
-   2. Typography & Headings
-   ========================================================================== */
-
-/* Section Titles (e.g. "Recommended Books") */
-.home-h1 {
-  font-size: 25px;
-  font-weight: 750;
-  color: black;
-  margin-bottom: 0;
-}
-
-/* Sub-titles (e.g. "(Premium)") */
-.home-h2 {
-  font-size: 25px;
-  color: goldenrod;
-  font-weight: 750;
-  margin-bottom: 0;
-}
-
-/* "View All" Button Link */
-.home-h3 {
-  font-size: 20px;
-  color: rgb(50, 50, 224);
-  margin-left: 100px;
-  border: none;
-  background: transparent;
-  text-decoration: none;
-  transition: all 0.3s ease;
-}
-
-/* View All Gradient Text Effect */
 #view-all {
-  background: linear-gradient(90deg, #4f0bc5, rgb(236, 94, 117));
+  background: linear-gradient(
+    90deg,
+    #4f0bc5,
+    rgb(236, 94, 117)
+  );
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
-/* Remove default focus outlines */
-.home-h3:focus,
-.home-h3:active,
-.home-h3:focus-visible {
-  outline: none !important;
-  box-shadow: none !important;
-  border: none !important;
+/* Arrows */
+.carousel-control-prev-icon,
+.carousel-control-next-icon {
+  filter: invert(30%) sepia(80%) saturate(600%)
+          hue-rotate(260deg);
 }
 
-/* ==========================================================================
-   3. Layout Components
-   ========================================================================== */
+/* Indicators */
+.carousel-indicators [data-bs-target] {
+  background-color: white
+}
 
-/* Horizontal Book List Container */
+.carousel-indicators .active {
+  background-color: white;
+}
+
+.carousel-item {
+  height: 500px;
+  background: rgba(255, 255, 255, 0.6);
+
+}
+
+.carousel-item img {
+  height: 100%;
+  object-fit: contain;
+}
+
+/* Navbar */
+.logo-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  font-size: 1.75rem;
+  line-height: 1;
+}
+
+.logo-img {
+  width: 50px;
+  height: 50px;
+  border-radius: 10%;
+}
+
+/* Home-h1-headings below carousal */
+.home-h1 {
+  font-size: 25px;
+  font-weight: 750;
+  color: black;
+}
+
+/* Home-h2-headings below carousal */
+.home-h2 {
+  font-size: 25px;
+  color: goldenrod;
+  font-weight: 750;
+}
+
+/* Home-h1-headings below carousal */
+.home-h3 {
+  font-size: 20px;
+  color: rgb(50, 50, 224);
+  margin-left: 100px;
+}
+
+/* Scroll Wrapper */
 .horizontal-scroll {
   display: flex;
   gap: 1.45rem;
   overflow-x: auto;
   padding: 0.7rem 0.7rem;
-  scrollbar-width: none;
-  /* Firefox */
-  -ms-overflow-style: none;
-  /* IE/Edge */
+  scrollbar-width: none; 
 }
 
-.horizontal-scroll::-webkit-scrollbar {
-  display: none;
-  /* Chrome/Safari */
-}
-
-/* Empty State Wrapper */
-.empty-state {
-  width: 100%;
-  height: 300px;
-  /* Ensures empty state image is centered and contained */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-/* ==========================================================================
-   4. Feature Sections
-   ========================================================================== */
-
-/* Daily Quote Card */
+/* Quote section */
 .quote-section {
-  /* Layout */
-  margin-top: 4rem;
-  margin-bottom: 4rem;
   padding: 4rem 2rem;
-  text-align: center;
-
-  /* Visuals */
   background: linear-gradient(135deg, #2dd4bf, #25a18e);
   color: white;
+  margin-top: 4rem;
+  margin-bottom: 4rem;
+  text-align: center;
   border-radius: 1rem;
   box-shadow: 0 6px 20px #6366f122;
-
-  /* Typography */
   font-style: italic;
-  font-size: 1.25rem;
   user-select: none;
+  font-size: 1.25rem;
 }
-
 .quote-section h2 {
   font-weight: 800;
   margin-bottom: 1rem;
-  font-style: normal;
 }
+
+

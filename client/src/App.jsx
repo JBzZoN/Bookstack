@@ -10,8 +10,14 @@ import './App.css';
 /* --- Member Modules --- */
 import Home from './pages/Member/Home/Home';
 import MemberHome from './pages/Member/MemberHome/MemberHome';
+import BrowseBooks from './pages/Member/BrowseBooks/BrowseBooks';
 import MyAccount from './pages/Member/MyAccount/MyAccount';
 import BookDetails from './pages/Member/BookDetails/BookDetails';
+import LikedBooks from './pages/Member/LikedBooks/LikedBooks';
+import AllRecommendedBooks from './pages/Member/RecommendedBooks/RecommendedBooks';
+import AllTrendingBooks from './pages/Member/TrendingBooks/TrendingBooks';
+import AllNewArrivedBooks from './pages/Member/NewArrivedBooks/NewArrivedBooks';
+import MightLikeBooks from './pages/Member/MightLikeBooks/MightLikeBooks';
 import ViewAllBooks from './components/Member/ViewAllBooks/ViewAllBooks';
 
 /* --- Administrative Modules --- */
@@ -75,6 +81,7 @@ function App() {
         theme="light"
       />
 
+
       <Routes>
         {/* 
           ----------------------------------------------------------------
@@ -105,6 +112,8 @@ function App() {
           <Route path="browse" element={<Navigate to="view-all/books" replace />} />
           <Route path="book/:id" element={<BookDetails />} />
           <Route path="account" element={<MyAccount />} />
+          <Route path="might-like-books/:id" element={<MightLikeBooks />} />
+          <Route path="liked-books" element={<LikedBooks />} />
         </Route>
 
         {/* 
@@ -131,7 +140,7 @@ function App() {
           Requires authenticated 'Librarian' role context.
           ---------------------------------------------------------------- 
         */}
-        <Route path="/staff" element={<StaffHome />}>
+        <Route path="staff" element={<StaffHome />}>
           <Route path="books" element={<AllBooks />} />
           <Route path="books/add" element={<AddBooks />} />
           <Route path="books/profile" element={<BookProfile />} />
@@ -141,7 +150,7 @@ function App() {
           <Route path="members/profile" element={<MemberStaffProfile />} />
         </Route>
       </Routes>
-    </div>
+    </div >
   );
 }
 

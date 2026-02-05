@@ -1,28 +1,3 @@
-/*
- * Member/Home/Home.css
- * ==========================================================================
- * Styles for the Authenticated Member Home Layout.
- *
- * TABLE OF CONTENTS:
- * 1. Page Wrapper
- * ==========================================================================
- */
-
-/* ==========================================================================
-   1. Page Wrapper
-   ========================================================================== */
-
-/**
- * Main layout container for authenticated pages.
- * Applies the consistent brand gradient background.
- */
-.member-home-wrapper {
-    /* Layout */
-    min-height: 100vh;
-    display: flex;
-    flex-direction: column;
-    position: relative;
-
-    /* Visuals */
-    background: linear-gradient(180deg, #f4f7ff 0%, #fff1f2 100%);
+.member-home {
+    background-color: linear-gradient(180deg, #f4f7ff 0%, #fff1f2 100%);
 }

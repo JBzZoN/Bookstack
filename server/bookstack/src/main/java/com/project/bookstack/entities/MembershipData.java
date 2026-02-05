@@ -34,5 +34,7 @@ public class MembershipData {
 
     @Column(name = "yearly_cost")
     private Integer yearlyCost;
-
+   
 }
+
+

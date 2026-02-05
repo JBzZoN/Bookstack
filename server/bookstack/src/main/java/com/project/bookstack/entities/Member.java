@@ -23,7 +23,11 @@ public class Member {
     /* ------------------ Membership Type ------------------ */
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "membership_type", referencedColumnName = "membership_type", foreignKey = @ForeignKey(name = "membership_type"))
+    @JoinColumn(
+        name = "membership_type",
+        referencedColumnName = "membership_type",
+        foreignKey = @ForeignKey(name = "membership_type")
+    )
     private MembershipData membershipData;
 
     @Column(name = "member_start")
@@ -31,11 +35,11 @@ public class Member {
 
     @Column(name = "member_end")
     private LocalDate memberEnd;
-
+    
     @Column(name = "rent_count")
     private Integer rentCount;
-
+    
     @Column(name = "renew_count")
     private Integer renewCount;
-
+    
 }

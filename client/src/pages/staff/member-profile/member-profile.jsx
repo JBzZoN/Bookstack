@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLocation, Link } from 'react-router-dom'
 import "./member-profile.css"
-import profileImage from "../../../assets/images/staff/default_profile_image.png"
+import profileImage from "../../../assets/staff/default_profile_image.png"
 
 /**
  * MemberStaffProfile Component

@@ -1,164 +1,39 @@
-/*
- * OrderSummary.css
- * ==========================================================================
- * Styles for the Order Summary / Checkout Page.
- *
- * TABLE OF CONTENTS:
- * 1. Global Variables
- * 2. Page Background
- * 3. Content Card
- * 4. Typography
- * 5. Order Details List
- * 6. Buttons
- * ==========================================================================
- */
-
-/* ==========================================================================
-   1. Global Variables
-   ========================================================================== */
-:root {
-  --brand-indigo: #6366f1;
-  --brand-pink: #ec4899;
-  --brand-teal: #2dd4bf;
-  --text-primary: #111827;
-  --text-secondary: #6b7280;
-}
-
-/* ==========================================================================
-   2. Page Background
-   ========================================================================== */
-
+/* =========================
+   BASE
+========================= */
 .body1 {
   font-family: 'Lato', sans-serif;
-  color: var(--text-primary);
-  /* Fallback color */
-  background-color: #f3f4f6;
+  color: black;
+  background-color: rgba(255, 255, 255, 0.9);
 }
-
-/* ==========================================================================
-   3. Content Card
-   ========================================================================== */
-
-.content-card {
-  /* Box Model */
-  background: white;
-  border-radius: 1.5rem;
-  padding: 2.5rem;
-
-  /* Visuals */
-  box-shadow:
-    0 20px 25px -5px rgba(0, 0, 0, 0.1),
-    0 8px 10px -6px rgba(0, 0, 0, 0.1);
-}
-
-.logo-img {
-  width: 50px;
-  height: 50px;
-  border-radius: 8px;
-}
-
-.logo-title {
-  font-family: 'Montserrat', sans-serif;
-  font-weight: 800;
-  font-size: 30px;
-}
-
-/* ==========================================================================
-   4. Typography
-   ========================================================================== */
 
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
 }
 
-.text-secondary {
-  color: var(--text-secondary) !important;
+/* =========================
+   PAGE BACKGROUND
+========================= */
+.order-page {
+  min-height: 100vh;
+  padding-top: 90px; /* navbar offset */
 }
 
-/* ==========================================================================
-   5. Order Details List
-   ========================================================================== */
-
-/* Used for the key-value pairs in the summary */
-.summary-row {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 0.75rem;
-  padding-bottom: 0.75rem;
-  border-bottom: 1px dashed #e5e7eb;
+/* =========================
+   CARD
+========================= */
+.content-card {
+  background: white;
+  border-radius: 1.5rem;
+  padding: 2.5rem;
+  box-shadow:
+    0 20px 25px -5px rgb(0 0 0 / 0.1),
+    0 8px 10px -6px rgb(0 0 0 / 0.1);
 }
 
-.summary-row:last-child {
-  border-bottom: none;
-  margin-bottom: 0;
-  padding-bottom: 0;
-}
+.padding {
+    padding-top: 100px;
+    padding-bottom: 250px;
 
-.summary-label {
-  color: var(--text-secondary);
-  font-weight: 500;
-}
-
-.summary-value {
-  font-weight: 700;
-  text-align: right;
-}
-
-/* ==========================================================================
-   6. Buttons
-   ========================================================================== */
-
-.btn-outline {
-  /* Layout */
-  display: inline-block;
-  width: 100%;
-
-  /* Box Model */
-  padding: 0.75rem 1.5rem;
-  border: 2px solid transparent;
-  border-radius: 0.5rem;
-  margin-top: 1rem;
-
-  /* Visuals */
-  background: transparent;
-  background-image:
-    linear-gradient(#fff, #fff),
-    linear-gradient(90deg, #6366f1, #ec4899);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
-
-  /* Typography */
-  color: #6366f1;
-  font-weight: 700;
-  text-align: center;
-
-  /* Animation */
-  transition: all 0.3s ease;
-}
-
-.btn-outline:hover:not(:disabled) {
-  background: linear-gradient(90deg, #6366f1, #ec4899);
-  color: white;
-  border-color: transparent;
-  cursor: pointer;
-  transform: translateY(-2px);
-}
-
-.btn-outline:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-  filter: grayscale(100%);
-}
-
-.btn-link-muted {
-  color: var(--text-secondary);
-  text-decoration: none;
-  font-size: 0.9rem;
-  transition: color 0.2s;
-}
-
-.btn-link-muted:hover {
-  color: var(--brand-indigo);
-  text-decoration: underline;
 }

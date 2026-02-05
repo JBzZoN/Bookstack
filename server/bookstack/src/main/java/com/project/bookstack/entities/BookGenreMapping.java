@@ -23,7 +23,7 @@ public class BookGenreMapping {
 
     @EmbeddedId
     private BookGenreMappingId id;
-
+    
     @Embeddable
     @Data
     @EqualsAndHashCode

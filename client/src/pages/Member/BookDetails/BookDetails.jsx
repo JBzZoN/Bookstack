@@ -1,10 +1,10 @@
 import BookCard from '../../../components/Member/BookCard/BookCard'
 import '../BookDetails/BookDetails.css'
-import { useParams, Link } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import ReviewsSection from '../../../components/Member/ReviewSection/ReviewSection';
 import star from '../../../assets/images/member/star.png'
 import api from '../../../api/api';
-import { useEffect, useState } from 'react';
+import { use, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from "react-redux";
 import { toggleLike, syncLikeWithBackend } from "../../../redux/slices/likeSlice";
 import { toast } from 'react-toastify';
@@ -222,9 +222,9 @@ function BookDetails() {
 
                 <div className="">
 
-                    <div className="d-flex justify-content-between align-items-center mb-4">
-                        <h3 className="mb-0">You might also like</h3>
-                        <Link to={`/member/view-all/might-like/${id}`} className="btn btn-outline-primary rounded-pill">View All</Link>
+                    <div className="d-flex justify-content-between align-items-center">
+                        <h2 className="font-montserrat">You Might Also Like</h2>
+                        <a href={`/member/might-like-books/${id}`} className="text-secondary text-decoration-none">View All</a>
                     </div>
 
                     <div className="horizontal-scroll mt-3">

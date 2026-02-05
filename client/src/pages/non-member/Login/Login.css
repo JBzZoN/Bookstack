@@ -1,93 +1,50 @@
-/*
- * Login.css
- * ==========================================================================
- * Styles for the Login / Sign In Page.
- *
- * TABLE OF CONTENTS:
- * 1. Global Variables
- * 2. Page Wrapper
- * 3. Typography
- * 4. Login Card
- * 5. Layout Panels (Image & Form)
- * 6. Form Components
- * ==========================================================================
- */
-
-/* ==========================================================================
-   1. Global Variables
-   ========================================================================== */
 :root {
   --brand-indigo: #6366f1;
   --brand-pink: #ec4899;
   --brand-teal: #2dd4bf;
+  --brand-indigo-rgb: 99, 102, 241;
+  --brand-pink-rgb: 236, 72, 153;
 }
 
-/* ==========================================================================
-   2. Page Wrapper
-   ========================================================================== */
-
+/* WRAPPER */
 .auth-wrapper {
-  /* Layout */
+  min-height: 100vh;
+  background: linear-gradient(180deg, #f4f7ff 0%, #fff1f2 100%);
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
-
-  /* Box Model */
   padding: 1rem;
-
-  /* Visuals */
-  background: linear-gradient(180deg, #f4f7ff 0%, #fff1f2 100%);
-
-  /* Typography */
   font-family: 'Lato', sans-serif;
 }
-
-/* ==========================================================================
-   3. Typography
-   ========================================================================== */
 
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
 }
 
-/* ==========================================================================
-   4. Login Card
-   ========================================================================== */
-
+/* CARD */
 .login-card {
-  /* Layout */
-  width: 100%;
-  max-width: 900px;
-
-  /* Visuals */
-  background: #fff;
   border-radius: 1.5rem;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   overflow: hidden;
+  background: #fff;
+  max-width: 900px;
+  width: 100%;
+  box-shadow: 0 25px 50px -12px rgb(0 0 0 / 0.25);
 }
 
-/* ==========================================================================
-   5. Layout Panels (Image & Form)
-   ========================================================================== */
-
-/* Left Side - Image/Brand Panel */
+/* IMAGE PANEL */
 .img-panel {
-  /* Box Model */
-  padding: 3rem;
-
-  /* Visuals */
   background-image:
-    linear-gradient(180deg,
-      #4f0bc5 0%,
-      rgb(236, 94, 117) 70%),
+    linear-gradient(
+  180deg,
+  #4f0bc5 0%,
+  rgb(236, 94, 117) 70%
+),
     url("https://images.unsplash.com/photo-1505642095992-ea3997129b7e?q=80&w=1887&auto=format&fit=crop");
   background-size: cover;
   background-position: center;
-
-  /* Typography */
   color: white;
+  padding: 3rem;
 }
 
 .brand-logo {
@@ -103,53 +60,25 @@
   line-height: 1;
 }
 
-/* Right Side - Form Panel */
-.form-panel {
-  /* Box Model */
-  padding: 3rem;
+.book-part {
+  color: #0a0d9f;
 }
 
-/* ==========================================================================
-   6. Form Components
-   ========================================================================== */
+.stack-part {
+  color: #111827;
+}
+
+/* FORM PANEL */
+.form-panel {
+  padding: 3rem;
+}
 
 .form-control-lg {
   padding: 1rem 1.25rem;
   border-radius: 0.75rem;
 }
 
-/* Gradient Button - Specific to Login if not using shared utility */
-.btn-outline {
-  /* Layout */
-  display: inline-block;
-  width: 100%;
 
-  /* Box Model */
-  padding: 0.75rem 1.5rem;
-  border: 2px solid transparent;
-  border-radius: 0.5rem;
 
-  /* Visuals */
-  background: transparent;
-  background-image:
-    linear-gradient(#fff, #fff),
-    linear-gradient(90deg, #6366f1, #ec4899);
-  background-origin: border-box;
-  background-clip: padding-box, border-box;
 
-  /* Typography */
-  color: #6366f1;
-  font-weight: 700;
-  text-align: center;
 
-  /* Animation */
-  transition: all 0.3s ease;
-}
-
-.btn-outline:hover {
-  background: linear-gradient(90deg, #6366f1, #ec4899);
-  color: white;
-  border-color: transparent;
-  transform: translateY(-2px);
-  cursor: pointer;
-}
