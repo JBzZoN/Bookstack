@@ -45,8 +45,8 @@ cd k8s/
 
 "C:\Program Files\Git\usr\bin\sleep.exe" 60
 
-cat sql/book_db.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-book-db -o name | head -n 1) -- \
-mysql -uroot -pbookstack book_db
+"C:\Program Files\Git\usr\bin\cat.exe" sql/book_db.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-book-db -o name | "C:\Program Files\Git\usr\bin\head.exe" -n 1) -- \
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -uroot -pbookstack book_db
 
 cd ..
 
@@ -59,10 +59,10 @@ cd k8s/
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service mysql-authorization --ignore-not-found
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f authorization-mysql-sc.yaml
 
-sleep 60
+"C:\Program Files\Git\usr\bin\sleep.exe" 60
 
-cat sql/authorization.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-authorization -o name | head -n 1) -- \
-mysql -uroot -pbookstack authorization
+"C:\Program Files\Git\usr\bin\cat.exe" sql/authorization.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-authorization -o name | "C:\Program Files\Git\usr\bin\head.exe" -n 1) -- \
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -uroot -pbookstack authorization
 
 cd ..
 
@@ -113,10 +113,10 @@ cd k8s/
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service mysql-bookstack --ignore-not-found
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f bookstack-mysql-sc.yaml
 
-sleep 60
+"C:\Program Files\Git\usr\bin\sleep.exe" 60
 
-cat sql/bookstack.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-bookstack -o name | head -n 1) -- \
-mysql -uroot -pbookstack bookstack
+"C:\Program Files\Git\usr\bin\cat.exe" sql/bookstack.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-bookstack -o name | "C:\Program Files\Git\usr\bin\head.exe" -n 1) -- \
+"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -uroot -pbookstack bookstack
 
 cd ..
 
