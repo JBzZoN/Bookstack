@@ -42,7 +42,7 @@ Our system is a **Polyglot Cluster** orchestrated by Kubernetes. We pick the bes
 
 ```mermaid
 graph TD
-    Client[📱 React Client] -->|HTTPS :443| Gateway[🚪 API Gateway :7070]
+    Client[📱 React Client] -->|HTTP :80| Gateway[🚪 API Gateway :7070]
     
     subgraph "Internal Network (Docker/K8s)"
         Gateway -->|/auth| Auth[🔐 Auth Server :9090]

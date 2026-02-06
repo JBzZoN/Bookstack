@@ -68,6 +68,14 @@ erDiagram
         int book_id
         int score
     }
+    BookGenre {
+        int genre_id PK
+        string genre_name
+    }
+    BookGenreMapping {
+        int book_id
+        int genre_id
+    }
 
     %% ==============================
     %% 📗 BOOK DB (Managed by Node.js Catalog)
@@ -77,14 +85,6 @@ erDiagram
         string title
         string isbn
         int current_stock
-    }
-    BookGenre {
-        int genre_id PK
-        string genre_name
-    }
-    BookGenreMapping {
-        int book_id
-        int genre_id
     }
 
     %% ==============================
