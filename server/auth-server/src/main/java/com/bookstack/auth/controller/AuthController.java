@@ -152,4 +152,9 @@ public class AuthController {
 		return ResponseEntity.ok(authService.senduserdetail(user));
 	}
 	
+	@GetMapping("/fortesting")
+	public String testing(){
+		return "authserver is working";
+	}
+	
 }
