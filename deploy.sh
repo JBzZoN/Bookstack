@@ -191,10 +191,11 @@ echo "------------------------------------------------------11. client react"
 
 cd client
 
-ls
-dir
+C:\Program Files\Git\usr\bin\ls.exe
 
 "C:\Program Files\nodejs\npm.cmd" run build
+
+C:\Program Files\Git\usr\bin\ls.exe
 
 "C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t react-client:latest .
 
