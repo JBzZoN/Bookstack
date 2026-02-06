@@ -8,7 +8,7 @@ import java.util.Map;
 
 @FeignClient(
     name = "auth-service",
-    url = "http://localhost:9090"   
+    url = "http://auth-server:9090"   
 )
 public interface AuthClient {
 

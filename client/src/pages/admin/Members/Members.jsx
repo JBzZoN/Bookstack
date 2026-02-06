@@ -15,7 +15,7 @@ function ViewMembers() {
     const token = JSON.parse(localStorage.getItem("currentUser")).token;
 
     await axios.post(
-      "http://localhost:7070/admin/sendfinetoall",
+      "http://localhost:30080/admin/sendfinetoall",
       {},
       {
         headers: {
@@ -33,7 +33,7 @@ function ViewMembers() {
 
   async function getAllMembers() {
     const response = await axios.get(
-      "http://localhost:7070/admin/allmember",
+      "http://localhost:30080/admin/allmember",
       {
         headers: {
           "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`

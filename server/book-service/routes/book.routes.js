@@ -10,9 +10,9 @@ const upload = multer({
 
 const mysql2 = require("mysql2")
 const staffPool = mysql2.createPool({
-  host: "localhost",
+  host: "mysql-book-db",
   port: "3306",
-  user: "bookstack",
+  user: "root",
   database: "book_db",
   password: "bookstack"
 })
@@ -239,13 +239,16 @@ router.post("/add", upload.single("imageFile"), (request, response) => {
   
 });
 
+router.get("/josh", (req, response) => {
+  response.send("Kubernetes is working")
+})
 
 router.get("/all", (request, response) => {
   const sql = "select * from book_table"
 
   staffPool.query(sql, (error, data) => {
     if (error) {
-      return response.sendStatus(500);
+      return response.send(error);
     }
 
     const mappedData = data.map(b => ({

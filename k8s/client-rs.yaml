@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: react-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react-client
+  template:
+    metadata:
+      labels:
+        app: react-client
+    spec:
+      containers:
+        - name: react-client
+          image: react-client:latest   # or <dockerhub-user>/react-client:1.0
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 80

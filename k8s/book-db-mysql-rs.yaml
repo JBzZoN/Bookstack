@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: mysql-book-db-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mysql-book-db
+  template:
+    metadata:
+      labels:
+        app: mysql-book-db
+    spec:
+      containers:
+        - name: mysql
+          image: mysql:8.0
+          env:
+            - name: MYSQL_ROOT_PASSWORD
+              value: bookstack
+            - name: MYSQL_DATABASE
+              value: book_db
+          ports:
+            - containerPort: 3306

@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: dotnet-logger-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: dotnet-logger
+  template:
+    metadata:
+      labels:
+        app: dotnet-logger
+    spec:
+      containers:
+        - name: dotnet-logger
+          image: dotnet-logger:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 5020

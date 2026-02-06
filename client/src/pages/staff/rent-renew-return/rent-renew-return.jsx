@@ -32,7 +32,7 @@ function RentRenewReturn() {
     setOnSearch(true)
     const timer = setTimeout(async () => {
       if(value.length < 2) return;
-      const response = await axios.post("http://localhost:7070/staff/search/user", {"search" : value}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+      const response = await axios.post("http://localhost:30080/staff/search/user", {"search" : value}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
       setSearchResults(response.data)
       setOnSearch(false)
     }, 500);
@@ -118,7 +118,7 @@ function RentRenewReturn() {
     }
 
     // check if that member is on fine if its on fine then display the fine and open a payment gateway staff will ask member to pay fine
-    const response = await axios.post("http://localhost:7070/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response = await axios.post("http://localhost:30080/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     const FINE_PER_DAY = 5;
     const today = new Date();
@@ -142,7 +142,7 @@ function RentRenewReturn() {
 
         for(let a of response.data) {
 
-          const response = await axios.post("http://localhost:7070/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response = await axios.post("http://localhost:30080/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
           fineRows.push({
           recordType: "Return",
           onBookSearch: false,
@@ -179,7 +179,7 @@ function RentRenewReturn() {
         if(a.recordType=="Rent") {
           
           // check if that number of books are available in book_table
-          const response = await axios.post("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response = await axios.post("http://localhost:30080/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           const {noOfCopiesRemaining} = response.data
 
@@ -191,7 +191,7 @@ function RentRenewReturn() {
 
         }else if(a.recordType == "Renew") {
 
-          const response4 = await axios.post("http://localhost:7070/staff/renew-logic/verify", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response4 = await axios.post("http://localhost:30080/staff/renew-logic/verify", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           if(response4.data.status == "Valid") {
             let updatedRows = [...rows];
@@ -214,7 +214,7 @@ function RentRenewReturn() {
           console.log(response4.data)
 
         }else if(a.recordType == "Return") {
-          const response4 = await axios.post("http://localhost:7070/staff/return-logic/verify", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response4 = await axios.post("http://localhost:30080/staff/return-logic/verify", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           if(response4.data.status == "Valid") {
             let updatedRows = [...rows];
@@ -249,7 +249,7 @@ function RentRenewReturn() {
 
     
     // check if that member is on fine if its on fine then display the fine and open a payment gateway staff will ask member to pay fine
-    const response = await axios.post("http://localhost:7070/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response = await axios.post("http://localhost:30080/staff/fine", {memberId: searchResultUser.userId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     const FINE_PER_DAY = 5;
     const today = new Date();
@@ -273,7 +273,7 @@ function RentRenewReturn() {
 
         for(let a of response.data) {
 
-          const response = await axios.post("http://localhost:7070/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response = await axios.post("http://localhost:30080/book/bookFromId", {bookId: a.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
           fineRows.push({
           recordType: "Return",
           onBookSearch: false,
@@ -325,7 +325,7 @@ function RentRenewReturn() {
     })
 
     // check if rent count is valid rent count(member table) + num of copies rent in this record <= rent limit(membership data table)
-    const response1 = await axios.post("http://localhost:7070/staff/rent-count/valid", {memberId: searchResultUser.userId, rentSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response1 = await axios.post("http://localhost:30080/staff/rent-count/valid", {memberId: searchResultUser.userId, rentSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     if(response1.data == false) {
       toast.error("Member cannot rent that many books")
@@ -333,7 +333,7 @@ function RentRenewReturn() {
     }
 
     // check if renew count is valid renew count(member table) + num of copies renew in this record <= renew limit(membership data table)
-    const response2 = await axios.post("http://localhost:7070/staff/renew-count/valid", {memberId: searchResultUser.userId, renewSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response2 = await axios.post("http://localhost:30080/staff/renew-count/valid", {memberId: searchResultUser.userId, renewSelected}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     if(response2.data == false) {
       toast.error("Member cannot renew that many books")
@@ -355,7 +355,7 @@ function RentRenewReturn() {
         if(a.recordType=="Rent") {
           
           // check if that number of books are available in book_table
-          const response2 = await axios.post("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response2 = await axios.post("http://localhost:30080/book/id", {bookId: a.searchResultBook.bookId}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           const {noOfCopiesRemaining} = response2.data
 
@@ -365,15 +365,15 @@ function RentRenewReturn() {
           }
           // reduce number of books remaining (- copies) in book_table
           // by default returned is 0
-          const response3 = await axios.put("http://localhost:7070/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response3 = await axios.put("http://localhost:30080/book/id", {bookId: a.searchResultBook.bookId, noOfCopiesRemaining: noOfCopiesRemaining-a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           // update all minor tables assoicated with rent like member_book_table
-          const response4 = await axios.post("http://localhost:7070/staff/rent-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response4 = await axios.post("http://localhost:30080/staff/rent-logic", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
           console.log(response4.data)
 
         }else if(a.recordType == "Renew") {
 
-          const response4 = await axios.post("http://localhost:7070/staff/renew-logic/submit", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response4 = await axios.post("http://localhost:30080/staff/renew-logic/submit", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           if(response4.data.status == "Invalid") {
             toast.error("Invalid Renew")
@@ -383,7 +383,7 @@ function RentRenewReturn() {
           console.log(response4.data)
 
         }else if(a.recordType == "Return") {
-          const response4 = await axios.post("http://localhost:7070/staff/return-logic/submit", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+          const response4 = await axios.post("http://localhost:30080/staff/return-logic/submit", {bookId: a.searchResultBook.bookId, memberId: searchResultUser.userId, copyCount: a.numberOfCopies}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
           if(response4.data.status == "Invalid"){
             toast.error("Invalid Renew")
@@ -396,7 +396,7 @@ function RentRenewReturn() {
     }
 
     // all records are directly put on here !
-    const response3 = await axios.post("http://localhost:7070/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response3 = await axios.post("http://localhost:30080/staff/record", output, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     navigate('/staff/books')
     toast.success("Added a record")
@@ -462,7 +462,7 @@ function RentRenewReturn() {
                 setOnBookSearch(true, i)
                 const timer = setTimeout(async () => {
                   if(value.length < 2) return;
-                  const response = await axios.post("http://localhost:7070/book/search", {"search" : value}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+                  const response = await axios.post("http://localhost:30080/book/search", {"search" : value}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
                   setSearchBookResults(response.data, i)
                   setOnBookSearch(false, i)
                 }, 500);

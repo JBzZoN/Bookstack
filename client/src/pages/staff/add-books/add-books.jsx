@@ -48,9 +48,9 @@ function AddBooks() {
 
     console.table(payload);
 
-    const response = await axios.post("http://localhost:7070/book/add", payload, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response = await axios.post("http://localhost:30080/book/add", payload, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
     
-    const response2 = await axios.post("http://localhost:7070/staff/genre", {bookId: response.data.bookId, genres}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    const response2 = await axios.post("http://localhost:30080/staff/genre", {bookId: response.data.bookId, genres}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
 
     navigate('/staff/books')
     toast.success("Added a book")

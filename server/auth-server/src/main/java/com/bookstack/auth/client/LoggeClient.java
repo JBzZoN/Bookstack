@@ -9,7 +9,7 @@ import com.bookstack.auth.dto.LogDto;
 
 
 @Service
-@FeignClient(name="admin-auth-coonect",url="http://localhost:5020")
+@FeignClient(name="admin-auth-coonect",url="http://dotnet-logger:5020")
 public interface LoggeClient {
 
 	@PostMapping("logs")
