@@ -51,7 +51,7 @@ export default function EditStaff() {
     try {
       const token = JSON.parse(localStorage.getItem("currentUser"))?.token;
 
-      const res = await fetch("http://localhost:7070/admin/editstaff", {
+      const res = await fetch("http://localhost:30080/admin/editstaff", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

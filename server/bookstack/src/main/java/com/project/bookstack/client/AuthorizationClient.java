@@ -9,7 +9,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.project.bookstack.dto.UserDTO;
 
-@FeignClient(value="authorization", url = "http://localhost:9090")
+@FeignClient(value="authorization", url = "http://auth-server:9090")
 public interface AuthorizationClient {
 
 	@GetMapping("/auth/users")

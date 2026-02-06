@@ -41,7 +41,7 @@ Team BOOKSTACK
   const sendEmail = async () => {
     navigate("/admin/members")
     toast.success("Email Sent!")
-    await axios.post("http://localhost:7070/admin/sendfine", {email: emailBody,emailId:member.email}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
+    await axios.post("http://localhost:30080/admin/sendfine", {email: emailBody,emailId:member.email}, {headers: {"Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`}})
   }
 
   return (

@@ -9,3 +9,6 @@
 2026-02-03 11:39:24 | User: alicej | action : Logging |RoleType: Member | IP: 127.0.0.1 | Details: Alice Johnson
 2026-02-03 11:42:16 | User: frankw | action : Logging |RoleType: Admin | IP: 127.0.0.1 | Details: Frank Wilson
 2026-02-03 11:45:40 | User: frankw | action : Logging |RoleType: Admin | IP: 127.0.0.1 | Details: Frank Wilson
+2026-02-03 12:01:40 | User: evag | action : Logging |RoleType: Librarian | IP: 127.0.0.1 | Details: Eva George
+2026-02-03 12:04:02 | User: frankw | action : Logging |RoleType: Admin | IP: 127.0.0.1 | Details: Frank Wilson
+2026-02-03 12:05:13 | User: alicej | action : Logging |RoleType: Member | IP: 127.0.0.1 | Details: Alice Johnson

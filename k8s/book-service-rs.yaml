@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: ReplicaSet
+metadata:
+  name: express-service-rs
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: express-service
+  template:
+    metadata:
+      labels:
+        app: express-service
+    spec:
+      containers:
+        - name: express-service
+          image: express-service:latest
+          imagePullPolicy: IfNotPresent  # <-- CRITICAL for local images!
+          ports:
+            - containerPort: 4000

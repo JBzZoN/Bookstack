@@ -11,7 +11,7 @@ function ViewMembers() {
 
   async function getAllMembers() {
     const response = await axios.get(
-      "http://localhost:7070/staff/members",
+      "http://localhost:30080/staff/members",
       {
         headers: {
           "Authorization": `Bearer ${JSON.parse(localStorage.getItem("currentUser")).token}`

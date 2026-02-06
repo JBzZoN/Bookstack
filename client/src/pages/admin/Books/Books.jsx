@@ -12,7 +12,7 @@ const Books = () => {
     const fetchBooks = async () => {
       try {
         const token = JSON.parse(localStorage.getItem("currentUser"))?.token;
-        const res = await axios.get("http://localhost:7070/admin/allbooks", {
+        const res = await axios.get("http://localhost:30080/admin/allbooks", {
           headers: { Authorization: `Bearer ${token}` },
         });
         setBooks(res.data);
