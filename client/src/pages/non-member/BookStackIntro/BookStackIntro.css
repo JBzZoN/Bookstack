@@ -1,8 +1,23 @@
-/* =========================================================
-   GLOBAL THEME VARIABLES
-   ---------------------------------------------------------
-   Single source of truth for colors
-   ========================================================= */
+/*
+ * BookStackIntro.css
+ * ==========================================================================
+ * Styles for the BookStack Introduction/Landing Page.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Global Variables
+ * 2. Page Background & Animation
+ * 3. Hero Section
+ * 4. Feature Showcase
+ * 5. Call-to-Action (CTA) Sections
+ * 6. Button Components
+ * 7. Footer
+ * 8. Responsive Design
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Global Variables
+   ========================================================================== */
 :root {
   --primary-color: #6366f1;
   --secondary-color: #ec4899;
@@ -11,59 +26,93 @@
   --green-color-end: #16a34a;
 }
 
-/* =========================================================
-   PAGE-SPECIFIC BACKGROUND (BookStack Intro only)
-   ========================================================= */
+/* ==========================================================================
+   2. Page Background & Animation
+   ========================================================================== */
+
+/**
+ * Applies a specific animated gradient background only when the
+ * BookStackIntro component (.outer-body) is present on the page.
+ * Uses :has() to style the body from within a component's scope.
+ */
 body:has(.outer-body) {
-  background: linear-gradient(
-    0deg,
-    #6366f1,
-    #2dd4bf,
-    #ec4899,
-    #fcd34d
-  );
+  /* Box Model */
+  background: linear-gradient(0deg,
+      #6366f1,
+      #2dd4bf,
+      #ec4899,
+      #fcd34d);
   background-size: 100% 100%;
-  animation: gradientBG 20s ease infinite;
+
+  /* Typography */
   color: white;
+
+  /* Animation */
+  animation: gradientBG 20s ease infinite;
 }
 
-/* Gradient animation */
+/**
+ * Keyframes for the background gradient animation.
+ * Shifts background position to create a flowing effect.
+ */
 @keyframes gradientBG {
-  0%   { background-position: 0% 50%; }
-  50%  { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+
+  50% {
+    background-position: 100% 50%;
+  }
+
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
-/* =========================================================
-   HERO SECTION
-   ========================================================= */
+/* ==========================================================================
+   3. Hero Section
+   ========================================================================== */
+
 .hero-section {
-  text-align: center;
+  /* Box Model */
   padding: 3rem 2rem;
+
+  /* Typography */
+  text-align: center;
 }
 
 .hero-logo-container {
+  /* Layout */
   display: flex;
+  flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   gap: 1rem;
-  flex-wrap: wrap;
+
+  /* Box Model */
+  margin-bottom: 3rem;
+  /* Replaces mb-5 utility if needed, keeping mostly consistent */
 }
 
 .hero-logo {
+  /* Box Model */
   width: clamp(80px, 20vw, 150px);
   height: auto;
 }
 
 .logo-text {
+  /* Layout */
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
+
+  /* Typography */
   text-align: center;
 }
 
 .book-part,
 .stack-part {
+  /* Typography */
   font-size: clamp(2.5rem, 8vw, 6rem);
   line-height: 1;
 }
@@ -76,147 +125,262 @@ body:has(.outer-body) {
   color: #333;
 }
 
-/* =========================================================
-   HERO FEATURE CHIPS
-   ========================================================= */
+/* Hero Feature Chips */
 .hero-features {
+  /* Layout */
   display: flex;
-  gap: 1rem;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
 }
 
 .hero-feature {
-  border: 2px solid white;
+  /* Layout */
+  display: inline-block;
+
+  /* Box Model */
   padding: 0.8rem 1rem;
+  border: 2px solid white;
   border-radius: 50px;
+
+  /* Typography */
   font-weight: 700;
-  transition: transform 0.3s;
+
+  /* Animation */
+  transition: transform 0.3s ease;
 }
 
 .hero-feature:hover {
   transform: scale(1.05);
+  cursor: default;
 }
 
-/* =========================================================
-   FEATURE SHOWCASE SECTION
-   ========================================================= */
+/* ==========================================================================
+   4. Feature Showcase
+   ========================================================================== */
+
 .feature-section {
+  /* Box Model */
   padding: 1rem 2rem;
 }
 
 .feature-row {
+  /* Layout */
   display: flex;
-  gap: 3rem;
-  margin-bottom: 4rem;
   flex-wrap: wrap;
   align-items: center;
+  gap: 3rem;
+
+  /* Box Model */
+  margin-bottom: 4rem;
 }
 
 .feature-row.reverse {
   flex-direction: row-reverse;
 }
 
-.feature-frame {
-  flex: 1;
-  height: 300px;
-  border: 3px dashed rgba(255, 255, 255, 0.5);
-  border-radius: 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
 .feature-text {
+  /* Layout */
   flex: 1;
 }
 
 .feature-title {
+  /* Typography */
   font-size: 2rem;
 }
 
-/* =========================================================
-   CTA SECTIONS
-   ========================================================= */
+.feature-frame {
+  /* Layout */
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  /* Box Model */
+  height: 300px;
+  border: 3px dashed rgba(255, 255, 255, 0.5);
+  border-radius: 1.5rem;
+}
+
+/* ==========================================================================
+   5. Call-to-Action (CTA) Sections
+   ========================================================================== */
+
 .cta-section1 {
+  /* Box Model */
   margin-top: 20px;
-  background: rgba(0, 0, 0, 0.4);
   padding: 1rem;
   border-radius: 0.5rem;
+
+  /* Visuals */
+  background: rgba(0, 0, 0, 0.4);
+
+  /* Typography */
   text-align: center;
 }
 
 .cta-section2 {
-  margin-top: 18px;
-  background: rgba(0, 0, 0, 0.4);
+  /* Box Model */
+  margin: 18px 0 50px 0;
   padding: 3rem 2rem;
   border-radius: 1.5rem;
+
+  /* Visuals */
+  background: rgba(0, 0, 0, 0.4);
+
+  /* Typography */
   text-align: center;
-  margin-bottom: 50px;
 }
 
-/* =========================================================
-   BUTTONS (GLOBAL-CANDIDATE)
-   ========================================================= */
+#para {
+  /* Box Model */
+  margin-bottom: 40px;
+}
+
+/* ==========================================================================
+   6. Button Components
+   ========================================================================== */
+
 .btn-subscribe {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
-  color: white;
+  /* Layout */
+  display: inline-block;
+
+  /* Box Model */
   padding: 0.8rem 1.5rem;
   border-radius: 50px;
+
+  /* Visuals */
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+
+  /* Typography */
+  color: white;
   font-weight: 700;
   text-decoration: none;
 }
 
 .btn-guest {
-  background: linear-gradient(135deg, #f59e0b, #d97706);
+  /* Layout */
+  display: inline-block;
+
+  /* Box Model */
   padding: 0.5rem 1.2rem;
   border-radius: 50px;
+
+  /* Visuals */
+  background: linear-gradient(135deg, #f59e0b, #d97706);
+
+  /* Typography */
   color: white;
   text-decoration: none;
 }
 
-/* =========================================================
-   FOOTER
-   ========================================================= */
+/* ==========================================================================
+   7. Footer
+   ========================================================================== */
+
 .footer {
+  /* Box Model */
+  padding: 25px 0 1rem 0;
+
+  /* Typography */
   text-align: center;
-  padding: 1rem 0;
-  padding-top: 25px;
   font-size: 18px;
 }
 
-/* =========================================================
-   RESPONSIVE LAYER
-   ========================================================= */
+/* ==========================================================================
+   8. Responsive Design
+   ========================================================================== */
+
+/* Large screens (Tablets landscape / small desktops) */
 @media (max-width: 1200px) {
-  .hero-section { padding: 2.5rem 2rem; }
-  .feature-row { gap: 2.5rem; }
+  .hero-section {
+    padding: 2.5rem 2rem;
+  }
+
+  .feature-row {
+    gap: 2.5rem;
+  }
 }
 
+/* Desktops/Laptops */
 @media (max-width: 992px) {
-  .hero-section { padding: 2.2rem 1.5rem; }
-  .feature-row { gap: 2rem; }
-  .feature-frame { height: 260px; }
-  .feature-title { font-size: 1.8rem; }
+  .hero-section {
+    padding: 2.2rem 1.5rem;
+  }
+
+  .feature-row {
+    gap: 2rem;
+  }
+
+  .feature-frame {
+    height: 260px;
+  }
+
+  .feature-title {
+    font-size: 1.8rem;
+  }
+
+  /* Add margins to CTAs on smaller screens to prevent edge-hugging */
   .cta-section1,
-  .cta-section2 { margin: 0 1rem; }
+  .cta-section2 {
+    margin-left: 1rem;
+    margin-right: 1rem;
+  }
 }
 
+/* Tablets (Portrait) */
 @media (max-width: 768px) {
-  .hero-section { padding: 2rem 1.2rem; }
-  .hero-features { gap: 0.6rem; }
-  .hero-feature { font-size: 0.9rem; padding: 0.6rem 0.9rem; }
+  .hero-section {
+    padding: 2rem 1.2rem;
+  }
+
+  .hero-features {
+    gap: 0.6rem;
+  }
+
+  .hero-feature {
+    padding: 0.6rem 0.9rem;
+    font-size: 0.9rem;
+  }
+
+  /* Stack feature rows vertically */
   .feature-row,
-  .feature-row.reverse { flex-direction: column; text-align: center; }
-  .feature-frame { width: 100%; height: 220px; }
-  .feature-title { font-size: 1.6rem; }
+  .feature-row.reverse {
+    flex-direction: column;
+    text-align: center;
+  }
+
+  .feature-frame {
+    width: 100%;
+    height: 220px;
+  }
+
+  .feature-title {
+    font-size: 1.6rem;
+  }
 }
 
+/* Mobile Devices */
 @media (max-width: 576px) {
-  .hero-section { padding: 1.8rem 1rem; }
-  .feature-section { padding: 1rem; }
-  .cta-section2 { padding: 2rem 1.2rem; }
+  .hero-section {
+    padding: 1.8rem 1rem;
+  }
+
+  .feature-section {
+    padding: 1rem;
+  }
+
+  .cta-section2 {
+    padding: 2rem 1.2rem;
+  }
+
   .btn-subscribe,
-  .btn-guest { font-size: 0.85rem; padding: 0.45rem 1rem; }
-  .footer { font-size: 0.9rem; }
+  .btn-guest {
+    padding: 0.45rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .footer {
+    font-size: 0.9rem;
+  }
 }

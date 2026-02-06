@@ -21,3 +21,7 @@
 2026-02-05 09:47:48 | User: maybe | action : Logging |RoleType: Member | IP: 127.0.0.1 | Details: Mayur Gajanan Bedare
 2026-02-05 09:57:41 | User: evag | action : Logging |RoleType: Librarian | IP: 127.0.0.1 | Details: Eva George
 2026-02-05 10:00:29 | User: maybe | action : Logging |RoleType: Member | IP: 127.0.0.1 | Details: Mayur Gajanan Bedare
+2026-02-06 08:02:07 | User: maybe | action : Logging |RoleType: Member | IP: 127.0.0.1 | Details: Bedare Mayur Gajanan
+2026-02-06 08:02:49 | User: evag | action : Logging |RoleType: Librarian | IP: 127.0.0.1 | Details: Eva George
+2026-02-06 08:03:10 | User: frankw | action : Logging |RoleType: Admin | IP: 127.0.0.1 | Details: Frank Wilson
+2026-02-06 08:04:36 | User: maybe | action : Logging |RoleType: Member | IP: 127.0.0.1 | Details: Bedare Mayur Gajanan

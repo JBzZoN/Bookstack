@@ -1,33 +1,75 @@
+/*
+ * Register.css
+ * ==========================================================================
+ * Styles for the Registration/Signup Page.
+ *
+ * TABLE OF CONTENTS:
+ * 1. Global Variables
+ * 2. Page Wrapper & Layout
+ * 3. Typography
+ * 4. Content Card
+ * 5. Form Elements
+ * ==========================================================================
+ */
+
+/* ==========================================================================
+   1. Global Variables
+   ========================================================================== */
 :root {
   --brand-indigo: #6366f1;
   --brand-pink: #ec4899;
   --brand-teal: #2dd4bf;
 }
 
+/* ==========================================================================
+   2. Page Wrapper & Layout
+   ========================================================================== */
+
+/**
+ * Isolated background wrapper.
+ * Ensures readable contrast against any global body backgrounds.
+ */
 .body1 {
-    background-color: rgba(255, 255, 255, 0.9);
+  /* Visuals */
+  background-color: rgba(255, 255, 255, 0.9);
 }
 
 .registration-page {
+  /* Layout */
   min-height: 100vh;
+
+  /* Typography */
   font-family: 'Lato', sans-serif;
 }
+
+/* ==========================================================================
+   3. Typography
+   ========================================================================== */
 
 .font-montserrat {
   font-family: 'Montserrat', sans-serif;
   font-weight: 800;
 }
 
+/* ==========================================================================
+   4. Content Card
+   ========================================================================== */
+
 .content-card {
+  /* Visuals */
   background: #fff;
   border-radius: 1.5rem;
   box-shadow:
-    0 20px 25px -5px rgba(0,0,0,0.1),
-    0 8px 10px -6px rgba(0,0,0,0.1);
+    0 20px 25px -5px rgba(0, 0, 0, 0.1),
+    0 8px 10px -6px rgba(0, 0, 0, 0.1);
 }
 
+/* ==========================================================================
+   5. Form Elements
+   ========================================================================== */
 
-
-
-
-
+/* 
+ * NOTE: Most form styling relies on Bootstrap classes (form-control, btn, etc.).
+ * Custom overrides should be placed here if acceptable or in a global form sheet.
+ * Currently, standard Bootstrap styling is sufficient for this consistency.
+ */

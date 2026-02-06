@@ -1,15 +1,31 @@
+/* ==========================================================================
+   Member Account Styles
+   ========================================================================== */
+
+/* 
+   Header Section 
+   --------------------------------------------------------------------------
+   Premium gradient background for the main page title.
+*/
 .myaccount-title {
-    padding: 4rem 2rem;
-    background: linear-gradient(
-    90deg,
-    #4f0bc5,
-    rgb(236, 94, 117)
-  );
-    border-radius: 1.5rem;
-    color: white;
-    margin-top:45px;
+  padding: 4rem 2rem;
+  background: linear-gradient(90deg,
+      #4f0bc5,
+      rgb(236, 94, 117));
+  border-radius: 1.5rem;
+  color: white;
+  margin-top: 45px;
 }
 
+/* ==========================================================================
+   Navigation Tabs
+   ========================================================================== */
+
+/* 
+   Tab Links 
+   --------------------------------------------------------------------------
+   Default state for tab navigation links.
+*/
 .custom-tabs .nav-link {
   border: none;
   color: #6c757d;
@@ -18,6 +34,11 @@
   transition: all 0.3s ease;
 }
 
+/* 
+   Active Tab State
+   --------------------------------------------------------------------------
+   Gradient border and text for the active tab.
+*/
 .custom-tabs .nav-link.active {
   background: transparent;
   color: black;
@@ -26,18 +47,24 @@
 
   background-image:
     linear-gradient(#fff, #fff),
-    linear-gradient(
-      90deg,
+    linear-gradient(90deg,
       #4f0bc5,
-      rgb(236, 94, 117)
-    );
+      rgb(236, 94, 117));
   background-origin: border-box;
   background-clip: padding-box, border-box;
 
   transition: all 0.3s ease;
 }
 
-/* Remove bottom border line */
+/* 
+   Tab Container
+   --------------------------------------------------------------------------
+   Removes default Bootstrap styling.
+*/
 .custom-tabs.nav-tabs {
   border-bottom: none;
+}
+
+.text-color {
+  color: yellow;
 }

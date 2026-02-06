@@ -41,9 +41,6 @@ public class MemberServiceImpl implements MemberService {
 	 * Retrieves the main catalog of books with average ratings and user-specific
 	 * like status.
 	 */
-	// Injected from mayur branch for renew logic
-	private final com.project.bookstack.repositories.StaffRecordDetailRepository recordDetailRepository;
-
 	@Override
 	public List<BookCardDTO> getAllBooks(Integer userId) {
 		List<BookCoreDTO> books = bookClientService.getAllBooks();
@@ -219,62 +216,4 @@ public class MemberServiceImpl implements MemberService {
 		return rows.stream().collect(Collectors.toMap(row -> (Integer) row[0], row -> ((Number) row[1]).doubleValue(),
 				(existing, replacement) -> existing));
 	}
-
-	@Override
-	public String renewBook(Integer userId, Integer bookId) {
-		com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
-		if (member.getRenewCount() >= member.getMembershipData().getRenewalLimit()) {
-			return "Renewal limit reached for your membership.";
-		}
-
-		// Check for overdue books? logic from mayur...
-		// Simplified based on available snippets. Assuming full logic is needed.
-		// Actual logic usually involves checking due dates.
-
-		// For now, valid renew:
-		member.setRenewCount(member.getRenewCount() + 1);
-		memberRepository.save(member);
-		return "Book renewed successfully.";
-	}
-
-	@Override
-	public com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId) {
-		com.project.bookstack.entities.Member member = memberRepository.findById(userId).orElse(null);
-
-		return new com.project.bookstack.dto.member.MemberLimitsDTO(
-				member.getRenewCount() != null ? member.getRenewCount() : 0,
-				member.getMembershipData().getRenewalLimit() != null ? member.getMembershipData().getRenewalLimit() : 0,
-				member.getMembershipData().getMembershipType());
-	}
-
-	@Override
-	public List<BookCardDTO> getAllMightAlsoLikedBooks(Integer bookId, Integer userId) {
-
-		List<Integer> likedBookIds = memberRepository.getAllBooksLikedByUser(userId);
-
-		List<Object[]> rawRatings = memberRepository.getAverageRatingsGroupedByBook();
-
-		Map<Integer, Double> ratingsLookup = rawRatings.stream()
-						.collect(Collectors.toMap(
-										row -> (Integer) row[0],
-										row -> ((Number) row[1]).doubleValue(),
-										(existing, replacement) -> existing));
-
-		List<Integer> genreIds = memberRepository.getGenreIdsByBookId(bookId);
-
-		List<Integer> Ids = memberRepository.getAllBooksByGenres(genreIds);
-
-		List<BookCoreDTO> books = bookClientService.getMightAlsoLikedBooks(bookId, Ids);
-
-		return books.stream()
-						.map(book -> new BookCardDTO(
-										book.bookId(),
-										book.title(),
-										book.author(),
-										book.bookImage(),
-										ratingsLookup.getOrDefault(book.bookId(), 0.0),
-										likedBookIds.contains(book.bookId())))
-						.toList();
-
-	}
-}```
+}

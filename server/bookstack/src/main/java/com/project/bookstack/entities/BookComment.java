@@ -31,5 +31,5 @@ public class BookComment {
 
     @Column(name = "comment_date")
     private LocalDateTime createdAt;
-    
+
 }

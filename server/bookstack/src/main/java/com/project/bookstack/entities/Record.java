@@ -15,7 +15,7 @@ import java.time.LocalDate;
 @Entity
 @Data
 @NoArgsConstructor
-@Table(name = "Record_table", schema = "Bookstack")
+@Table(name = "Record_table")
 public class Record {
 
     /* ------------------ Primary Key ------------------ */
@@ -28,19 +28,11 @@ public class Record {
     /* ------------------ Relationships ------------------ */
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(
-        name = "member_id",
-        referencedColumnName = "user_id",
-        foreignKey = @ForeignKey(name = "member_record")
-    )
+    @JoinColumn(name = "member_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "member_record"))
     private Member member;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(
-        name = "staff_id",
-        referencedColumnName = "user_id",
-        foreignKey = @ForeignKey(name = "staff_record")
-    )
+    @JoinColumn(name = "staff_id", referencedColumnName = "user_id", foreignKey = @ForeignKey(name = "staff_record"))
     private Staff staff;
 
     /* ------------------ Other Columns ------------------ */

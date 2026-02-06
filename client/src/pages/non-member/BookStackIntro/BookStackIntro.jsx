@@ -1,28 +1,45 @@
 import React from "react";
 import "./BookStackIntro.css";
 
-/* Assets */
-import logo from "./../../../assets/logo.png";
+/* ==========================================================================
+   Assets
+   ========================================================================== */
+import logo from "./../../../assets/images/logo.png";
 import main1 from "./../../../assets/images/non-member/main1.png";
 import main2 from "./../../../assets/images/non-member/main2.png";
 import main3 from "./../../../assets/images/non-member/main3.png";
 import main4 from "./../../../assets/images/non-member/main4.png";
 import main5 from "./../../../assets/images/non-member/main5.png";
+import main6 from "./../../../assets/images/non-member/main6.png";
 
-/* Routing utilities */
+/* ==========================================================================
+   Routing Utilities
+   ========================================================================== */
 import { useNavigate, Link, Outlet } from "react-router-dom";
 
-/*
-  BookStackIntro Component
-  -----------------------
-  Landing page for non-members.
-  Introduces BookStack features and provides navigation
-  to Guest Mode, Login, and Membership plans.
-*/
+/**
+ * BookStackIntro Component
+ * 
+ * The main landing and introduction page for non-authenticated users.
+ * This component serves as the entry point to the application, highlighting
+ * core features and value propositions before prompting the user to
+ * sign up or log in.
+ * 
+ * Key Sections:
+ * - Hero/Welcome Area: Brand introduction.
+ * - Feature Showcase: Alternating rows detailing capabilities.
+ * - Call to Actions (CTAs): Navigation to browsing or membership plans.
+ * 
+ * @component
+ * @returns {JSX.Element} The rendered BookStack landing page.
+ */
 function BookStackIntro() {
   const navigate = useNavigate();
 
-  // Reserved for future login navigation usage
+  /**
+   * Handles navigation to the login page.
+   * @deprecated logic currently unused; kept for potential future CTA binding.
+   */
   const onLogin = () => {
     navigate("/login");
   };
@@ -31,24 +48,34 @@ function BookStackIntro() {
     <div className="outer-body">
       <main className="container">
 
-        {/* Guest CTA */}
+        {/* 
+          ----------------------------------------------------------------
+          Guest Access Call-to-Action
+          Top banner encouraging immediate exploration without an account.
+          ---------------------------------------------------------------- 
+        */}
         <div className="cta-section1">
           <span className="top-text bold">
-            Your Personalized Offline Library Experience
+            Welcome to the BookStack Library
           </span>
 
-          <span className="top-text ms-4 bold">
-            Want to try the library?
+          <span className="top-text ms-4">
+            Browse our curated book collection freely. Login to borrow books.
           </span>
 
-          <Link to="/guest" className="btn-guest ms-3">
-            <i className="bi bi-person-bounding-box"></i> Guest Mode
+          <Link to="/books" className="btn-guest ms-3">
+            <i className="bi bi-book"></i> Browse Collection
           </Link>
         </div>
 
-        {/* Hero Section */}
+        {/* 
+          ----------------------------------------------------------------
+          Hero Section
+          Main value proposition and feature highlights.
+          ---------------------------------------------------------------- 
+        */}
         <section className="hero-section">
-          <div className="hero-logo-container mb-3">
+          <div className="hero-logo-container mb-5">
             <img src={logo} alt="BookStack Logo" className="hero-logo" />
             <div className="logo-text bold">
               <span className="book-part">Book</span>
@@ -74,7 +101,7 @@ function BookStackIntro() {
               Ratings & Reviews
             </div>
             <div className="hero-feature">
-              <i className="bi bi-kanban-fill"></i> Structured Plans
+              <i className="bi bi-bell"></i> Book Availability Alerts
             </div>
             <div className="hero-feature">
               <i className="bi bi-arrow-repeat"></i> Easy Renewal System
@@ -85,10 +112,17 @@ function BookStackIntro() {
           </div>
         </section>
 
-        {/* Feature Showcase */}
-        <section className="feature-section">
+        {/* 
+          ----------------------------------------------------------------
+          Feature Showcase
+          Alternating layout rows displaying specific application features.
+          ---------------------------------------------------------------- 
+        */}
+        <section className="feature-section mt-4">
+
+          {/* Feature 1: Structured Plans */}
           <div className="feature-row">
-            <img src={main1} className="feature-frame" />
+            <img src={main1} className="feature-frame" alt="Structured Library Plans" />
             <div className="feature-text">
               <h2 className="feature-title bold">Structured Library Plans</h2>
               <p className="feature-desc">
@@ -97,8 +131,9 @@ function BookStackIntro() {
             </div>
           </div>
 
+          {/* Feature 2: Offline Access (Reversed Layout) */}
           <div className="feature-row reverse">
-            <img src={main2} className="feature-frame" />
+            <img src={main2} className="feature-frame" alt="Offline Access" />
             <div className="feature-text">
               <h2 className="feature-title bold">Offline Access</h2>
               <p className="feature-desc">
@@ -107,8 +142,9 @@ function BookStackIntro() {
             </div>
           </div>
 
+          {/* Feature 3: Ratings */}
           <div className="feature-row">
-            <img src={main3} className="feature-frame" />
+            <img src={main3} className="feature-frame" alt="Ratings and Feedback" />
             <div className="feature-text">
               <h2 className="feature-title bold">Ratings & Feedback</h2>
               <p className="feature-desc">
@@ -117,6 +153,7 @@ function BookStackIntro() {
             </div>
           </div>
 
+          {/* Feature 4: Borrowing (Text Left) */}
           <div className="feature-row">
             <div className="feature-text">
               <h2 className="feature-title bold">
@@ -126,9 +163,10 @@ function BookStackIntro() {
                 Borrow and renew books seamlessly.
               </p>
             </div>
-            <img src={main5} className="feature-frame" />
+            <img src={main5} className="feature-frame" alt="Borrowing System" />
           </div>
 
+          {/* Feature 5: Recommendations (Reversed) */}
           <div className="feature-row reverse">
             <div className="feature-text">
               <h2 className="feature-title bold">Smart Recommendations</h2>
@@ -136,24 +174,37 @@ function BookStackIntro() {
                 Personalized suggestions based on reading habits.
               </p>
             </div>
-            <img src={main4} className="feature-frame" />
+            <img src={main4} className="feature-frame" alt="Recommendations" />
           </div>
+
+          {/* Feature 6: Alerts (Reversed) */}
+          <div className="feature-row reverse">
+            <img src={main6} className="feature-frame" alt="Availability Alerts" />
+            <div className="feature-text">
+              <h2 className="feature-title bold">Book Availability Alerts</h2>
+              <p className="feature-desc">
+                Get notified by email when an unavailable book becomes available.
+              </p>
+            </div>
+          </div>
+
         </section>
 
-        {/* Final CTA */}
+        {/* 
+          ----------------------------------------------------------------
+          Final Call-to-Action
+          Membership conversion prompt.
+          ---------------------------------------------------------------- 
+        */}
         <section className="cta-section2">
           <h2 className="bold">Start Your Structured Reading Journey Today</h2>
-          <p>
+          <p id="para">
             Join readers who trust BookStack for an offline-friendly
             library experience.
           </p>
 
-          <Link to="/membership" className="btn-subscribe me-3">
+          <Link to="/membership" className="btn-subscribe me-5">
             <i className="bi bi-currency-dollar"></i> View Subscription Plans
-          </Link>
-
-          <Link to="/login" className="btn-subscribe me-3">
-            Login
           </Link>
         </section>
 

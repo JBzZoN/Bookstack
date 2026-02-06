@@ -33,9 +33,4 @@ public interface MemberService {
 
 	List<CurrentlyBorrowedBooksDTO> getCurrentlyBorrowedBooks(Integer userId);
 
-	String renewBook(Integer userId, Integer bookId);
-
-	com.project.bookstack.dto.member.MemberLimitsDTO getMemberLimits(Integer userId);
-
-	List<BookCardDTO> getAllMightAlsoLikedBooks(Integer bookId, Integer userId);
 }

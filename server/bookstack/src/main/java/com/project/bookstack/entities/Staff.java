@@ -29,10 +29,7 @@ public class Staff {
 
     @Column(name = "date_hired")
     private LocalDate dateHired;
-    
-    @Column(name = "status",length = 10)
+
+    @Column(name = "status", length = 10)
     private String status;
 }
-
-    
- 
