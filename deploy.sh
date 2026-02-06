@@ -46,7 +46,7 @@ cd k8s/
 "C:\Program Files\Git\usr\bin\sleep.exe" 60
 
 "C:\Program Files\Git\usr\bin\cat.exe" sql/book_db.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-book-db -o name | "C:\Program Files\Git\usr\bin\head.exe" -n 1) -- \
-"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -uroot -pbookstack book_db
+mysql -uroot -pbookstack book_db
 
 cd ..
 
@@ -62,7 +62,7 @@ cd k8s/
 "C:\Program Files\Git\usr\bin\sleep.exe" 60
 
 "C:\Program Files\Git\usr\bin\cat.exe" sql/authorization.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-authorization -o name | "C:\Program Files\Git\usr\bin\head.exe" -n 1) -- \
-"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -uroot -pbookstack authorization
+mysql -uroot -pbookstack authorization
 
 cd ..
 
@@ -116,7 +116,7 @@ cd k8s/
 "C:\Program Files\Git\usr\bin\sleep.exe" 60
 
 "C:\Program Files\Git\usr\bin\cat.exe" sql/bookstack.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-bookstack -o name | "C:\Program Files\Git\usr\bin\head.exe" -n 1) -- \
-"C:\Program Files\MySQL\MySQL Server 8.0\bin\mysql.exe" -uroot -pbookstack bookstack
+mysql -uroot -pbookstack bookstack
 
 cd ..
 
