@@ -4,7 +4,7 @@ echo "------------------------------------------------------1. Gateway"
 
 cd server/gateway/
 
-mvn clean package
+"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package
 
 "C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t api-gateway:latest .
 
