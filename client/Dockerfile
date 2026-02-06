@@ -4,7 +4,7 @@ FROM nginx:alpine
 RUN rm -rf /usr/share/nginx/html/*
 
 # Copy React build files
-COPY dist/ /usr/share/nginx/html/
+COPY build/ /usr/share/nginx/html/
 
 # Expose HTTP port
 EXPOSE 80

@@ -125,12 +125,6 @@ echo "------------------------------------------------------8. kafka server"
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete pod kafka --ignore-not-found
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete svc kafka --ignore-not-found
 
-"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" expose pod kafka \
-    --name=kafka \
-    --port=9092 \
-    --target-port=9092 \
-    --type=ClusterIP
-
 "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" run kafka \
   --image=apache/kafka:4.1.1 \
   --restart=Never \
@@ -143,6 +137,13 @@ echo "------------------------------------------------------8. kafka server"
   --env="KAFKA_LISTENER_SECURITY_PROTOCOL_MAP=PLAINTEXT:PLAINTEXT,CONTROLLER:PLAINTEXT" \
   --env="KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093" \
   --env="KAFKA_CLUSTER_ID=5L6g3nShT-eMCtK--X86sw"
+
+
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" expose pod kafka \
+    --name=kafka \
+    --port=9092 \
+    --target-port=9092 \
+    --type=ClusterIP
 
   
 
