@@ -51,8 +51,8 @@ function BookStackIntro() {
           <div className="hero-logo-container mb-3">
             <img src={logo} alt="BookStack Logo" className="hero-logo" />
             <div className="logo-text bold">
-              <span className="book-part">Applie</span>
-              <span className="stack-part">Benanaeie</span>
+              <span className="book-part">Dragon</span>
+              <span className="stack-part">Fried Rice</span>
             </div>
           </div>
 
