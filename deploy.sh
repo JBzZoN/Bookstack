@@ -4,16 +4,16 @@ echo "------------------------------------------------------1. Gateway"
 
 cd server/gateway/
 
-mvn clean package
+"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package
 
-docker build -t api-gateway:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t api-gateway:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset api-gateway-rs --ignore-not-found
-kubectl apply -f api-gateway-rs.yaml
-kubectl delete service api-gateway --ignore-not-found
-kubectl apply -f api-gateway-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete replicaset api-gateway-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f api-gateway-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service api-gateway --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f api-gateway-sc.yaml
 
 cd ..
 
@@ -21,16 +21,16 @@ echo "------------------------------------------------------2. Express server"
 
 cd server/book-service
 
-docker build -t express-service:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t express-service:latest .
 
 
 cd ../../k8s/
 
-kubectl delete replicaset express-service-rs --ignore-not-found
-kubectl apply -f book-service-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete replicaset express-service-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f book-service-rs.yaml
 
-kubectl delete service express-service --ignore-not-found
-kubectl apply -f book-service-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service express-service --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f book-service-sc.yaml
 
 cd ..
 
@@ -38,14 +38,14 @@ echo "------------------------------------------------------4. book_db database"
 
 cd k8s/
 
-kubectl delete rs mysql-book-db-rs --ignore-not-found
-kubectl apply -f book-db-mysql-rs.yaml
-kubectl delete service mysql-book-db --ignore-not-found
-kubectl apply -f book-db-mysql-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete rs mysql-book-db-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f book-db-mysql-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service mysql-book-db --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f book-db-mysql-sc.yaml
 
-sleep 60
+"C:\Program Files\Git\usr\bin\sleep.exe" 60
 
-cat sql/book_db.sql | kubectl exec -i $(kubectl get pod -l app=mysql-book-db -o name | head -n 1) -- \
+cat sql/book_db.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-book-db -o name | head -n 1) -- \
 mysql -uroot -pbookstack book_db
 
 cd ..
@@ -54,14 +54,14 @@ echo "------------------------------------------------------5. authorization dat
 
 cd k8s/
 
-kubectl delete rs mysql-authorization-rs --ignore-not-found
-kubectl apply -f authorization-mysql-rs.yaml
-kubectl delete service mysql-authorization --ignore-not-found
-kubectl apply -f authorization-mysql-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete rs mysql-authorization-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f authorization-mysql-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service mysql-authorization --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f authorization-mysql-sc.yaml
 
 sleep 60
 
-cat sql/authorization.sql | kubectl exec -i $(kubectl get pod -l app=mysql-authorization -o name | head -n 1) -- \
+cat sql/authorization.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-authorization -o name | head -n 1) -- \
 mysql -uroot -pbookstack authorization
 
 cd ..
@@ -71,17 +71,17 @@ echo "------------------------------------------------------3. Authorization ser
 
 cd server/auth-server
 
-mvn clean package -DskipTests
+"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package -DskipTests
 
-docker build -t auth-server:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t auth-server:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset auth-server-rs --ignore-not-found
-kubectl apply -f auth-server-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete replicaset auth-server-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f auth-server-rs.yaml
 
-kubectl delete service auth-server --ignore-not-found
-kubectl apply -f auth-server-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service auth-server --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f auth-server-sc.yaml
 
 cd ..
 
@@ -89,17 +89,17 @@ echo "------------------------------------------------------6. logger server"
 
 cd server/logger/WebApplication1/
 
-dotnet clean && dotnet publish -c Release -o out
+"C:\Program Files\dotnet\dotnet.exe" clean && "C:\Program Files\dotnet\dotnet.exe" publish -c Release -o out
 
-docker build -t dotnet-logger:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t dotnet-logger:latest .
 
 cd ../../../k8s/
 
-kubectl delete replicaset dotnet-logger-rs --ignore-not-found
-kubectl apply -f dotnet-logger-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete replicaset dotnet-logger-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f dotnet-logger-rs.yaml
 
-kubectl delete service dotnet-logger --ignore-not-found
-kubectl apply -f dotnet-logger-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service dotnet-logger --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f dotnet-logger-sc.yaml
 
 cd ..
 
@@ -108,30 +108,30 @@ echo "------------------------------------------------------7. bookstack databas
 
 cd k8s/
 
-kubectl delete rs mysql-bookstack-rs --ignore-not-found
-kubectl apply -f bookstack-mysql-rs.yaml
-kubectl delete service mysql-bookstack --ignore-not-found
-kubectl apply -f bookstack-mysql-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete rs mysql-bookstack-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f bookstack-mysql-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service mysql-bookstack --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f bookstack-mysql-sc.yaml
 
 sleep 60
 
-cat sql/bookstack.sql | kubectl exec -i $(kubectl get pod -l app=mysql-bookstack -o name | head -n 1) -- \
+cat sql/bookstack.sql | "C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" exec -i $("C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" get pod -l app=mysql-bookstack -o name | head -n 1) -- \
 mysql -uroot -pbookstack bookstack
 
 cd ..
 
 echo "------------------------------------------------------8. kafka server"
 
-kubectl delete pod kafka --ignore-not-found
-kubectl delete svc kafka --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete pod kafka --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete svc kafka --ignore-not-found
 
-kubectl expose pod kafka \
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" expose pod kafka \
     --name=kafka \
     --port=9092 \
     --target-port=9092 \
     --type=ClusterIP
 
-kubectl run kafka \
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" run kafka \
   --image=apache/kafka:4.1.1 \
   --restart=Never \
   --port=9092 \
@@ -151,17 +151,17 @@ echo "------------------------------------------------------9. messaging service
 
 cd server/messaging
 
-mvn clean package -DskipTests
+"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package -DskipTests
 
-docker build -t messaging-service:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t messaging-service:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset messaging-service-rs --ignore-not-found
-kubectl apply -f messaging-server-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete replicaset messaging-service-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f messaging-server-rs.yaml
 
-kubectl delete service messaging-service --ignore-not-found
-kubectl apply -f messaging-server-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service messaging-service --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f messaging-server-sc.yaml
 
 cd ..
 
@@ -171,17 +171,17 @@ echo "------------------------------------------------------10. bookstack server
 
 cd server/bookstack
 
-mvn clean package -DskipTests
+"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package -DskipTests
 
-docker build -t bookstack-server:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t bookstack-server:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset bookstack-server-rs --ignore-not-found
-kubectl apply -f bookstack-server-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete replicaset bookstack-server-rs --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f bookstack-server-rs.yaml
 
-kubectl delete service bookstack-server --ignore-not-found
-kubectl apply -f bookstack-server-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete service bookstack-server --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f bookstack-server-sc.yaml
 
 cd ..
 
@@ -190,16 +190,16 @@ echo "------------------------------------------------------11. client react"
 
 cd client
 
-npm run build
+"C:\Program Files\nodejs\npm.cmd" run build
 
-docker build -t react-client:latest .
+"C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t react-client:latest .
 
 cd ../k8s
 
-kubectl delete rs react-client --ignore-not-found
-kubectl delete svc react-client --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete rs react-client --ignore-not-found
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" delete svc react-client --ignore-not-found
 
-kubectl apply -f client-rs.yaml
-kubectl apply -f client-sc.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f client-rs.yaml
+"C:\Program Files\Docker\Docker\resources\bin\kubectl.exe" apply -f client-sc.yaml
 
 cd ..

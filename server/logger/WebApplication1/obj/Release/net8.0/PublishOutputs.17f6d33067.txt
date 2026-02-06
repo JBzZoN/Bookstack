@@ -1,4 +1,5 @@
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\WebApplication1.exe
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\web.config
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\web.config
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\web.config
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\web.config
@@ -49,6 +50,10 @@ C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\o
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\appsettings.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\appsettings.Development.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\appsettings.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\appsettings.Development.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\appsettings.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\WebApplication1.deps.json
+C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\WebApplication1.runtimeconfig.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\WebApplication1.deps.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\WebApplication1.runtimeconfig.json
 C:\Users\Josh Biju\Desktop\Bookstack\server\logger\WebApplication1\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\out\WebApplication1.deps.json
