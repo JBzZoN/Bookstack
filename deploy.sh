@@ -10,9 +10,9 @@ docker build -t api-gateway:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset api-gateway-rs
+kubectl delete replicaset api-gateway-rs --ignore-not-found
 kubectl apply -f api-gateway-rs.yaml
-kubectl delete service api-gateway
+kubectl delete service api-gateway --ignore-not-found
 kubectl apply -f api-gateway-sc.yaml
 
 cd ..
@@ -23,31 +23,14 @@ cd server/book-service
 
 docker build -t express-service:latest .
 
+
 cd ../../k8s/
 
-kubectl delete replicaset express-service-rs
+kubectl delete replicaset express-service-rs --ignore-not-found
 kubectl apply -f book-service-rs.yaml
 
-kubectl delete service express-service
+kubectl delete service express-service --ignore-not-found
 kubectl apply -f book-service-sc.yaml
-
-cd ..
-
-echo "------------------------------------------------------3. Authorization server"
-
-cd server/auth-server
-
-mvn clean package
-
-docker build -t auth-server:latest .
-
-cd ../../k8s/
-
-kubectl delete replicaset auth-server-rs
-kubectl apply -f auth-server-rs.yaml
-
-kubectl delete service auth-server
-kubectl apply -f auth-server-sc.yaml
 
 cd ..
 
@@ -55,9 +38,9 @@ echo "------------------------------------------------------4. book_db database"
 
 cd k8s/
 
-kubectl delete rs mysql-book-db-rs
+kubectl delete rs mysql-book-db-rs --ignore-not-found
 kubectl apply -f book-db-mysql-rs.yaml
-kubectl delete service mysql-book-db
+kubectl delete service mysql-book-db --ignore-not-found
 kubectl apply -f book-db-mysql-sc.yaml
 
 sleep 60
@@ -71,15 +54,34 @@ echo "------------------------------------------------------5. authorization dat
 
 cd k8s/
 
-kubectl delete rs mysql-authorization-rs
+kubectl delete rs mysql-authorization-rs --ignore-not-found
 kubectl apply -f authorization-mysql-rs.yaml
-kubectl delete service mysql-authorization
+kubectl delete service mysql-authorization --ignore-not-found
 kubectl apply -f authorization-mysql-sc.yaml
 
 sleep 60
 
 cat sql/authorization.sql | kubectl exec -i $(kubectl get pod -l app=mysql-authorization -o name | head -n 1) -- \
 mysql -uroot -pbookstack authorization
+
+cd ..
+
+
+echo "------------------------------------------------------3. Authorization server"
+
+cd server/auth-server
+
+mvn clean package -DskipTests
+
+docker build -t auth-server:latest .
+
+cd ../../k8s/
+
+kubectl delete replicaset auth-server-rs --ignore-not-found
+kubectl apply -f auth-server-rs.yaml
+
+kubectl delete service auth-server --ignore-not-found
+kubectl apply -f auth-server-sc.yaml
 
 cd ..
 
@@ -93,10 +95,10 @@ docker build -t dotnet-logger:latest .
 
 cd ../../../k8s/
 
-kubectl delete replicaset dotnet-logger-rs
+kubectl delete replicaset dotnet-logger-rs --ignore-not-found
 kubectl apply -f dotnet-logger-rs.yaml
 
-kubectl delete service dotnet-logger
+kubectl delete service dotnet-logger --ignore-not-found
 kubectl apply -f dotnet-logger-sc.yaml
 
 cd ..
@@ -106,9 +108,9 @@ echo "------------------------------------------------------7. bookstack databas
 
 cd k8s/
 
-kubectl delete rs mysql-bookstack-rs
+kubectl delete rs mysql-bookstack-rs --ignore-not-found
 kubectl apply -f bookstack-mysql-rs.yaml
-kubectl delete service mysql-bookstack
+kubectl delete service mysql-bookstack --ignore-not-found
 kubectl apply -f bookstack-mysql-sc.yaml
 
 sleep 60
@@ -123,6 +125,12 @@ echo "------------------------------------------------------8. kafka server"
 kubectl delete pod kafka --ignore-not-found
 kubectl delete svc kafka --ignore-not-found
 
+kubectl expose pod kafka \
+    --name=kafka \
+    --port=9092 \
+    --target-port=9092 \
+    --type=ClusterIP
+
 kubectl run kafka \
   --image=apache/kafka:4.1.1 \
   --restart=Never \
@@ -136,6 +144,8 @@ kubectl run kafka \
   --env="KAFKA_CONTROLLER_QUORUM_VOTERS=1@kafka:9093" \
   --env="KAFKA_CLUSTER_ID=5L6g3nShT-eMCtK--X86sw"
 
+  
+
 echo "------------------------------------------------------9. messaging service"
 
 
@@ -147,10 +157,10 @@ docker build -t messaging-service:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset messaging-service-rs
+kubectl delete replicaset messaging-service-rs --ignore-not-found
 kubectl apply -f messaging-server-rs.yaml
 
-kubectl delete service messaging-service
+kubectl delete service messaging-service --ignore-not-found
 kubectl apply -f messaging-server-sc.yaml
 
 cd ..
@@ -167,10 +177,10 @@ docker build -t bookstack-server:latest .
 
 cd ../../k8s/
 
-kubectl delete replicaset bookstack-server-rs
+kubectl delete replicaset bookstack-server-rs --ignore-not-found
 kubectl apply -f bookstack-server-rs.yaml
 
-kubectl delete service bookstack-server
+kubectl delete service bookstack-server --ignore-not-found
 kubectl apply -f bookstack-server-sc.yaml
 
 cd ..

@@ -28,7 +28,6 @@ public class SecurityConfiguration {
 		.cors(Customizer.withDefaults()) // Or use withDefaults()
 		// URL authorization
 		.authorizeHttpRequests(requests -> requests
-			.requestMatchers("/**").permitAll() // change this to only "/book/image" ⚠️⚠️⚠️
 			.requestMatchers("/payment/**").permitAll()
 			.requestMatchers("/auth/**").permitAll()
 			.requestMatchers("/member/**").hasAuthority("Member")
