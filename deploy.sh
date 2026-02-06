@@ -4,7 +4,7 @@ echo "------------------------------------------------------1. Gateway"
 
 cd server/gateway/
 
-"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package
+"C:\Program Files\Apache\maven\apache-maven-3.9.12\bin\mvn.cmd" clean package
 
 "C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t api-gateway:latest .
 
@@ -71,7 +71,7 @@ echo "------------------------------------------------------3. Authorization ser
 
 cd server/auth-server
 
-"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package -DskipTests
+"C:\Program Files\Apache\maven\apache-maven-3.9.12\bin\mvn.cmd" clean package -DskipTests
 
 "C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t auth-server:latest .
 
@@ -152,7 +152,7 @@ echo "------------------------------------------------------9. messaging service
 
 cd server/messaging
 
-"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package -DskipTests
+"C:\Program Files\Apache\maven\apache-maven-3.9.12\bin\mvn.cmd" clean package -DskipTests
 
 "C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t messaging-service:latest .
 
@@ -172,7 +172,7 @@ echo "------------------------------------------------------10. bookstack server
 
 cd server/bookstack
 
-"C:\Program Files\Apache\maven\bin\mvn.cmd" clean package -DskipTests
+"C:\Program Files\Apache\maven\apache-maven-3.9.12\bin\mvn.cmd" clean package -DskipTests
 
 "C:\Program Files\Docker\Docker\resources\bin\docker.exe" build -t bookstack-server:latest .
 
