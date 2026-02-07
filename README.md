@@ -4,27 +4,6 @@
 >
 > *A scalable, feature-rich library management system built with the industry's best technologies.*
 
-
-
-![Java](https://img.shields.io/badge/Java-21-orange?logo=openjdk)
-![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.2-green?logo=spring-boot)
-![Node.js](https://img.shields.io/badge/Node.js-18-green?logo=nodedotjs)
-![React](https://img.shields.io/badge/React-18-blue?logo=react)
-![Redux](https://img.shields.io/badge/Redux-Toolkit-purple?logo=redux)
-![K8s](https://img.shields.io/badge/Kubernetes-Ready-blue?logo=kubernetes)
-![Docker](https://img.shields.io/badge/Docker-Ready-blue?logo=docker)
-![Kafka](https://img.shields.io/badge/Kafka-Ready-blue?logo=kafka)
-![Feign](https://img.shields.io/badge/Feign-Ready-blue?logo=feign)
-![.net](https://img.shields.io/badge/.net-8-purple?logo=dotnet)
-![node.js](https://img.shields.io/badge/node.js-18-green?logo=nodedotjs)
-![express](https://img.shields.io/badge/express-18-green?logo=express)
-![mysql](https://img.shields.io/badge/mysql-18-green?logo=mysql)
-![Build Status](https://img.shields.io/badge/build-passing-brightgreen)
-
-</div>
-
----
-
 ## 📋 Table of Contents
 
 - [🚀 Introduction](#-introduction)
@@ -64,37 +43,8 @@ We solve the hard problems so you don't have to.
 
 ## 🏗️ System Architecture
 
-graph TD
 
-    %% Client Layer
-    User[💻 User / Browser] -->|HTTPS| Gateway[🚪 API Gateway<br/>(Spring Cloud :7070)]
-
-    %% Gateway Routing
-    Gateway -->|/auth/**| Auth[🔐 Auth Service<br/>(Spring Security)]
-    Gateway -->|/books/**| Catalog[📗 Book Catalog<br/>(Node.js)]
-    Gateway -->|/members/**| Core[📚 Bookstack Core<br/>(Spring Boot)]
-    Gateway -->|/logs/**| Logger[📝 Logger Service<br/>(.NET)]
-
-    %% Async Messaging
-    Core -->|Publish Events| Kafka[(📨 Apache Kafka)]
-    Kafka -->|Consume| Messaging[🔔 Messaging Service<br/>(Spring Boot)]
-
-    %% Databases
-    Auth --> AuthDB[(🗄️ Auth DB)]
-    Core --> CoreDB[(🗄️ Bookstack DB)]
-    Catalog --> BookDB[(🗄️ Book DB)]
-
-    %% Service Grouping
-    subgraph Backend Cluster
-        Auth
-        Core
-        Catalog
-        Logger
-        Messaging
-    
-
-
----
+![Bookstack Architecture](docs/API%20Gateway%20to%20Book%20Flow.png)
 
 ## 🛠️ Technology Stack (Polyglot)
 
